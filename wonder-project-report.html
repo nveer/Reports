@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wonder Project — Executive Report</title>
+  <style>
+    :root {
+      --bc-orange: #FF6B00;
+      --bc-dark: #1A1A2E;
+      --bc-mid: #16213E;
+      --bc-blue: #0F3460;
+      --bc-accent: #E94560;
+      --text-light: #F0F0F0;
+      --text-muted: #A0A0B0;
+      --card-bg: rgba(255,255,255,0.05);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bc-dark); color: var(--text-light); min-height: 100vh; }
+    header { background: linear-gradient(135deg, var(--bc-blue), var(--bc-dark)); border-bottom: 3px solid var(--bc-orange); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+    .logo-area h1 { font-size: 1.8rem; font-weight: 700; color: white; }
+    .logo-area h1 span { color: var(--bc-orange); }
+    .logo-area p { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; }
+    .report-meta { text-align: right; font-size: 0.8rem; color: var(--text-muted); }
+    .report-meta strong { color: var(--bc-orange); display: block; font-size: 1rem; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+    .section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--bc-orange); margin-bottom: 1rem; margin-top: 2.5rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+    .kpi-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; position: relative; overflow: hidden; }
+    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--bc-orange); }
+    .kpi-card .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .kpi-card .value { font-size: 2.2rem; font-weight: 700; margin: 0.4rem 0; color: white; }
+    .kpi-card .delta { font-size: 0.8rem; color: #4CAF50; }
+    .kpi-card .delta.down { color: var(--bc-accent); }
+    .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .card h3 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+    .bar-chart { display: flex; flex-direction: column; gap: 0.75rem; }
+    .bar-row { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; }
+    .bar-label { width: 90px; color: var(--text-muted); text-align: right; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 28px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 0.5rem; font-size: 0.75rem; font-weight: 600; color: white; }
+    .status-list { list-style: none; display: flex; flex-direction: column; gap: 0.85rem; }
+    .status-list li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
+    .badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; flex-shrink: 0; }
+    .badge.green  { background: rgba(76,175,80,0.2); color: #4CAF50; }
+    .badge.yellow { background: rgba(255,193,7,0.2); color: #FFC107; }
+    .badge.red    { background: rgba(233,69,96,0.2); color: var(--bc-accent); }
+    .badge.blue   { background: rgba(33,150,243,0.2); color: #2196F3; }
+    .timeline { display: flex; flex-direction: column; gap: 1rem; }
+    .tl-item { display: flex; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-date { font-size: 0.75rem; color: var(--bc-orange); white-space: nowrap; width: 70px; flex-shrink: 0; padding-top: 0.1rem; }
+    .tl-content strong { font-size: 0.9rem; color: white; }
+    .tl-content p { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+    footer { text-align: center; padding: 2rem; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer span { color: var(--bc-orange); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo-area">
+    <h1>Bright<span>cove</span></h1>
+    <p>Sales Engineering · Account Intelligence Report</p>
+  </div>
+  <div class="report-meta">
+    <strong>Wonder Project</strong>
+    Generated: February 24, 2026<br>
+    Prepared by: Nathan Veer
+  </div>
+</header>
+<main>
+  <p class="section-title">Key Performance Indicators</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="label">Total Video Views</div><div class="value">4.2M</div><div class="delta">▲ 18% vs last quarter</div></div>
+    <div class="kpi-card"><div class="label">Avg. Engagement Rate</div><div class="value">67%</div><div class="delta">▲ 5pts improvement</div></div>
+    <div class="kpi-card"><div class="label">CDN Bandwidth Used</div><div class="value">38 TB</div><div class="delta down">▲ 22% YoY growth</div></div>
+    <div class="kpi-card"><div class="label">Active Players</div><div class="value">1,240</div><div class="delta">▲ 3 new deployments</div></div>
+    <div class="kpi-card"><div class="label">API Calls / Day</div><div class="value">820K</div><div class="delta">Stable ↔</div></div>
+  </div>
+  <div class="content-grid">
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+      <div class="card">
+        <h3>Video Performance by Channel</h3>
+        <div class="bar-chart">
+          <div class="bar-row"><span class="bar-label">Marketing</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:linear-gradient(90deg,var(--bc-orange),#FF9A3C);">1.8M</div></div></div>
+          <div class="bar-row"><span class="bar-label">Product</span><div class="bar-track"><div class="bar-fill" style="width:62%;background:linear-gradient(90deg,var(--bc-blue),#1565C0);">1.3M</div></div></div>
+          <div class="bar-row"><span class="bar-label">Training</span><div class="bar-track"><div class="bar-fill" style="width:45%;background:linear-gradient(90deg,#6A1B9A,#9C27B0);">940K</div></div></div>
+          <div class="bar-row"><span class="bar-label">Support</span><div class="bar-track"><div class="bar-fill" style="width:18%;background:linear-gradient(90deg,#00695C,#26A69A);">380K</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Recent Milestones</h3>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-date">Feb 18</span><div class="tl-content"><strong>Live Event: Wonder Q1 Keynote</strong><p>Peak concurrent viewers: 12,400 — zero buffering events</p></div></div>
+          <div class="tl-item"><span class="tl-date">Feb 10</span><div class="tl-content"><strong>Player SDK v7 Migration Complete</strong><p>All 1,240 players updated to latest Brightcove Player</p></div></div>
+          <div class="tl-item"><span class="tl-date">Jan 28</span><div class="tl-content"><strong>Analytics Integration Go-Live</strong><p>Real-time dashboards connected to Brightcove Data APIs</p></div></div>
+          <div class="tl-item"><span class="tl-date">Jan 12</span><div class="tl-content"><strong>DRM Policy Rollout</strong><p>AES-128 encryption enforced across premium content library</p></div></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+      <div class="card">
+        <h3>Integration Health</h3>
+        <ul class="status-list">
+          <li><span class="badge green">Live</span> Brightcove Player Embed</li>
+          <li><span class="badge green">Live</span> Analytics Data Export</li>
+          <li><span class="badge green">Live</span> CMS API Integration</li>
+          <li><span class="badge yellow">Pilot</span> AI Metadata Tagging</li>
+          <li><span class="badge blue">Planned</span> Interactivity Plugin</li>
+          <li><span class="badge red">Blocked</span> SSO / IDP Handoff</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Open Action Items</h3>
+        <ul class="status-list">
+          <li><span class="badge red">High</span> Resolve SSO blocker with IT</li>
+          <li><span class="badge yellow">Med</span> Finalize Interactivity scope</li>
+          <li><span class="badge yellow">Med</span> Review AI tagging accuracy</li>
+          <li><span class="badge blue">Low</span> Update player skin assets</li>
+          <li><span class="badge blue">Low</span> Archive Q4 VOD library</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Next Steps</h3>
+        <ul class="status-list" style="gap:0.6rem;">
+          <li>📞 SSO escalation call — Feb 27</li>
+          <li>📋 Interactivity POC kickoff — Mar 3</li>
+          <li>📊 QBR prep with AE — Mar 10</li>
+          <li>🚀 AI tagging full rollout — Mar 17</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>Generated by <span>Claude AI</span> for Brightcove Sales Engineering · Wonder Project · Feb 2026</footer>
+</body>
+</html>
