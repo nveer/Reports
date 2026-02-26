@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brightcove vs. Adobe Edge Delivery Services</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f5f7fb;
+    color: #1a1a2e;
+    font-size: 13px;
+    line-height: 1.55;
+    padding: 32px;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.1);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0a1628 0%, #1a3a6b 100%);
+    padding: 36px 40px 28px;
+    color: white;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .brightcove-badge {
+    background: #f47b20;
+    color: white;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .date-badge {
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: #f47b20; }
+  .header p {
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+  }
+
+  /* BODY */
+  .body { padding: 32px 40px 36px; }
+
+  /* ALERT BOX */
+  .alert {
+    background: #fff8f0;
+    border-left: 4px solid #f47b20;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+  }
+  .alert strong { color: #c25a00; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+  .alert p { color: #4a3020; font-size: 12.5px; }
+
+  /* SECTION HEADERS */
+  h2 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #1a3a6b;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e8edf8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2 .icon { font-size: 14px; }
+
+  /* COMPARISON TABLE */
+  .table-wrap { margin-bottom: 28px; overflow: hidden; border-radius: 8px; border: 1px solid #e0e7f3; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr {
+    background: #1a3a6b;
+    color: white;
+  }
+  thead th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  thead th:first-child { width: 38%; }
+  thead th:nth-child(2), thead th:nth-child(3) { width: 31%; text-align: center; }
+  tbody tr:nth-child(odd) { background: #f4f7fd; }
+  tbody tr:nth-child(even) { background: white; }
+  tbody td {
+    padding: 9px 16px;
+    border-bottom: 1px solid #e8edf5;
+    font-size: 12px;
+    color: #2c3e60;
+  }
+  tbody td:nth-child(2), tbody td:nth-child(3) { text-align: center; }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .yes { color: #1a8a3a; font-weight: 600; }
+  .no  { color: #c0392b; font-weight: 600; }
+  .partial { color: #d68910; font-weight: 600; }
+
+  /* TALKING POINTS */
+  .talking-points { margin-bottom: 28px; }
+  .point {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #f8faff;
+    border: 1px solid #e4eaf8;
+  }
+  .point-num {
+    background: #1a3a6b;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .point-text strong { color: #1a3a6b; font-size: 12.5px; display: block; margin-bottom: 2px; }
+  .point-text p { color: #4a5568; font-size: 12px; }
+
+  /* DISCOVERY QUESTION */
+  .discovery {
+    background: linear-gradient(135deg, #0a1628, #1a3a6b);
+    color: white;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .discovery .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #f47b20;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .discovery blockquote {
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.6;
+    border-left: 3px solid #f47b20;
+    padding-left: 16px;
+    margin-bottom: 10px;
+  }
+  .discovery p {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* PROOF POINT */
+  .proof {
+    background: #f0fdf4;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .proof-icon { font-size: 20px; flex-shrink: 0; }
+  .proof p { font-size: 12px; color: #065f46; }
+  .proof strong { color: #047857; }
+
+  /* FOOTER */
+  .footer {
+    background: #f0f4fc;
+    border-top: 1px solid #dde6f5;
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer p { font-size: 10.5px; color: #6b7a99; }
+  .footer a { color: #1a3a6b; text-decoration: none; font-weight: 500; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; padding: 0; }
+    .page { box-shadow: none; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <span class="brightcove-badge">Sales Engineering</span>
+      <span class="date-badge">February 2026</span>
+    </div>
+    <h1>Brightcove vs. <span>Adobe Edge Delivery</span></h1>
+    <p>Competitive overview — retention guide for customer conversations</p>
+  </div>
+
+  <div class="body">
+
+    <!-- ALERT -->
+    <div class="alert">
+      <strong>⚠️ Key Insight</strong>
+      <p>Adobe Edge Delivery Services (EDS) is a <strong>CMS and web performance tool</strong> — not a video platform. It has <strong>no native video hosting, streaming, or delivery</strong>. Customers moving to EDS would <em>still need Brightcove</em> to serve video. These are complementary tools, not replacements.</p>
+    </div>
+
+    <!-- COMPARISON TABLE -->
+    <h2><span class="icon">📊</span> Capability Comparison</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Brightcove</th>
+            <th>Adobe EDS + AEM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Video Hosting &amp; Streaming</td>
+            <td class="yes">✔ Native, global CDN</td>
+            <td class="no">✘ Requires 3rd party</td>
+          </tr>
+          <tr>
+            <td>Live Streaming (4K, Low-Latency)</td>
+            <td class="yes">✔ Built-in</td>
+            <td class="no">✘ Not included</td>
+          </tr>
+          <tr>
+            <td>Adaptive Bitrate Delivery</td>
+            <td class="yes">✔ Built-in</td>
+            <td class="no">✘ Not included</td>
+          </tr>
+          <tr>
+            <td>Video Analytics / QoE Metrics</td>
+            <td class="yes">✔ Deep engagement data</td>
+            <td class="no">✘ Marketing-only</td>
+          </tr>
+          <tr>
+            <td>Monetization (SVOD / AVOD / TVOD)</td>
+            <td class="yes">✔ Built-in</td>
+            <td class="no">✘ Requires integrations</td>
+          </tr>
+          <tr>
+            <td>Server-Side Ad Insertion (SSAI)</td>
+            <td class="yes">✔ Native</td>
+            <td class="no">✘ Not available</td>
+          </tr>
+          <tr>
+            <td>DRM / Content Protection</td>
+            <td class="yes">✔ Multi-DRM, native</td>
+            <td class="no">✘ Limited</td>
+          </tr>
+          <tr>
+            <td>OTT / Mobile Apps (Roku, Apple TV…)</td>
+            <td class="yes">✔ Beacon platform</td>
+            <td class="no">✘ Web-only</td>
+          </tr>
+          <tr>
+            <td>Interactive Video (CTAs, Branching)</td>
+            <td class="yes">✔ Built-in</td>
+            <td class="no">✘ Not available</td>
+          </tr>
+          <tr>
+            <td>AI Auto-Captions (250+ languages)</td>
+            <td class="yes">✔ Built-in</td>
+            <td class="no">✘ Not available</td>
+          </tr>
+          <tr>
+            <td>Digital Asset Management (DAM)</td>
+            <td class="partial">◑ Video-focused</td>
+            <td class="yes">✔ Broad (non-video)</td>
+          </tr>
+          <tr>
+            <td>CMS / Web Publishing</td>
+            <td class="partial">◑ Limited</td>
+            <td class="yes">✔ Strong</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RETENTION TALKING POINTS -->
+    <h2><span class="icon">💬</span> Retention Talking Points</h2>
+    <div class="talking-points">
+      <div class="point">
+        <div class="point-num">1</div>
+        <div class="point-text">
+          <strong>EDS is a CMS — not a video platform replacement</strong>
+          <p>Any video on an EDS site must still be hosted externally. The customer would need Brightcove (or a competitor) regardless of adopting EDS for their web experience.</p>
+        </div>
+      </div>
+      <div class="point">
+        <div class="point-num">2</div>
+        <div class="point-text">
+          <strong>Understand what's really driving the conversation</strong>
+          <p>Is it cost pressure? A push to consolidate Adobe licenses? A DAM frustration? Identifying the root cause usually reveals a misalignment of tools, not a true platform replacement need.</p>
+        </div>
+      </div>
+      <div class="point">
+        <div class="point-num">3</div>
+        <div class="point-text">
+          <strong>Anchor on video-specific use cases they care about</strong>
+          <p>Live events, viewer analytics, monetization, OTT apps — map these back to the customer's actual needs. Whatever their video strategy is, EDS cannot fulfill it.</p>
+        </div>
+      </div>
+      <div class="point">
+        <div class="point-num">4</div>
+        <div class="point-text">
+          <strong>Position this as "and" not "or"</strong>
+          <p>Brightcove + Adobe EDS can coexist. EDS handles the web experience; Brightcove powers the video. Frame the conversation around complementary tools, not a choice.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROOF POINT -->
+    <div class="proof">
+      <div class="proof-icon">🏅</div>
+      <p><strong>Proof point:</strong> Adobe Learning Manager runs on Brightcove's streaming infrastructure — a direct signal that Adobe's own products rely on Brightcove for video delivery, not their own platform.</p>
+    </div>
+
+    <!-- DISCOVERY QUESTION -->
+    <h2><span class="icon">🔍</span> Recommended Discovery Question</h2>
+    <div class="discovery">
+      <div class="label">Ask the customer</div>
+      <blockquote>"What specific gaps are you trying to solve with this move?"</blockquote>
+      <p>This surfaces whether the customer is conflating two separate needs — web CMS vs. video platform — opening the door to a "you can have both" conversation rather than a replacement scenario.</p>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>Brightcove Sales Engineering &nbsp;|&nbsp; Prepared February 2026</p>
+    <p>Source of truth: <a href="https://support.brightcove.com" target="_blank">support.brightcove.com</a></p>
+  </div>
+
+</div>
+</body>
+</html>
