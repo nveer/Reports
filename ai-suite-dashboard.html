@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brightcove AI Suite — Intelligent Video at Scale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1a2847;
+            --bg-tertiary: #243355;
+            --border-color: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --status-ga: #10b981;
+            --status-pilot: #0ea5e9;
+            --status-coming: #f59e0b;
+            --status-highlight: #ec4899;
+        }
+
+        html, body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #1a2e5c 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(26, 40, 71, 0.8) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--status-highlight);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Navigation */
+        .nav-container {
+            max-width: 1400px;
+            margin: 2rem auto 0;
+            padding: 0 2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .nav-tabs::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            position: relative;
+            font-family: inherit;
+        }
+
+        .nav-tab:hover {
+            color: var(--accent-blue);
+        }
+
+        .nav-tab.active {
+            color: var(--accent-blue);
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 2px;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Feature Card */
+        .feature-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-blue);
+            background: linear-gradient(135deg, var(--bg-tertiary) 0%, #2a4a6a 100%);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            flex: 1;
+            padding-right: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .status-badge.ga {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.pilot {
+            background: rgba(14, 165, 233, 0.15);
+            color: #0ea5e9;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+
+        .status-badge.coming {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .feature-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
+        }
+
+        .expand-indicator {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .expand-indicator {
+            color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+
+        .expand-indicator::after {
+            content: '→';
+            transition: transform 0.3s ease;
+        }
+
+        /* Expanded Content */
+        .feature-card.expanded {
+            grid-column: span 1;
+            position: relative;
+        }
+
+        .expanded-content {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .feature-card.expanded .expanded-content {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .expanded-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .expanded-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-blue);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .capability-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .capability-list li {
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .capability-list li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-size: 0.6rem;
+        }
+
+        .languages-tag {
+            display: inline-block;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .partner-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* Roadmap Section */
+        .roadmap-section {
+            margin-top: 6rem;
+            padding-top: 3rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .roadmap-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .roadmap-phase {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .roadmap-phase:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.1);
+        }
+
+        .roadmap-phase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 12px 12px 0 0;
+        }
+
+        .phase-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-date {
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .phase-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .phase-items li {
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-items li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 1) 100%);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .powered-by {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .roadmap-timeline {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .nav-tabs {
+                gap: 0.5rem;
+            }
+
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Filter Animation */
+        .features-grid.filtered .feature-card {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Brightcove</div>
+            <h1>AI Suite</h1>
+            <p>Intelligent Video at Scale</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-filter="all">All Features</button>
+            <button class="nav-tab" data-filter="content-creation">Content Creation</button>
+            <button class="nav-tab" data-filter="localization">Localization</button>
+            <button class="nav-tab" data-filter="monetization">Monetization</button>
+            <button class="nav-tab" data-filter="live">Live Operations</button>
+            <button class="nav-tab" data-filter="intelligence">Intelligence</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="features-grid" id="featuresGrid">
+            <!-- Content Creation & Repurposing -->
+            <div class="feature-card" data-category="content-creation">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">AI Content Multiplier</div>
+                    </div>
+                    <span class="status-badge ga">GA</span>
+                </div>
+                <p class="feature-description">Transform one video into dozens of social-ready clips with automatic format conversion and highlight detection.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">6+</div>
+                        <div class="stat-label">Formats</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Auto</div>
+                        <div class="stat-label">Processing</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Key Capabilities</div>
+                        <ul class="capability-list">
+                            <li>Auto-clip detection with scene analysis</li>
+                            <li>Format conversion (horizontal ↔ vertical ↔ square)</li>
+                            <li>Auto-summarization & highlight reels</li>
+                            <li>TikTok, Instagram Reels, Facebook optimization</li>
+                            <li>Batch processing with quality preservation</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Use Cases</div>
+                        <div class="section-content">
+                            Social media distribution, viral clip extraction, promotional content generation, multi-platform publishing automation.
+                        </div>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Supported Platforms</div>
+                        <div class="partner-list">
+                            <span class="languages-tag">TikTok</span>
+                            <span class="languages-tag">Instagram</span>
+                            <span class="languages-tag">Facebook</span>
+                            <span class="languages-tag">YouTube</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="content-creation">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">AI-Generated Video Chapters</div>
+                    </div>
+                    <span class="status-badge coming">Coming H1 2026</span>
+                </div>
+                <p class="feature-description">Automatic chapter detection and creation for long-form content with seamless navigation markers.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">Auto</div>
+                        <div class="stat-label">Detection</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">90%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Key Capabilities</div>
+                        <ul class="capability-list">
+                            <li>Topic transition detection</li>
+                            <li>Automatic chapter marker creation</li>
+                            <li>Natural break point identification</li>
+                            <li>SEO-optimized chapter titles</li>
+                            <li>Player integration with chapter navigation</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Benefits</div>
+                        <div class="section-content">
+                            Improves viewer discoverability, increases watch time, enhances content organization, better YouTube/web search ranking.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="content-creation">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">AI-Generated Thumbnails</div>
+                    </div>
+                    <span class="status-badge coming">Coming 2026</span>
+                </div>
+                <p class="feature-description">Intelligent frame selection and multi-variant generation for A/B testing and maximum engagement.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">10+</div>
+                        <div class="stat-label">Variants</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">A/B</div>
+                        <div class="stat-label">Testing</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Key Capabilities</div>
+                        <ul class="capability-list">
+                            <li>AI-powered frame selection</li>
+                            <li>Multi-variant generation</li>
+                            <li>Text overlay suggestions</li>
+                            <li>A/B testing integration</li>
+                            <li>Performance analytics</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Impact</div>
+                        <div class="section-content">
+                            Increase click-through rates, optimize for platform-specific formats, reduce thumbnail creation time from hours to minutes.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Localization & Accessibility -->
+            <div class="feature-card" data-category="localization">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">Auto-Captions</div>
+                    </div>
+                    <span class="status-badge ga">GA</span>
+                </div>
+                <p class="feature-description">Automatically generate accurate captions in 90+ languages with custom dictionary and speaker attribution.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">90+</div>
+                        <div class="stat-label">Languages</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">250K+</div>
+                        <div class="stat-label">Customers</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Key Capabilities</div>
+                        <ul class="capability-list">
+                            <li>90+ language support with continuous expansion</li>
+                            <li>Custom dictionary for brand terminology</li>
+                            <li>Speaker attribution (coming H1 2026)</li>
+                            <li>Timestamp accuracy & sync</li>
+                            <li>Searchable transcript generation</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Compliance</div>
+                        <div class="section-content">
+                            WCAG 2.1 AA compliant, ADA accessible, GDPR ready, CCPA compatible.
+                        </div>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Supported Languages</div>
+                        <div class="partner-list">
+                            <span class="languages-tag">English</span>
+                            <span class="languages-tag">Spanish</span>
+                            <span class="languages-tag">Mandarin</span>
+                            <span class="languages-tag">French</span>
+                            <span class="languages-tag">German</span>
+                            <span class="languages-tag">+85 more</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="localization">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">Universal Translator</div>
+                    </div>
+                    <span class="status-badge ga">GA</span>
+                </div>
+                <p class="feature-description">Translate and dub content into 130+ languages with hundreds of natural voice options and voice cloning.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">130+</div>
+                        <div class="stat-label">Languages</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">1000+</div>
+                        <div class="stat-label">Voices</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Key Capabilities</div>
+                        <ul class="capability-list">
+                            <li>Translation in 130+ languages</li>
+                            <li>Dubbing in 80+ languages</li>
+                            <li>1000+ natural voice options</li>
+                            <li>Speaker voice cloning technology</li>
+                            <li>Lip-sync preservation for video</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">AI Pledge</div>
+                        <div class="section-content">
+                            <strong style="color: var(--accent-blue);">Your content is never used for model training.</strong> All customer data remains private and confidential. Full transparency on AI usage.
+                        </div>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Use Cases</div>
+                        <div class="section-content">
+                            Global content distribution, regional market expansion, multi-language live streaming, podcast localization.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="localization">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">Auto Audio Descriptions</div>
+                    </div>
+                    <span class="status-badge coming">Coming H1 2026</span>
+                </div>
+                <p class="feature-description">AI-generated descriptive audio tracks for compliance with accessibility standards and inclusive viewing.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">WCAG</div>
+                        <div class="stat-label">Compliant</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Auto</div>
+                        <div class="stat-label">Generation</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Compliance Standards</div>
+                        <ul class="capability-list">
+                            <li>WCAG 2.1 Level AA compliance</li>
+                            <li>ADA (Americans with Disabilities Act)</li>
+                            <li>European Accessibility Act (EAA)</li>
+                            <li>Broadcast accessibility standards</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Technology Partner</div>
+                        <div class="partner-list">
+                            <span class="languages-tag">3Play Media</span>
+                        </div>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Benefits</div>
+                        <div class="section-content">
+                            Reach wider audiences, ensure regulatory compliance, improve SEO, demonstrate accessibility commitment.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monetization & Advertising -->
+            <div class="feature-card" data-category="monetization">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">Contextual Advertising</div>
+                    </div>
+                    <span class="status-badge coming">Coming H1 2026</span>
+                </div>
+                <p class="feature-description">Scene-level visual analysis for precise contextual ad matching without relying on user data.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">Scene</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Privacy</div>
+                        <div class="stat-label">First</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Key Capabilities</div>
+                        <ul class="capability-list">
+                            <li>Visual metadata extraction at scene level</li>
+                            <li>Contextual relevance scoring</li>
+                            <li>Privacy-first matching algorithm</li>
+                            <li>Brand safety controls</li>
+                            <li>Real-time ad placement optimization</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Revenue Impact</div>
+                        <div class="section-content">
+                            Increase ad relevance, improve CPM rates, reduce ad rejection rates, enhance viewer experience with contextual ads.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="monetization">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">Sentiment-Aware Ad Breaks</div>
+                    </div>
+                    <span class="status-badge coming">Coming H1 2026</span>
+                </div>
+                <p class="feature-description">Emotional AI detects natural break points and eliminates jarring mid-scene ad interruptions.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">Real</div>
+                        <div class="stat-label">Time</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">95%+</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">How It Works</div>
+                        <div class="section-content">
+                            AI analyzes emotional tone, scene sentiment, dialogue pacing, and visual intensity to identify optimal ad placement moments that don't disrupt viewer engagement.
+                        </div>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Viewer Impact</div>
+                        <ul class="capability-list">
+                            <li>Less disruptive ad experiences</li>
+                            <li>Higher engagement and completion rates</li>
+                            <li>Improved ad recall and effectiveness</li>
+                            <li>Better retention metrics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Operations -->
+            <div class="feature-card" data-category="live">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">Intelligent Moment Detection</div>
+                    </div>
+                    <span class="status-badge coming">Coming 2026</span>
+                </div>
+                <p class="feature-description">Real-time highlight detection during live broadcasts with pattern recognition for key moments.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">Real</div>
+                        <div class="stat-label">Time</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Multi</div>
+                        <div class="stat-label">Sport</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Detection Patterns</div>
+                        <ul class="capability-list">
+                            <li>Goal & scoring detection</li>
+                            <li>Celebration identification</li>
+                            <li>Key play moments</li>
+                            <li>Crowd reactions</li>
+                            <li>Player highlights</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Applications</div>
+                        <div class="section-content">
+                            Sports broadcasting, esports streaming, live events, concerts, award shows, conference coverage.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="live">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">AI-Assisted Live Clipping</div>
+                    </div>
+                    <span class="status-badge coming">Coming 2026</span>
+                </div>
+                <p class="feature-description">Automatically create shareable clips from live streams with instant social media publishing.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">60</div>
+                        <div class="stat-label">Sec Max</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Auto</div>
+                        <div class="stat-label">Publish</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Key Capabilities</div>
+                        <ul class="capability-list">
+                            <li>Auto-clip creation from live streams</li>
+                            <li>Platform-optimized formatting</li>
+                            <li>One-click social publishing</li>
+                            <li>Instant video distribution</li>
+                            <li>Performance tracking per clip</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Social Platforms</div>
+                        <div class="partner-list">
+                            <span class="languages-tag">TikTok</span>
+                            <span class="languages-tag">Instagram</span>
+                            <span class="languages-tag">Twitter/X</span>
+                            <span class="languages-tag">YouTube Shorts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intelligence & Optimization -->
+            <div class="feature-card" data-category="intelligence">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">Metadata Optimizer</div>
+                    </div>
+                    <span class="status-badge ga">GA</span>
+                </div>
+                <p class="feature-description">AI-generated titles, tags, and descriptions in 40+ languages with SEO optimization and multi-modal analysis.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">40+</div>
+                        <div class="stat-label">Languages</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">3x</div>
+                        <div class="stat-label">SEO Lift</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Analysis Methods</div>
+                        <ul class="capability-list">
+                            <li>Text analysis (captions, transcripts)</li>
+                            <li>Audio analysis (tone, speakers, topics)</li>
+                            <li>Visual content analysis (scenes, objects)</li>
+                            <li>SEO optimization</li>
+                            <li>Multi-language generation</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Impact</div>
+                        <div class="section-content">
+                            Reduce metadata creation time by 80%, improve search rankings, increase discoverability, enable global content reach.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="intelligence">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">AI Engagement Maximizer</div>
+                    </div>
+                    <span class="status-badge pilot">Pilot</span>
+                </div>
+                <p class="feature-description">Personalized recommendations and interactive overlay automation for higher engagement and time-on-platform.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">+40%</div>
+                        <div class="stat-label">Engagement</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Auto</div>
+                        <div class="stat-label">Overlays</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Key Capabilities</div>
+                        <ul class="capability-list">
+                            <li>ML-powered recommendations</li>
+                            <li>Automated overlay suggestions</li>
+                            <li>Interactive content elements</li>
+                            <li>A/B testing integration</li>
+                            <li>Real-time performance tracking</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Use Cases</div>
+                        <div class="section-content">
+                            Video discovery, content personalization, interactive video experiences, audience retention optimization.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="intelligence">
+                <div class="feature-header">
+                    <div>
+                        <div class="feature-title">Cost-to-Quality Optimizer</div>
+                    </div>
+                    <span class="status-badge pilot">Pilot</span>
+                </div>
+                <p class="feature-description">ML-powered encoding optimization built on Emmy Award-winning Context Aware Encoding technology.</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">-45%</div>
+                        <div class="stat-label">Costs</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Emmy</div>
+                        <div class="stat-label">Award</div>
+                    </div>
+                </div>
+                <div class="expand-indicator">Learn more</div>
+
+                <div class="expanded-content">
+                    <div class="expanded-section">
+                        <div class="section-title">Technology Foundation</div>
+                        <div class="section-content">
+                            Built on <strong style="color: var(--accent-blue);">Context Aware Encoding (CAE)</strong> — Emmy Award-winning video optimization technology that intelligently adjusts encoding parameters per-scene for optimal quality-to-file-size ratio.
+                        </div>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">Benefits</div>
+                        <ul class="capability-list">
+                            <li>Reduce storage costs by up to 45%</li>
+                            <li>Lower delivery bandwidth expenses</li>
+                            <li>Maintain or improve video quality</li>
+                            <li>Automatic codec selection</li>
+                            <li>Per-scene optimization</li>
+                        </ul>
+                    </div>
+                    <div class="expanded-section">
+                        <div class="section-title">ROI Timeline</div>
+                        <div class="section-content">
+                            Typical payback period: 2-4 months depending on content library size and delivery volume.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Roadmap Section -->
+        <section class="roadmap-section">
+            <div class="section-header">
+                <h2>Product Roadmap</h2>
+                <p>Explore what's available now and what's coming next</p>
+            </div>
+
+            <div class="roadmap-timeline">
+                <div class="roadmap-phase">
+                    <div class="phase-title">Generally Available</div>
+                    <div class="phase-date">Proven in Production</div>
+                    <ul class="phase-items">
+                        <li>AI Content Multiplier</li>
+                        <li>Auto-Captions (90+ languages)</li>
+                        <li>Universal Translator (130+ languages)</li>
+                        <li>Metadata Optimizer</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <div class="phase-title">H1 2026</div>
+                    <div class="phase-date">Coming Soon</div>
+                    <ul class="phase-items">
+                        <li>AI-Generated Video Chapters</li>
+                        <li>Auto-Captions Speaker Attribution</li>
+                        <li>Contextual Advertising</li>
+                        <li>Sentiment-Aware Ad Breaks</li>
+                        <li>Auto Audio Descriptions</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <div class="phase-title">2026 & Beyond</div>
+                    <div class="phase-date">In Development</div>
+                    <ul class="phase-items">
+                        <li>AI-Generated Thumbnails</li>
+                        <li>Intelligent Moment Detection</li>
+                        <li>AI-Assisted Live Clipping</li>
+                        <li>Advanced Intelligence Features</li>
+                        <li>Emerging AI Capabilities</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">Brightcove AI Suite</div>
+            <div class="footer-text">
+                Intelligent video technology powered by world-class AI. Transform how you create, localize, monetize, and optimize video content at scale.
+            </div>
+            <div class="powered-by">
+                Powered by Anthropic, AWS, and Google AI • Privacy-First • Enterprise Ready
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Feature filtering
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const featureCards = document.querySelectorAll('.feature-card');
+        const featuresGrid = document.getElementById('featuresGrid');
+
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                navTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Filter cards
+                const filterValue = tab.dataset.filter;
+                featuresGrid.classList.add('filtered');
+
+                featureCards.forEach(card => {
+                    if (filterValue === 'all' || card.dataset.category === filterValue) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                // Collapse all expanded cards when filtering
+                featureCards.forEach(card => {
+                    card.classList.remove('expanded');
+                });
+            });
+        });
+
+        // Card expansion
+        featureCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Don't expand if clicking on an expanded card's content
+                if (card.classList.contains('expanded') && e.target.closest('.expanded-content')) {
+                    return;
+                }
+                card.classList.toggle('expanded');
+            });
+        });
+
+        // Prevent scroll jump on expand
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.feature-card')) {
+                e.preventDefault();
+            }
+        }, true);
+    </script>
+</body>
+</html>
