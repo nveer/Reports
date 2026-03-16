@@ -17,7 +17,7 @@
   .result-box .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #666; margin-bottom: 4px; }
   .result-box .value { font-size: 28px; font-weight: 700; color: #27ae60; }
   .result-box .sub { font-size: 13px; color: #555; margin-top: 4px; }
-  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
   .note { background: #fff8e1; border-left: 4px solid #f7a600; padding: 12px 16px; font-size: 13px; color: #555; margin: 16px 0; border-radius: 0 4px 4px 0; }
   .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #eee; font-size: 12px; color: #999; }
   .contract-box { background: #f5f5f5; border-radius: 6px; padding: 16px 20px; margin: 12px 0; }
@@ -38,7 +38,7 @@
     <tr><td>Plan</td><td>Marketing Studio Essential</td></tr>
     <tr><td>Annual Plays Included</td><td>100,000 plays/year</td></tr>
     <tr><td>Annual Bandwidth Included</td><td>500,000 GB (500 TB) / year</td></tr>
-    <tr><td>Managed Content</td><td>Included (not a limiting factor)</td></tr>
+    <tr><td>Managed Content</td><td>20,000 GB (20 TB) / year</td></tr>
     <tr><td>Term</td><td>12 months</td></tr>
     <tr><td>Overage Policy (Plays)</td><td>No overages charged; right-sized at renewal</td></tr>
     <tr><td>Overage Policy (Bandwidth)</td><td>Overage fees apply if exceeded</td></tr>
@@ -87,6 +87,18 @@
   <tr><td style="color:#27ae60; font-weight:600;">Headroom</td><td style="color:#27ae60; font-weight:600;">~498.9 TB (99.8% unused)</td><td></td></tr>
 </table>
 
+<h2>Managed Content Estimate — Annual</h2>
+<table>
+  <tr><th>Variable</th><th>Value</th><th>Basis</th></tr>
+  <tr><td>Average source file size (12 min, 1080p upload)</td><td>~0.9 GB</td><td>~10 Mbps source × 720 sec ÷ 8 ÷ 1,024</td></tr>
+  <tr><td>Average rendition storage per video (720p max, 4–6 renditions)</td><td>~1.1 GB</td><td>Sum of all ABR renditions for 12 min video</td></tr>
+  <tr><td>Total managed content per video</td><td>~2.0 GB</td><td>Source + renditions</td></tr>
+  <tr><td>New videos per year</td><td>150</td><td>~3 videos/week</td></tr>
+  <tr class="highlight"><td><strong>Total Estimated Annual Managed Content</strong></td><td><strong>~300 GB</strong></td><td><strong>150 videos × 2.0 GB</strong></td></tr>
+  <tr><td>Contract Limit</td><td>20,000 GB (20 TB)</td><td>Per contract</td></tr>
+  <tr><td style="color:#27ae60; font-weight:600;">Headroom</td><td style="color:#27ae60; font-weight:600;">~19,700 GB (98.5% unused)</td><td></td></tr>
+</table>
+
 <h2>Summary</h2>
 <div class="results-grid">
   <div class="result-box">
@@ -99,20 +111,26 @@
     <div class="value">1.1 TB / 500 TB</div>
     <div class="sub">~99.8% unused headroom<br>Would need <strong>440× growth</strong> to approach limit</div>
   </div>
+  <div class="result-box">
+    <div class="label">Managed Content — Estimated vs. Limit</div>
+    <div class="value">300 GB / 20 TB</div>
+    <div class="sub">~98.5% unused headroom<br>Would need <strong>67× growth</strong> to approach limit</div>
+  </div>
 </div>
 
 <div class="note">
-  <strong>Note for legal review:</strong> These estimates are based on KBRA's observed YouTube traffic patterns and Brightcove's actual encoding profile for this account. The projections use a standard fixed 720p H.264 bitrate of 1,800 kbps and include a 3× buffer on regular traffic to account for organic growth and unpredictable spike events. Even with a 5× growth scenario (62,500 plays, ~5.7 TB), KBRA remains comfortably within both contract limits. Bandwidth overages — the only metric with potential overage charges — would require usage to increase by more than 440× from current projected levels.
+  <strong>Note for legal review:</strong> These estimates are based on KBRA's observed YouTube traffic patterns and Brightcove's actual encoding profile for this account. The projections use a standard fixed 720p H.264 bitrate of 1,800 kbps and include a 3× buffer on regular traffic to account for organic growth and unpredictable spike events. Managed content (storage) is estimated at ~2 GB per video including source and all renditions. Even with a 5× growth scenario (62,500 plays, ~5.7 TB bandwidth, ~1.5 TB storage), KBRA remains comfortably within all three contract limits. Bandwidth overages would require 440× growth, and managed content overages would require 67× growth from current projected levels.
 </div>
 
 <h2>Overage Risk Assessment</h2>
 <table>
-  <tr><th>Scenario</th><th>Plays</th><th>Bandwidth</th><th>Risk</th></tr>
-  <tr><td>Current projection (baseline)</td><td>12,500</td><td>~1.1 TB</td><td style="color:#27ae60;">✓ No risk</td></tr>
-  <tr><td>3× growth</td><td>37,500</td><td>~3.4 TB</td><td style="color:#27ae60;">✓ No risk</td></tr>
-  <tr><td>5× growth</td><td>62,500</td><td>~5.7 TB</td><td style="color:#27ae60;">✓ No risk</td></tr>
-  <tr><td>10× growth</td><td>125,000</td><td>~11.4 TB</td><td style="color:#e67e22;">⚠ Plays overage possible (right-sized at renewal, no penalty)</td></tr>
-  <tr><td>440× growth</td><td>5.5M+</td><td>~500 TB</td><td style="color:#e74c3c;">✗ Bandwidth overage threshold</td></tr>
+  <tr><th>Scenario</th><th>Plays</th><th>Bandwidth</th><th>Managed Content</th><th>Risk</th></tr>
+  <tr><td>Current projection (baseline)</td><td>12,500</td><td>~1.1 TB</td><td>~300 GB</td><td style="color:#27ae60;">✓ No risk</td></tr>
+  <tr><td>3× growth</td><td>37,500</td><td>~3.4 TB</td><td>~900 GB</td><td style="color:#27ae60;">✓ No risk</td></tr>
+  <tr><td>5× growth</td><td>62,500</td><td>~5.7 TB</td><td>~1.5 TB</td><td style="color:#27ae60;">✓ No risk</td></tr>
+  <tr><td>10× growth</td><td>125,000</td><td>~11.4 TB</td><td>~3 TB</td><td style="color:#e67e22;">⚠ Plays overage possible (right-sized at renewal, no penalty)</td></tr>
+  <tr><td>67× growth</td><td>837,500</td><td>~76 TB</td><td>~20 TB</td><td style="color:#e74c3c;">✗ Managed content overage threshold</td></tr>
+  <tr><td>440× growth</td><td>5.5M+</td><td>~500 TB</td><td>~132 TB</td><td style="color:#e74c3c;">✗ Bandwidth overage threshold</td></tr>
 </table>
 
 <div class="footer">
