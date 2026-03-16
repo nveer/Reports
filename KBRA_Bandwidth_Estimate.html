@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KBRA — Brightcove Bandwidth & Usage Estimate</title>
+<style>
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 860px; margin: 40px auto; padding: 0 40px; color: #1a1a1a; font-size: 15px; line-height: 1.6; }
+  h1 { font-size: 22px; color: #1a1a1a; border-bottom: 3px solid #f7a600; padding-bottom: 10px; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 13px; margin-bottom: 32px; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 0.08em; color: #f7a600; margin-top: 32px; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 14px; }
+  th { background: #1a1a1a; color: #fff; text-align: left; padding: 9px 12px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 9px 12px; border-bottom: 1px solid #eee; }
+  tr:nth-child(even) td { background: #fafafa; }
+  .highlight td { background: #fffbf0 !important; font-weight: 600; }
+  .result-box { background: #f0faf0; border: 2px solid #2ecc71; border-radius: 6px; padding: 20px 24px; margin: 20px 0; }
+  .result-box .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #666; margin-bottom: 4px; }
+  .result-box .value { font-size: 28px; font-weight: 700; color: #27ae60; }
+  .result-box .sub { font-size: 13px; color: #555; margin-top: 4px; }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .note { background: #fff8e1; border-left: 4px solid #f7a600; padding: 12px 16px; font-size: 13px; color: #555; margin: 16px 0; border-radius: 0 4px 4px 0; }
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #eee; font-size: 12px; color: #999; }
+  .contract-box { background: #f5f5f5; border-radius: 6px; padding: 16px 20px; margin: 12px 0; }
+  .contract-box table { margin: 0; }
+  .contract-box td { border: none; padding: 5px 12px; }
+  .contract-box td:first-child { font-weight: 600; width: 200px; color: #444; }
+  .headroom { display: inline-block; background: #27ae60; color: white; padding: 3px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>KBRA — Brightcove Bandwidth & Usage Estimate</h1>
+<div class="subtitle">Prepared by Brightcove Sales Engineering · March 16, 2026 · For internal legal review</div>
+
+<h2>Contract Entitlements</h2>
+<div class="contract-box">
+  <table>
+    <tr><td>Plan</td><td>Marketing Studio Essential</td></tr>
+    <tr><td>Annual Plays Included</td><td>100,000 plays/year</td></tr>
+    <tr><td>Annual Bandwidth Included</td><td>500,000 GB (500 TB) / year</td></tr>
+    <tr><td>Managed Content</td><td>Included (not a limiting factor)</td></tr>
+    <tr><td>Term</td><td>12 months</td></tr>
+    <tr><td>Overage Policy (Plays)</td><td>No overages charged; right-sized at renewal</td></tr>
+    <tr><td>Overage Policy (Bandwidth)</td><td>Overage fees apply if exceeded</td></tr>
+  </table>
+</div>
+
+<h2>Brightcove Encoding Profile</h2>
+<table>
+  <tr><th>Setting</th><th>Value</th><th>Impact on Bandwidth</th></tr>
+  <tr><td>Profile</td><td>Multiplatform Standard</td><td>Fixed renditions, H.264 adaptive bitrate (ABR)</td></tr>
+  <tr><td>Codec</td><td>H.264</td><td>Industry standard, efficient compression</td></tr>
+  <tr><td>Maximum Resolution</td><td>720p</td><td>No 1080p delivery — lower data per play</td></tr>
+  <tr><td>Maximum Bitrate Cap</td><td>2,400 kbps</td><td>Hard ceiling, never exceeded</td></tr>
+</table>
+
+<h2>Usage Baseline — YouTube Channel Analysis</h2>
+<table>
+  <tr><th>Metric</th><th>Observed (YouTube)</th><th>Brightcove Projection</th></tr>
+  <tr><td>Upload frequency</td><td>~3 videos/week</td><td>~150 videos/year</td></tr>
+  <tr><td>Typical views/video</td><td>10–50 views</td><td>~25 avg (conservative)</td></tr>
+  <tr><td>Spike event views (e.g. major deal rated)</td><td>~140 views observed</td><td>~200 views (buffered)</td></tr>
+  <tr><td>Spike events/year (estimate)</td><td>—</td><td>~10 events</td></tr>
+  <tr><td>Average video length</td><td>9–14 min (podcasts); ~60 min (webinars)</td><td>~12 min average</td></tr>
+</table>
+
+<h2>Plays Estimate — Annual</h2>
+<table>
+  <tr><th>Component</th><th>Calculation</th><th>Plays</th></tr>
+  <tr><td>Regular content (140 videos × 25 views)</td><td>140 × 25</td><td>3,500</td></tr>
+  <tr><td>Spike events (10 events × 200 views)</td><td>10 × 200</td><td>2,000</td></tr>
+  <tr><td>Long-tail / older content views</td><td>3× buffer on regular</td><td>7,000</td></tr>
+  <tr class="highlight"><td><strong>Total Estimated Annual Plays</strong></td><td></td><td><strong>~12,500</strong></td></tr>
+  <tr><td>Contract Limit</td><td></td><td>100,000</td></tr>
+  <tr><td style="color:#27ae60; font-weight:600;">Headroom</td><td></td><td style="color:#27ae60; font-weight:600;">~87,500 plays (88% unused)</td></tr>
+</table>
+
+<h2>Bandwidth Estimate — Annual</h2>
+<table>
+  <tr><th>Variable</th><th>Value</th><th>Basis</th></tr>
+  <tr><td>Average delivery bitrate (fixed 720p rendition)</td><td>~1,800 kbps</td><td>Standard H.264 fixed 720p; below 2,400 kbps hard cap</td></tr>
+  <tr><td>Average video length watched</td><td>7.2 min (12 min × 60% completion)</td><td>Industry avg completion rate</td></tr>
+  <tr><td>Data per play</td><td>~0.09 GB</td><td>1,800 kbps × 432 sec ÷ 8 ÷ 1,073,741,824</td></tr>
+  <tr><td>Estimated annual plays</td><td>12,500</td><td>From above</td></tr>
+  <tr class="highlight"><td><strong>Total Estimated Annual Bandwidth</strong></td><td><strong>~1.1 TB</strong></td><td><strong>12,500 × 0.09 GB</strong></td></tr>
+  <tr><td>Contract Limit</td><td>500 TB</td><td>500,000 GB per contract</td></tr>
+  <tr><td style="color:#27ae60; font-weight:600;">Headroom</td><td style="color:#27ae60; font-weight:600;">~498.9 TB (99.8% unused)</td><td></td></tr>
+</table>
+
+<h2>Summary</h2>
+<div class="results-grid">
+  <div class="result-box">
+    <div class="label">Plays — Estimated vs. Limit</div>
+    <div class="value">12,500 / 100,000</div>
+    <div class="sub">~88% unused headroom<br>Would need <strong>8× growth</strong> to approach limit</div>
+  </div>
+  <div class="result-box">
+    <div class="label">Bandwidth — Estimated vs. Limit</div>
+    <div class="value">1.1 TB / 500 TB</div>
+    <div class="sub">~99.8% unused headroom<br>Would need <strong>440× growth</strong> to approach limit</div>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Note for legal review:</strong> These estimates are based on KBRA's observed YouTube traffic patterns and Brightcove's actual encoding profile for this account. The projections use a standard fixed 720p H.264 bitrate of 1,800 kbps and include a 3× buffer on regular traffic to account for organic growth and unpredictable spike events. Even with a 5× growth scenario (62,500 plays, ~5.7 TB), KBRA remains comfortably within both contract limits. Bandwidth overages — the only metric with potential overage charges — would require usage to increase by more than 440× from current projected levels.
+</div>
+
+<h2>Overage Risk Assessment</h2>
+<table>
+  <tr><th>Scenario</th><th>Plays</th><th>Bandwidth</th><th>Risk</th></tr>
+  <tr><td>Current projection (baseline)</td><td>12,500</td><td>~1.1 TB</td><td style="color:#27ae60;">✓ No risk</td></tr>
+  <tr><td>3× growth</td><td>37,500</td><td>~3.4 TB</td><td style="color:#27ae60;">✓ No risk</td></tr>
+  <tr><td>5× growth</td><td>62,500</td><td>~5.7 TB</td><td style="color:#27ae60;">✓ No risk</td></tr>
+  <tr><td>10× growth</td><td>125,000</td><td>~11.4 TB</td><td style="color:#e67e22;">⚠ Plays overage possible (right-sized at renewal, no penalty)</td></tr>
+  <tr><td>440× growth</td><td>5.5M+</td><td>~500 TB</td><td style="color:#e74c3c;">✗ Bandwidth overage threshold</td></tr>
+</table>
+
+<div class="footer">
+  Brightcove, Inc. · Prepared by Nathan Veer, Sales Engineering · nveer@brightcove.com<br>
+  Based on KBRA YouTube channel analysis (March 2026) and Brightcove account encoding profile: <em>multi-platform-standard-dynamic</em>.<br>
+  Estimates are projections only and not contractual guarantees of usage.
+</div>
+
+</body>
+</html>
