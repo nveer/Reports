@@ -4,6 +4,54 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Newsday — Brightcove Configuration Guide</title>
+  <script>
+    (function() {
+      const CORRECT = "NewsdayD3m0";
+      const SESSION_KEY = "bc_guide_auth";
+      function showGate() {
+        document.documentElement.style.overflow = "hidden";
+        var gate = document.createElement("div");
+        gate.id = "bc-gate";
+        gate.style.cssText = "position:fixed;inset:0;z-index:99999;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',system-ui,sans-serif;";
+        gate.innerHTML = [
+          '<div style="background:#16213e;border:1px solid #2d3a5e;border-radius:16px;padding:48px 40px;max-width:420px;width:90%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.5);">',
+            '<div style="width:56px;height:56px;background:rgba(255,102,0,0.12);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 20px;">🎬</div>',
+            '<div style="color:#FF6600;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Brightcove</div>',
+            '<h1 style="color:#fff;font-size:1.3rem;font-weight:700;margin:0 0 6px;">Newsday Configuration Guide</h1>',
+            '<p style="color:#6b7280;font-size:0.875rem;margin:0 0 28px;">This document is confidential.<br>Enter the access password to continue.</p>',
+            '<input id="bc-pw" type="password" placeholder="Enter password" style="width:100%;box-sizing:border-box;padding:12px 16px;border-radius:8px;border:1.5px solid #2d3a5e;background:#0f1623;color:#fff;font-size:1rem;outline:none;margin-bottom:10px;" />',
+            '<div id="bc-err" style="color:#ef4444;font-size:0.8rem;min-height:18px;margin-bottom:10px;"></div>',
+            '<button id="bc-btn" style="width:100%;padding:12px;background:#FF6600;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;">Access Document</button>',
+            '<p style="color:#374151;font-size:0.75rem;margin:20px 0 0;">Provided by Brightcove Sales Engineering</p>',
+          '</div>'
+        ].join("");
+        document.body.appendChild(gate);
+        var input = document.getElementById("bc-pw");
+        var btn = document.getElementById("bc-btn");
+        var err = document.getElementById("bc-err");
+        function attempt() {
+          if (input.value === CORRECT) {
+            sessionStorage.setItem(SESSION_KEY, "1");
+            gate.style.opacity = "0";
+            gate.style.transition = "opacity 0.3s";
+            setTimeout(function(){ gate.remove(); document.documentElement.style.overflow = ""; }, 300);
+          } else {
+            err.textContent = "Incorrect password. Please try again.";
+            input.value = "";
+            input.focus();
+            input.style.borderColor = "#ef4444";
+            setTimeout(function(){ input.style.borderColor = "#2d3a5e"; }, 1500);
+          }
+        }
+        btn.addEventListener("click", attempt);
+        input.addEventListener("keydown", function(e){ if(e.key==="Enter") attempt(); });
+        setTimeout(function(){ input.focus(); }, 100);
+      }
+      if (sessionStorage.getItem(SESSION_KEY) !== "1") {
+        document.addEventListener("DOMContentLoaded", showGate);
+      }
+    })();
+  </script>
   <style>
     :root {
       --bc-orange: #FF6600;
