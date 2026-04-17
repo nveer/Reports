@@ -320,6 +320,63 @@
     }
     footer a { color: var(--bc-orange); text-decoration: none; }
 
+    /* ── Q&A Section ── */
+    .qa-item {
+      margin-bottom: 14px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--bc-border);
+    }
+    .qa-question {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 14px 18px;
+      font-size: 0.93rem;
+      font-weight: 600;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .qa-question .q-label {
+      background: var(--bc-orange);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .qa-answer {
+      padding: 14px 18px;
+      font-size: 0.88rem;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .qa-answer.confirmed {
+      background: #f0fdf4;
+      color: #14532d;
+      border-top: 1px solid #86efac;
+    }
+    .qa-answer.open {
+      background: #fff7ed;
+      color: #78350f;
+      border-top: 1px solid #fcd34d;
+    }
+    .qa-answer .a-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .qa-answer.confirmed .a-label { background: #10b981; color: white; }
+    .qa-answer.open .a-label { background: #f59e0b; color: white; }
+
     code {
       background: #f1f5f9;
       color: #c2185b;
@@ -683,6 +740,7 @@
             <li>Ad Server: Paste your VAST ad tag URL (DFP/GAM or other)</li>
             <li>Configure beacons, targeting params as needed</li>
           </ul>
+          <div class="alert alert-info">ℹ️ <strong>SSAI is direct-sold only — no programmatic.</strong> Brightcove SSAI stitches ads from your own ad server (GAM/DFP, FreeWheel, Springserve). Programmatic/RTB is not supported via SSAI — all inventory must be managed through your direct ad server. Pricing: <strong>$0.40 per 1,000 ad insertions</strong>, charged only when ads are actually stitched into the stream (unfilled inventory = no charge).</div>
         </div>
       </li>
       <li>
@@ -752,15 +810,28 @@
       </li>
       <li>
         <div class="step-content">
-          <strong>Insert an Ad Break</strong>
+          <strong>Insert an Ad Break (Control Room UI)</strong>
           <p>Click <strong>Go To Ad</strong> → Select the desired ad break duration → Click <strong>Insert</strong>. The fill slate plays for any unfilled inventory during that window.</p>
-          <div class="alert alert-warn">⚠️ <strong>There will be a delay</strong> between clicking Insert and viewers seeing the ad. Due to the HLS segment buffer, expect <strong>18–30 seconds</strong> from trigger to on-screen. Operators must account for this — trigger the break early, and plan a minimum 60-second ad window. See the <em>Latency &amp; Switching Expectations</em> section at the bottom of this guide for the full breakdown.</div>
+          <div class="alert alert-warn">⚠️ <strong>Timing is variable, not fixed.</strong> "Insert Ad Now" fires the break at the <strong>next HLS segment boundary</strong> — not at a fixed offset. With Brightcove's default 6-second segment length, that means <strong>0–6 seconds of variable latency</strong> from button press to break start. Depending on where in the current segment the button is pressed, the actual delay shifts each time. Anchors <em>cannot</em> reliably compensate with a fixed "hit it 8s early" habit — the offset is different every trigger. Plan a minimum 60-second break window and brief anchors on the variable nature of the in-point. <strong>Minimum cuepoint duration: 12 seconds</strong> (must be ≥ 2× the 6-second segment length). See the <em>Latency &amp; Switching Expectations</em> section for the full breakdown.</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <strong>API-Triggered Ad Breaks (Automation Alternative)</strong>
+          <p>Instead of using the Control Room UI, ad breaks can be triggered programmatically via the Live API. This is the recommended approach for integrating with newsroom automation systems (e.g., <strong>Mozart, Vizrt</strong>):</p>
+          <ul>
+            <li>Endpoint: <code>POST https://api.bcovlive.io/v1/jobs/{job_id}/cuepoint</code></li>
+            <li>Payload: specify duration (seconds) and cue point type</li>
+            <li>Eliminates the need for a $5,000+ hardware SCTE-35 encoder</li>
+            <li>Allows studio automation systems to trigger ad breaks on a precise schedule</li>
+          </ul>
+          <div class="alert alert-warn">⚠️ <strong>Open item:</strong> Whether this API trigger also emits a SCTE-35 marker in the clean <code>playlist.m3u8</code> (FAST partner stream) has <strong>not yet been confirmed</strong> by Brightcove engineering. Confirm before presenting FAST delivery to Newsday as an API-only workflow.</div>
         </div>
       </li>
       <li>
         <div class="step-content">
           <strong>Manual vs. Automated Breaks</strong>
-          <p>For a news channel, ad breaks during live segments are triggered manually by a producer. During Cloud Playout VOD segments and between-show ad slots, breaks fire automatically at their scheduled time — no manual action needed and no buffer delay.</p>
+          <p>For a news channel, ad breaks during live segments are triggered manually by a producer (or via API from a newsroom automation system). During Cloud Playout VOD segments and between-show ad slots, breaks fire automatically at their scheduled time — no manual action needed and no buffer delay.</p>
         </div>
       </li>
     </ol>
@@ -804,7 +875,10 @@
         </tr>
       </tbody>
     </table>
-    <div class="callout callout-warning" style="margin-top:14px;">
+    <div class="alert alert-good" style="margin-top:14px;">
+      ✅ <span><strong>CDN Architecture:</strong> Brightcove uses <strong>Fastly as the primary CDN</strong> with <strong>Akamai as the failover CDN</strong>. Both CDNs deliver standard HLS M3U8 — the URL patterns above use the Fastly hostname by default. CDN failover is managed automatically by Brightcove. Newsday does not need to configure separate URLs for each CDN.</span>
+    </div>
+    <div class="callout callout-warning" style="margin-top:10px;">
       ⚠️ <span><strong>Verify during testing:</strong> Pull up your live job in the Control Room or via the Live API and confirm you can retrieve both URL patterns. Use a stream inspector to verify SCTE-35 markers are present in the clean <code>playlist.m3u8</code> output. SCTE-35 passthrough on the clean URL has been confirmed by Brightcove product (April 2026), but validate in your own account before presenting to Newsday.</span>
     </div>
   </div>
@@ -994,7 +1068,10 @@
         </tr>
       </tbody>
     </table>
-    <div class="callout callout-warning">
+    <div class="alert alert-warn" style="margin-top:14px;">
+      ⚠️ <span><strong>Open item — EPG behavior during live override:</strong> Whether Cloud Playout's schedule clock continues running in the background during a live interrupt (returning to the correct EPG position) or advances to the next item is not yet confirmed. Awaiting Brightcove engineering response before committing to Newsday.</span>
+    </div>
+    <div class="alert alert-warn" style="margin-top:10px;">
       ⚠️ <span>Cloud Playout requires the live input to be connected and streaming before the slot starts. If the encoder isn't sending signal, Cloud Playout will play the fill slate and advance to the next item after a short delay. Build a hot-standby encoder step into the ops runbook for time-sensitive content.</span>
     </div>
   </div>
@@ -1030,8 +1107,8 @@
         </tr>
         <tr style="background:#fff7ed;">
           <td><strong>Live ad breaks</strong> (manually triggered during live feed)</td>
-          <td>⚠️ 18–30 sec delay after trigger</td>
-          <td>HLS buffer delay cannot be pre-compensated for live signals. Operators must trigger ~30 sec early. Plan minimum 60-sec break windows.</td>
+          <td>⚠️ 0–6s variable to segment boundary + 18–30s viewer buffer</td>
+          <td>Break fires at next HLS segment boundary (0–6s on default 6s segments) — variable, not fixed. Anchors cannot use a fixed offset. Add viewer buffer on top. Minimum break duration: 12s. Plan minimum 60-sec break windows.</td>
         </tr>
         <tr>
           <td>End-to-end stream latency (encoder → viewer)</td>
@@ -1070,7 +1147,147 @@
       <li><strong>MP4 rendition missing from ingest profile:</strong> Cloud Playout will skip or fail on any video without an MP4. Run a Media API audit before importing the content library.</li>
       <li><strong>SSAI not enabled at account level:</strong> This is a support request — it must be enabled by Brightcove before any SSAI config will work. Confirm with your Brightcove TAM before go-live week.</li>
       <li><strong>✅ SCTE-35 passthrough confirmed:</strong> SCTE-35 markers DO survive the Fastly HLS URL (the clean, non-SSAI output). Confirmed April 2026. No third-party transcoder (e.g. Wowza) is required for FAST partner HLS delivery — use the Fastly URL directly for FAST channels, and the SSAI URL for O&amp;O properties.</li>
+      <li><strong>✅ Ad blocker bypass is a key SSAI benefit:</strong> Because SSAI stitches ads at the manifest layer (server-side), ads cannot be blocked by client-side ad blockers. Brightcove data shows an <strong>18–24% viewership increase</strong> for monetized content when SSAI is used versus client-side ad insertion — a meaningful revenue uplift for Newsday's direct-sold inventory.</li>
     </ul>
+  </div>
+
+  <hr>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SECTION 7: Q&A — NEWSDAY TECHNICAL QUESTIONS  -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="section-icon icon-blue">❓</div>
+    <div>
+      <h2>Newsday Q&amp;A — Technical Questions &amp; Answers</h2>
+      <p>Questions raised by TC McCarthy &amp; Milan · April 17, 2026 SSAI Call · <span style="color:#10b981;font-weight:600;">Green = Confirmed</span> · <span style="color:#f59e0b;font-weight:600;">Orange = Open Item</span></p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      Can Brightcove deliver two separate HLS streams from a single live job — one with SSAI ads stitched in, one clean with SCTE-35 markers intact for FAST channel partners?
+    </div>
+    <div class="qa-answer confirmed">
+      <span class="a-label">✓ CONFIRMED</span>
+      Yes. Every ad-enabled Brightcove Live job produces two native M3U8 output URLs automatically — no extra configuration required. The SSAI URL (<code>playlist_ssaiM.m3u8</code>) is used for Newsday's O&amp;O website and apps. The clean URL (<code>playlist.m3u8</code>) carries SCTE-35 markers intact and is provided directly to FAST distribution partners.
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      Do pre-scheduled ad slots between shows in Cloud Playout fire at exact times, or is there an HLS buffer delay like with live ad breaks?
+    </div>
+    <div class="qa-answer confirmed">
+      <span class="a-label">✓ CONFIRMED</span>
+      Pre-scheduled ad slots (inserted between shows in the Cloud Playout EPG) fire at their <strong>exact scheduled time</strong> — no buffer delay. Cloud Playout knows the full schedule in advance and stitches the ad transition precisely. Only manually triggered ad breaks during live segments carry the 18–30 second HLS buffer delay.
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      What CDN delivers the Brightcove live streams, and is there CDN failover?
+    </div>
+    <div class="qa-answer confirmed">
+      <span class="a-label">✓ CONFIRMED</span>
+      <strong>Fastly is the primary CDN.</strong> Akamai serves as the automatic failover CDN. Both are managed entirely by Brightcove — Newsday does not need to configure separate URLs or manage CDN routing. Failover is transparent to the viewer.
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      Is SSAI programmatic (RTB/Open Auction) or direct-sold only?
+    </div>
+    <div class="qa-answer confirmed">
+      <span class="a-label">✓ CONFIRMED</span>
+      <strong>Direct-sold only.</strong> Brightcove SSAI stitches ads served from your own ad server (GAM/DFP, FreeWheel, Springserve, etc.). Programmatic/RTB demand is not supported through SSAI. All ad inventory must be managed and trafficked through Newsday's own direct ad server.
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      What does SSAI cost, and how is it billed?
+    </div>
+    <div class="qa-answer confirmed">
+      <span class="a-label">✓ CONFIRMED</span>
+      <strong>$0.40 per 1,000 ad insertions.</strong> Billing is per-stitch — Newsday is only charged when an ad is actually stitched into the stream. Unfilled inventory (fill slate playback) is not billed. This makes SSAI cost predictable and proportional to sold inventory.
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      When does a live ad break actually fire after pressing "Insert"? How precise is the in-point and out-point, and how do we coordinate the anchor?
+    </div>
+    <div class="qa-answer open">
+      <span class="a-label">⚠ PARTIAL — NEEDS CARL</span>
+      <strong>Brightcove's default HLS segment length is 6 seconds</strong> (Apple's recommendation — Brightcove's standard). Pressing "Insert Ad Now" fires the break at the <em>next segment boundary</em>, meaning in-point latency is <strong>0–6 seconds variable</strong> — not a fixed offset. The actual delay shifts every trigger depending on where in the current segment the button is pressed. Anchors cannot compensate with a fixed "throw early" habit. Break duration is set via the <code>duration</code> parameter (seconds) and must be ≥ 12 seconds (2× the 6s segment length). The out-point also resolves to a segment boundary with the same variable behavior.
+      <br><br><strong>Open items (following up with Carl):</strong>
+      <ol style="margin-top:6px;margin-left:18px;font-size:0.87rem;">
+        <li>Is there a studio-facing countdown or any Cloud Playout UI element showing when the break starts/ends so the anchor has a visual cue?</li>
+        <li>Is there a way to get more predictable in/out timing — e.g., scheduled cuepoints via <code>timecode</code> parameter, or running a shorter (2s) segment length?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      Can ad breaks be triggered via API instead of a hardware SCTE-35 encoder? How does it integrate with newsroom automation (Mozart, Vizrt)?
+    </div>
+    <div class="qa-answer confirmed">
+      <span class="a-label">✓ CONFIRMED</span>
+      Yes. The Brightcove Live API endpoint <code>POST https://api.bcovlive.io/v1/jobs/{job_id}/cuepoint</code> triggers an ad break on-demand with a specified duration. This eliminates the need for a $5,000+ hardware SCTE-35 encoder entirely. Mozart or Vizrt can call this endpoint directly on a scheduled basis to automate ad break insertion aligned with the show rundown.
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      Does a breaking news override disrupt the underlying EPG schedule or ad slot timing? Does the schedule continue running in the background, and what is the UI trigger for an unplanned live interrupt?
+    </div>
+    <div class="qa-answer open">
+      <span class="a-label">⚠ OPEN</span>
+      <strong>Not yet confirmed.</strong> It is not documented whether Cloud Playout's schedule clock continues ticking during a live override (returning to the correct EPG position when live ends) or whether it advances to the next scheduled item. The exact UI trigger for an unplanned live interrupt also needs verification. <strong>Action: Awaiting confirmation from Brightcove engineering.</strong>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      Does Newsday need a hardware SCTE-35 encoder to deliver SCTE-35 markers to FAST channel partners?
+    </div>
+    <div class="qa-answer confirmed">
+      <span class="a-label">✓ CONFIRMED</span>
+      No hardware SCTE-35 encoder is required. SCTE-35 markers pass through intact on the clean Fastly HLS URL (<code>playlist.m3u8</code>). Confirmed by Brightcove product team, April 2026. Newsday can provide this URL directly to FAST distribution partners without any third-party transcoder (Wowza or otherwise).
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      Does the API cuepoint endpoint (<code>POST /v1/jobs/{job_id}/cuepoint</code>) emit a SCTE-35 marker in the clean HLS stream for FAST partners — or only in the SSAI stream?
+    </div>
+    <div class="qa-answer open">
+      <span class="a-label">⚠ OPEN</span>
+      <strong>Not yet confirmed.</strong> The Control Room "Go To Ad" trigger is confirmed to generate SCTE-35 in the clean stream. Whether the API endpoint produces the same SCTE-35 output in <code>playlist.m3u8</code> has not been verified with Brightcove engineering. <strong>Action: Follow up with Brightcove product/engineering before committing to an API-only FAST workflow.</strong>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question">
+      <span class="q-label">Q</span>
+      Can Newsday's Tyrion microservice eliminate the need for a Static Entry Point (SEP) for live news event injection into Cloud Playout?
+    </div>
+    <div class="qa-answer confirmed">
+      <span class="a-label">✓ CONFIRMED (APPROACH)</span>
+      Yes — architecturally. Tyrion pings the Brightcove Live API until the encoder is ready, then dynamically writes the RTP ingest endpoint back to Haivision. This approach provides the same operational benefit as a SEP (no manual reconfig) without requiring a persistent static entry point. <strong>Engineering confirmation pending full end-to-end test.</strong>
+    </div>
   </div>
 
 <footer>
