@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE Activity Dashboard | Nathan Veer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1923;
+            --bg-secondary: #1a2332;
+            --bg-tertiary: #232d3d;
+            --accent-cyan: #00d4ff;
+            --accent-green: #00e676;
+            --accent-orange: #ff9100;
+            --accent-purple: #b388ff;
+            --accent-blue: #0088ff;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border-color: #3a4a5a;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-bottom: 2px solid var(--accent-cyan);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            letter-spacing: -0.5px;
+        }
+
+        .header-title p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.live {
+            background-color: var(--accent-green);
+        }
+
+        .status-dot.cached {
+            background-color: var(--accent-orange);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .last-updated {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Date Range Controls */
+        .controls {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .preset-btn {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .preset-btn:hover {
+            background-color: var(--bg-primary);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .preset-btn.active {
+            background-color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            color: var(--bg-primary);
+        }
+
+        .date-inputs {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .date-input {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            background-color: var(--bg-primary);
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .kpi-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .kpi-card:nth-child(1) .kpi-icon { background-color: rgba(0, 212, 255, 0.2); color: var(--accent-cyan); }
+        .kpi-card:nth-child(2) .kpi-icon { background-color: rgba(0, 136, 255, 0.2); color: var(--accent-blue); }
+        .kpi-card:nth-child(3) .kpi-icon { background-color: rgba(0, 230, 118, 0.2); color: var(--accent-green); }
+        .kpi-card:nth-child(4) .kpi-icon { background-color: rgba(255, 145, 0, 0.2); color: var(--accent-orange); }
+        .kpi-card:nth-child(5) .kpi-icon { background-color: rgba(179, 136, 255, 0.2); color: var(--accent-purple); }
+        .kpi-card:nth-child(6) .kpi-icon { background-color: rgba(0, 230, 118, 0.2); color: var(--accent-green); }
+
+        .kpi-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0.5rem 0;
+        }
+
+        .kpi-delta {
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .kpi-delta.positive {
+            background-color: rgba(0, 230, 118, 0.2);
+            color: var(--accent-green);
+        }
+
+        .kpi-delta.negative {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        .kpi-delta.neutral {
+            background-color: rgba(160, 160, 160, 0.2);
+            color: var(--text-secondary);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+
+        /* Table Section */
+        .table-section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+
+        .table-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--bg-tertiary);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        tbody tr:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .week-cell {
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .comparison-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-name {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .metric-change {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .metric-change.positive {
+            color: var(--accent-green);
+        }
+
+        .metric-change.negative {
+            color: #f44336;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .kpi-value {
+                font-size: 1.5rem;
+            }
+
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .preset-btn {
+                flex: 1;
+            }
+
+            .date-inputs {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .date-input {
+                width: 100%;
+            }
+
+            .comparison-section {
+                grid-template-columns: 1fr;
+            }
+
+            .table-section {
+                overflow-x: scroll;
+            }
+
+            table {
+                min-width: 600px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-title h1 {
+                font-size: 1.25rem;
+            }
+
+            .kpi-value {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.8rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <h1>SE Activity Dashboard</h1>
+                <p>Nathan Veer | Brightcove</p>
+            </div>
+            <div class="header-status">
+                <div class="status-indicator">
+                    <div class="status-dot live" id="statusDot"></div>
+                    <span id="statusText">Loading data...</span>
+                </div>
+                <div class="last-updated" id="lastUpdated"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Date Range Controls -->
+        <div class="controls">
+            <div class="controls-row">
+                <div class="control-group">
+                    <button class="preset-btn active" data-preset="30">Last 30 Days</button>
+                    <button class="preset-btn" data-preset="14">Last 14 Days</button>
+                    <button class="preset-btn" data-preset="7">Last 7 Days</button>
+                    <button class="preset-btn" data-preset="all">All Time</button>
+                </div>
+                <div class="control-group">
+                    <label style="color: var(--text-secondary); font-size: 0.85rem;">Custom Range:</label>
+                    <div class="date-inputs">
+                        <input type="date" id="startDate" class="date-input" placeholder="Start">
+                        <span style="color: var(--text-secondary);">to</span>
+                        <input type="date" id="endDate" class="date-input" placeholder="End">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon">📞</div>
+                    <div class="kpi-label">Customer Meetings</div>
+                </div>
+                <div class="kpi-value" id="kpiCustomerMeetings">0</div>
+                <div class="kpi-delta neutral" id="deltaCustomerMeetings">-</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon">👥</div>
+                    <div class="kpi-label">Internal Meetings</div>
+                </div>
+                <div class="kpi-value" id="kpiInternalMeetings">0</div>
+                <div class="kpi-delta neutral" id="deltaInternalMeetings">-</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon">📧</div>
+                    <div class="kpi-label">Emails Sent</div>
+                </div>
+                <div class="kpi-value" id="kpiEmailsSent">0</div>
+                <div class="kpi-delta neutral" id="deltaEmailsSent">-</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon">📬</div>
+                    <div class="kpi-label">Emails Received</div>
+                </div>
+                <div class="kpi-value" id="kpiEmailsReceived">0</div>
+                <div class="kpi-delta neutral" id="deltaEmailsReceived">-</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon">🏢</div>
+                    <div class="kpi-label">Unique Orgs</div>
+                </div>
+                <div class="kpi-value" id="kpiUniqueOrgs">0</div>
+                <div class="kpi-delta neutral" id="deltaUniqueOrgs">-</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <div class="kpi-icon">👤</div>
+                    <div class="kpi-label">Unique Contacts</div>
+                </div>
+                <div class="kpi-value" id="kpiUniqueContacts">0</div>
+                <div class="kpi-delta neutral" id="deltaUniqueContacts">-</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="chart-title">📊 Meetings by Type (Daily)</div>
+                <div class="chart-container">
+                    <canvas id="meetingsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">✉️ Email Activity (Daily)</div>
+                <div class="chart-container">
+                    <canvas id="emailsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">🌐 Unique Organizations (Daily)</div>
+                <div class="chart-container">
+                    <canvas id="orgsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Summary Table -->
+        <div class="table-section">
+            <div class="table-title">📅 Weekly Summary</div>
+            <table id="weeklySummaryTable">
+                <thead>
+                    <tr>
+                        <th>Week</th>
+                        <th>Customer Meetings</th>
+                        <th>Internal Meetings</th>
+                        <th>Total Meetings</th>
+                        <th>Emails Sent</th>
+                        <th>Emails Received</th>
+                        <th>Unique Orgs</th>
+                        <th>Unique Contacts</th>
+                    </tr>
+                </thead>
+                <tbody id="weeklySummaryBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Comparison Section -->
+        <div class="comparison-section">
+            <div class="comparison-card">
+                <div class="comparison-title">📊 This Week vs Last Week</div>
+                <div id="weekComparisonContent"></div>
+            </div>
+            <div class="comparison-card">
+                <div class="comparison-title">📈 This Month vs Last Month</div>
+                <div id="monthComparisonContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Embedded fallback data
+        const FALLBACK_DATA = `Date,Customer Meetings,Internal Meetings,Total Meetings,Emails Sent,Emails Received,Unique Orgs Contacted,Unique Contacts,Total Calls
+2026-03-26,1,1,2,4,6,1,3,0
+2026-03-27,3,2,5,2,2,5,15,0
+2026-03-28,0,0,0,0,0,0,0,0
+2026-03-29,0,0,0,0,0,0,0,0
+2026-03-30,2,4,6,3,3,2,2,0
+2026-03-31,2,3,5,2,3,2,2,0
+2026-04-01,3,3,6,1,6,4,11,0
+2026-04-02,4,2,6,8,6,10,20,0
+2026-04-03,1,1,2,2,6,1,3,0
+2026-04-04,0,0,0,0,0,0,0,0
+2026-04-05,0,0,0,0,0,0,0,0
+2026-04-06,2,3,5,2,2,3,3,0
+2026-04-07,7,0,7,1,5,9,18,0
+2026-04-08,7,2,9,4,7,7,19,0
+2026-04-09,5,1,6,3,1,6,9,0
+2026-04-10,0,1,1,4,3,0,0,0
+2026-04-11,0,0,0,0,0,0,0,0
+2026-04-12,0,0,0,0,0,0,0,0
+2026-04-13,2,2,4,0,1,3,6,0
+2026-04-14,4,1,5,0,1,4,5,0
+2026-04-15,9,3,12,1,2,12,22,0
+2026-04-16,3,1,4,0,5,5,15,0
+2026-04-17,3,1,4,0,8,3,9,0
+2026-04-18,0,1,1,0,1,0,0,0
+2026-04-19,9,1,10,0,0,11,12,0
+2026-04-20,11,0,11,0,5,15,19,0
+2026-04-21,11,1,12,0,5,13,16,0
+2026-04-22,1,0,1,0,3,1,1,0
+2026-04-23,2,0,2,1,18,3,6,0
+2026-04-24,3,2,5,0,28,3,5,0
+2026-04-25,0,0,0,0,1,0,0,0`;
+
+        let allData = [];
+        let filteredData = [];
+        let dataSource = 'cached';
+        let charts = {};
+
+        // Parse CSV data
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',');
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                const row = {};
+                headers.forEach((header, index) => {
+                    row[header] = isNaN(values[index]) ? values[index] : parseInt(values[index]);
+                });
+                row.Date = new Date(row.Date);
+                data.push(row);
+            }
+
+            return data.sort((a, b) => a.Date - b.Date);
+        }
+
+        // Fetch data from Google Sheets
+        async function fetchData() {
+            const csvUrl = 'https://docs.google.com/spreadsheets/d/1u2LVXgHLCnKGmpa7ZmmgELFvr-CA5UbWZ4-_pxNcmGM/gviz/tq?tqx=out:csv';
+
+            try {
+                const response = await fetch(csvUrl);
+                if (response.ok) {
+                    const csvText = await response.text();
+                    allData = parseCSV(csvText);
+                    dataSource = 'live';
+                    console.log('Data fetched from Google Sheets');
+                } else {
+                    throw new Error('Failed to fetch');
+                }
+            } catch (error) {
+                console.log('Using fallback embedded data:', error);
+                allData = parseCSV(FALLBACK_DATA);
+                dataSource = 'cached';
+            }
+
+            updateStatus();
+            applyDateFilter('30');
+        }
+
+        // Update status indicator
+        function updateStatus() {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
+            statusDot.className = 'status-dot ' + dataSource;
+            statusText.textContent = dataSource === 'live' ? '🟢 Live Data' : '🟡 Cached Data';
+
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent = `Last updated: ${now.toLocaleTimeString()}`;
+        }
+
+        // Filter data by date range
+        function filterDataByDateRange(startDate, endDate) {
+            return allData.filter(row => {
+                const date = new Date(row.Date);
+                return date >= startDate && date <= endDate;
+            });
+        }
+
+        // Calculate KPIs
+        function calculateKPIs(data) {
+            const metrics = {
+                customerMeetings: 0,
+                internalMeetings: 0,
+                totalMeetings: 0,
+                emailsSent: 0,
+                emailsReceived: 0,
+                uniqueOrgs: new Set(),
+                uniqueContacts: 0,
+                totalCalls: 0
+            };
+
+            data.forEach(row => {
+                metrics.customerMeetings += row['Customer Meetings'];
+                metrics.internalMeetings += row['Internal Meetings'];
+                metrics.totalMeetings += row['Total Meetings'];
+                metrics.emailsSent += row['Emails Sent'];
+                metrics.emailsReceived += row['Emails Received'];
+                metrics.uniqueOrgs.add(row['Unique Orgs Contacted']);
+                metrics.uniqueContacts += row['Unique Contacts'];
+                metrics.totalCalls += row['Total Calls'];
+            });
+
+            metrics.uniqueOrgsCount = metrics.uniqueOrgs.size > 0 ?
+                Math.max(...Array.from(metrics.uniqueOrgs)) : 0;
+
+            return metrics;
+        }
+
+        // Calculate delta percentage
+        function calculateDelta(current, previous) {
+            if (previous === 0) return current > 0 ? '↑ New' : '→ No change';
+            const delta = ((current - previous) / previous * 100).toFixed(0);
+            const sign = delta > 0 ? '+' : '';
+            return `${sign}${delta}%`;
+        }
+
+        // Get delta class
+        function getDeltaClass(current, previous) {
+            if (previous === 0) return 'neutral';
+            return current >= previous ? 'positive' : 'negative';
+        }
+
+        // Update KPI cards
+        function updateKPICards() {
+            const currentKPIs = calculateKPIs(filteredData);
+
+            // Get last week's data for comparison
+            const today = new Date();
+            const lastWeekStart = new Date(today);
+            lastWeekStart.setDate(today.getDate() - 14);
+            const lastWeekEnd = new Date(today);
+            lastWeekEnd.setDate(today.getDate() - 7);
+
+            const lastWeekData = filterDataByDateRange(lastWeekStart, lastWeekEnd);
+            const lastWeekKPIs = calculateKPIs(lastWeekData);
+
+            // Update display
+            const kpiUpdates = [
+                { id: 'kpiCustomerMeetings', deltaId: 'deltaCustomerMeetings', value: currentKPIs.customerMeetings, prevValue: lastWeekKPIs.customerMeetings },
+                { id: 'kpiInternalMeetings', deltaId: 'deltaInternalMeetings', value: currentKPIs.internalMeetings, prevValue: lastWeekKPIs.internalMeetings },
+                { id: 'kpiEmailsSent', deltaId: 'deltaEmailsSent', value: currentKPIs.emailsSent, prevValue: lastWeekKPIs.emailsSent },
+                { id: 'kpiEmailsReceived', deltaId: 'deltaEmailsReceived', value: currentKPIs.emailsReceived, prevValue: lastWeekKPIs.emailsReceived },
+                { id: 'kpiUniqueOrgs', deltaId: 'deltaUniqueOrgs', value: currentKPIs.uniqueOrgsCount, prevValue: lastWeekKPIs.uniqueOrgsCount },
+                { id: 'kpiUniqueContacts', deltaId: 'deltaUniqueContacts', value: currentKPIs.uniqueContacts, prevValue: lastWeekKPIs.uniqueContacts }
+            ];
+
+            kpiUpdates.forEach(kpi => {
+                document.getElementById(kpi.id).textContent = kpi.value;
+                const deltaEl = document.getElementById(kpi.deltaId);
+                deltaEl.textContent = calculateDelta(kpi.value, kpi.prevValue);
+                deltaEl.className = 'kpi-delta ' + getDeltaClass(kpi.value, kpi.prevValue);
+            });
+
+            return currentKPIs;
+        }
+
+        // Update charts
+        function updateCharts(currentKPIs) {
+            const chartDates = filteredData.map(d => d.Date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+            const customerMeetings = filteredData.map(d => d['Customer Meetings']);
+            const internalMeetings = filteredData.map(d => d['Internal Meetings']);
+            const emailsSent = filteredData.map(d => d['Emails Sent']);
+            const emailsReceived = filteredData.map(d => d['Emails Received']);
+            const uniqueOrgs = filteredData.map(d => d['Unique Orgs Contacted']);
+
+            // Destroy existing charts
+            Object.values(charts).forEach(chart => chart?.destroy?.());
+
+            // Meetings Chart
+            charts.meetings = new Chart(document.getElementById('meetingsChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartDates,
+                    datasets: [
+                        {
+                            label: 'Customer Meetings',
+                            data: customerMeetings,
+                            backgroundColor: 'rgba(0, 212, 255, 0.8)',
+                            borderColor: 'rgb(0, 212, 255)',
+                            borderWidth: 0,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Internal Meetings',
+                            data: internalMeetings,
+                            backgroundColor: 'rgba(0, 136, 255, 0.8)',
+                            borderColor: 'rgb(0, 136, 255)',
+                            borderWidth: 0,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } },
+                        y: { stacked: true, beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }
+                    }
+                }
+            });
+
+            // Emails Chart
+            charts.emails = new Chart(document.getElementById('emailsChart'), {
+                type: 'line',
+                data: {
+                    labels: chartDates,
+                    datasets: [
+                        {
+                            label: 'Emails Sent',
+                            data: emailsSent,
+                            borderColor: 'rgb(0, 230, 118)',
+                            backgroundColor: 'rgba(0, 230, 118, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: 'rgb(0, 230, 118)',
+                            pointBorderColor: '#1a2332',
+                            pointBorderWidth: 2
+                        },
+                        {
+                            label: 'Emails Received',
+                            data: emailsReceived,
+                            borderColor: 'rgb(255, 145, 0)',
+                            backgroundColor: 'rgba(255, 145, 0, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: 'rgb(255, 145, 0)',
+                            pointBorderColor: '#1a2332',
+                            pointBorderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } },
+                        y: { beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }
+                    }
+                }
+            });
+
+            // Orgs Chart
+            charts.orgs = new Chart(document.getElementById('orgsChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartDates,
+                    datasets: [
+                        {
+                            label: 'Unique Orgs Contacted',
+                            data: uniqueOrgs,
+                            backgroundColor: 'rgba(179, 136, 255, 0.8)',
+                            borderColor: 'rgb(179, 136, 255)',
+                            borderWidth: 0,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } },
+                        y: { beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }
+                    }
+                }
+            });
+        }
+
+        // Generate weekly summary
+        function generateWeeklySummary() {
+            const weeks = {};
+
+            filteredData.forEach(row => {
+                const date = new Date(row.Date);
+                const weekStart = new Date(date);
+                weekStart.setDate(date.getDate() - date.getDay());
+                const weekKey = weekStart.toLocaleDateString();
+
+                if (!weeks[weekKey]) {
+                    weeks[weekKey] = {
+                        start: weekStart,
+                        customerMeetings: 0,
+                        internalMeetings: 0,
+                        totalMeetings: 0,
+                        emailsSent: 0,
+                        emailsReceived: 0,
+                        uniqueOrgs: new Set(),
+                        uniqueContacts: 0,
+                        days: 0
+                    };
+                }
+
+                weeks[weekKey].customerMeetings += row['Customer Meetings'];
+                weeks[weekKey].internalMeetings += row['Internal Meetings'];
+                weeks[weekKey].totalMeetings += row['Total Meetings'];
+                weeks[weekKey].emailsSent += row['Emails Sent'];
+                weeks[weekKey].emailsReceived += row['Emails Received'];
+                weeks[weekKey].uniqueOrgs.add(row['Unique Orgs Contacted']);
+                weeks[weekKey].uniqueContacts += row['Unique Contacts'];
+                weeks[weekKey].days++;
+            });
+
+            const tbody = document.getElementById('weeklySummaryBody');
+            tbody.innerHTML = '';
+
+            Object.values(weeks).sort((a, b) => a.start - b.start).forEach(week => {
+                const weekStr = `${week.start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(week.start.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="week-cell">${weekStr}</td>
+                    <td>${week.customerMeetings}</td>
+                    <td>${week.internalMeetings}</td>
+                    <td>${week.totalMeetings}</td>
+                    <td>${week.emailsSent}</td>
+                    <td>${week.emailsReceived}</td>
+                    <td>${Math.max(...Array.from(week.uniqueOrgs))}</td>
+                    <td>${week.uniqueContacts}</td>
+                `;
+            });
+        }
+
+        // Generate comparisons
+        function generateComparisons() {
+            const today = new Date();
+
+            // This week vs last week
+            const thisWeekStart = new Date(today);
+            thisWeekStart.setDate(today.getDate() - today.getDay());
+            const thisWeekEnd = new Date(thisWeekStart);
+            thisWeekEnd.setDate(thisWeekStart.getDate() + 6);
+
+            const lastWeekStart = new Date(thisWeekStart);
+            lastWeekStart.setDate(thisWeekStart.getDate() - 7);
+            const lastWeekEnd = new Date(lastWeekStart);
+            lastWeekEnd.setDate(lastWeekStart.getDate() + 6);
+
+            const thisWeek = calculateKPIs(filterDataByDateRange(thisWeekStart, thisWeekEnd));
+            const lastWeek = calculateKPIs(filterDataByDateRange(lastWeekStart, lastWeekEnd));
+
+            // This month vs last month
+            const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+            const thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+            const lastMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+            const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0);
+
+            const thisMonth = calculateKPIs(filterDataByDateRange(thisMonthStart, thisMonthEnd));
+            const lastMonth = calculateKPIs(filterDataByDateRange(lastMonthStart, lastMonthEnd));
+
+            // Render week comparison
+            const weekContent = document.getElementById('weekComparisonContent');
+            weekContent.innerHTML = `
+                <div class="metric-row">
+                    <span class="metric-name">Customer Meetings</span>
+                    <span class="metric-change ${getDeltaClass(thisWeek.customerMeetings, lastWeek.customerMeetings)}">${calculateDelta(thisWeek.customerMeetings, lastWeek.customerMeetings)}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Internal Meetings</span>
+                    <span class="metric-change ${getDeltaClass(thisWeek.internalMeetings, lastWeek.internalMeetings)}">${calculateDelta(thisWeek.internalMeetings, lastWeek.internalMeetings)}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Emails Sent</span>
+                    <span class="metric-change ${getDeltaClass(thisWeek.emailsSent, lastWeek.emailsSent)}">${calculateDelta(thisWeek.emailsSent, lastWeek.emailsSent)}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Unique Orgs</span>
+                    <span class="metric-change ${getDeltaClass(thisWeek.uniqueOrgsCount, lastWeek.uniqueOrgsCount)}">${calculateDelta(thisWeek.uniqueOrgsCount, lastWeek.uniqueOrgsCount)}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Unique Contacts</span>
+                    <span class="metric-change ${getDeltaClass(thisWeek.uniqueContacts, lastWeek.uniqueContacts)}">${calculateDelta(thisWeek.uniqueContacts, lastWeek.uniqueContacts)}</span>
+                </div>
+            `;
+
+            // Render month comparison
+            const monthContent = document.getElementById('monthComparisonContent');
+            monthContent.innerHTML = `
+                <div class="metric-row">
+                    <span class="metric-name">Customer Meetings</span>
+                    <span class="metric-change ${getDeltaClass(thisMonth.customerMeetings, lastMonth.customerMeetings)}">${calculateDelta(thisMonth.customerMeetings, lastMonth.customerMeetings)}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Internal Meetings</span>
+                    <span class="metric-change ${getDeltaClass(thisMonth.internalMeetings, lastMonth.internalMeetings)}">${calculateDelta(thisMonth.internalMeetings, lastMonth.internalMeetings)}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Emails Sent</span>
+                    <span class="metric-change ${getDeltaClass(thisMonth.emailsSent, lastMonth.emailsSent)}">${calculateDelta(thisMonth.emailsSent, lastMonth.emailsSent)}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Unique Orgs</span>
+                    <span class="metric-change ${getDeltaClass(thisMonth.uniqueOrgsCount, lastMonth.uniqueOrgsCount)}">${calculateDelta(thisMonth.uniqueOrgsCount, lastMonth.uniqueOrgsCount)}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Unique Contacts</span>
+                    <span class="metric-change ${getDeltaClass(thisMonth.uniqueContacts, lastMonth.uniqueContacts)}">${calculateDelta(thisMonth.uniqueContacts, lastMonth.uniqueContacts)}</span>
+                </div>
+            `;
+        }
+
+        // Apply date filter
+        function applyDateFilter(preset) {
+            const today = new Date();
+            let startDate;
+
+            switch (preset) {
+                case '7':
+                    startDate = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    break;
+                case '14':
+                    startDate = new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000);
+                    break;
+                case '30':
+                    startDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                    break;
+                case 'all':
+                    startDate = new Date(1970, 0, 1);
+                    break;
+                default:
+                    startDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+            }
+
+            filteredData = filterDataByDateRange(startDate, today);
+
+            // Update date inputs
+            document.getElementById('startDate').valueAsDate = startDate;
+            document.getElementById('endDate').valueAsDate = today;
+
+            updateDisplay();
+        }
+
+        // Update display
+        function updateDisplay() {
+            const currentKPIs = updateKPICards();
+            updateCharts(currentKPIs);
+            generateWeeklySummary();
+            generateComparisons();
+        }
+
+        // Event listeners
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                applyDateFilter(e.target.dataset.preset);
+            });
+        });
+
+        document.getElementById('startDate').addEventListener('change', () => {
+            const start = document.getElementById('startDate').valueAsDate;
+            const end = document.getElementById('endDate').valueAsDate;
+            if (start && end && start <= end) {
+                filteredData = filterDataByDateRange(start, end);
+                document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                updateDisplay();
+            }
+        });
+
+        document.getElementById('endDate').addEventListener('change', () => {
+            const start = document.getElementById('startDate').valueAsDate;
+            const end = document.getElementById('endDate').valueAsDate;
+            if (start && end && start <= end) {
+                filteredData = filterDataByDateRange(start, end);
+                document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                updateDisplay();
+            }
+        });
+
+        // Auto-refresh data every 5 minutes
+        setInterval(() => {
+            fetchData();
+        }, 5 * 60 * 1000);
+
+        // Initialize
+        fetchData();
+    </script>
+</body>
+</html>
