@@ -388,6 +388,36 @@
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
             border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-title:hover {
+            color: var(--accent-green);
+        }
+
+        .comparison-title .toggle-icon {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .comparison-title.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .comparison-content {
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 1000px;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .comparison-content.collapsed {
+            max-height: 0;
+            opacity: 0;
         }
 
         .metric-row {
@@ -421,6 +451,38 @@
 
         .metric-change.negative {
             color: #f44336;
+        }
+
+        /* Section Header */
+        .section-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin: 2rem 0 1.5rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Multiplier Badge */
+        .multiplier-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(0, 230, 118, 0.2);
+            color: var(--accent-green);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            border: 1px solid var(--accent-green);
+        }
+
+        .multiplier-value {
+            font-size: 1.3rem;
         }
 
         /* Responsive Design */
@@ -667,22 +729,509 @@
             </table>
         </div>
 
-        <!-- Comparison Section -->
+        <!-- Standard Comparison Section -->
+        <div class="section-header">📊 Current Period Comparisons</div>
         <div class="comparison-section">
             <div class="comparison-card">
-                <div class="comparison-title">📊 This Week vs Last Week</div>
-                <div id="weekComparisonContent"></div>
+                <div class="comparison-title" onclick="toggleComparison(event)">
+                    <span>📊 This Week vs Last Week</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="comparison-content" id="weekComparisonContent"></div>
             </div>
             <div class="comparison-card">
-                <div class="comparison-title">📈 This Month vs Last Month</div>
-                <div id="monthComparisonContent"></div>
+                <div class="comparison-title" onclick="toggleComparison(event)">
+                    <span>📈 This Month vs Last Month</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="comparison-content" id="monthComparisonContent"></div>
+            </div>
+        </div>
+
+        <!-- Historical Comparisons Section -->
+        <div class="section-header">📊 Historical Comparisons</div>
+        <div class="comparison-section">
+            <!-- Year-over-Year Comparison -->
+            <div class="comparison-card">
+                <div class="comparison-title collapsed" onclick="toggleComparison(event)">
+                    <span id="yoyLabel">📅 Year-over-Year Comparison</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="comparison-content collapsed" id="yoyComparisonContent"></div>
+            </div>
+
+            <!-- Quarter-over-Quarter Comparison -->
+            <div class="comparison-card">
+                <div class="comparison-title collapsed" onclick="toggleComparison(event)">
+                    <span id="qoqLabel">📊 Quarter-over-Quarter Comparison</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="comparison-content collapsed" id="qoqComparisonContent"></div>
+            </div>
+
+            <!-- Pre/Post Acquisition Comparison -->
+            <div class="comparison-card">
+                <div class="comparison-title collapsed" onclick="toggleComparison(event)">
+                    <span id="acqLabel">🚀 Post-Acquisition Productivity Multiplier</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="comparison-content collapsed" id="acqComparisonContent"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Embedded fallback data
+        // Embedded fallback data - complete backfilled dataset
         const FALLBACK_DATA = `Date,Customer Meetings,Internal Meetings,Total Meetings,Emails Sent,Emails Received,Unique Orgs Contacted,Unique Contacts,Total Calls
+2025-01-01,0,2,2,0,0,0,0,0
+2025-01-02,0,2,2,0,0,0,0,0
+2025-01-03,0,2,2,0,0,0,0,0
+2025-01-04,0,0,0,0,0,0,0,0
+2025-01-05,0,0,0,0,0,0,0,0
+2025-01-06,0,3,3,0,0,0,0,0
+2025-01-07,0,5,5,0,0,0,0,0
+2025-01-08,0,2,2,0,0,0,0,0
+2025-01-09,0,2,2,0,0,0,0,0
+2025-01-10,0,2,2,0,0,0,0,0
+2025-01-11,0,0,0,0,0,0,0,0
+2025-01-12,0,0,0,0,0,0,0,0
+2025-01-13,0,2,2,0,0,0,0,0
+2025-01-14,0,4,4,0,0,0,0,0
+2025-01-15,3,3,6,0,0,3,7,0
+2025-01-16,2,5,7,0,0,2,7,0
+2025-01-17,1,4,5,0,0,1,4,0
+2025-01-18,0,0,0,0,0,0,0,0
+2025-01-19,0,0,0,0,0,0,0,0
+2025-01-20,0,4,4,0,0,0,0,0
+2025-01-21,1,2,3,0,0,1,1,0
+2025-01-22,2,3,5,0,0,1,2,0
+2025-01-23,1,4,5,0,0,1,1,0
+2025-01-24,0,3,3,0,0,0,0,0
+2025-01-25,0,0,0,0,0,0,0,0
+2025-01-26,0,0,0,0,0,0,0,0
+2025-01-27,0,5,5,0,0,0,0,0
+2025-01-28,3,4,7,0,0,6,29,0
+2025-01-29,1,4,5,0,0,1,5,0
+2025-01-30,0,3,3,0,0,0,0,0
+2025-01-31,0,3,3,0,0,0,0,0
+2025-02-01,0,0,0,0,0,0,0,0
+2025-02-02,0,0,0,0,0,0,0,0
+2025-02-03,0,5,5,0,0,0,0,0
+2025-02-04,1,3,4,0,0,1,2,0
+2025-02-05,0,5,5,0,0,0,0,0
+2025-02-06,1,6,7,0,0,2,6,0
+2025-02-07,0,4,4,0,0,0,0,0
+2025-02-08,0,0,0,0,0,0,0,0
+2025-02-09,0,0,0,0,0,0,0,0
+2025-02-10,0,4,4,0,0,0,0,0
+2025-02-11,0,4,4,0,0,0,0,0
+2025-02-12,3,3,6,0,0,4,11,0
+2025-02-13,1,4,5,0,0,1,6,0
+2025-02-14,2,3,5,0,0,2,3,0
+2025-02-15,0,0,0,0,0,0,0,0
+2025-02-16,0,0,0,0,0,0,0,0
+2025-02-17,0,4,4,0,0,0,0,0
+2025-02-18,0,4,4,0,0,0,0,0
+2025-02-19,0,5,5,0,0,0,0,0
+2025-02-20,1,5,6,0,0,1,3,0
+2025-02-21,1,3,4,0,0,1,3,0
+2025-02-22,0,0,0,0,0,0,0,0
+2025-02-23,0,0,0,0,0,0,0,0
+2025-02-24,1,5,6,0,0,1,2,0
+2025-02-25,1,3,4,0,0,3,7,0
+2025-02-26,5,3,8,3,6,5,17,0
+2025-02-27,2,6,8,2,3,4,13,0
+2025-02-28,1,3,4,3,2,1,3,0
+2025-03-01,0,0,0,0,0,0,0,0
+2025-03-02,0,0,0,0,0,0,0,0
+2025-03-03,0,0,0,3,2,0,0,0
+2025-03-04,0,2,2,0,1,0,0,0
+2025-03-05,0,3,3,1,0,0,0,0
+2025-03-06,0,3,3,1,0,0,0,0
+2025-03-07,0,1,1,1,0,0,0,0
+2025-03-08,0,0,0,0,0,0,0,0
+2025-03-09,0,0,0,0,0,0,0,0
+2025-03-10,1,1,2,1,0,1,4,0
+2025-03-11,0,5,5,0,0,0,0,0
+2025-03-12,1,3,4,2,3,1,5,0
+2025-03-13,0,4,4,3,4,0,0,0
+2025-03-14,0,1,1,3,4,0,0,0
+2025-03-15,0,0,0,0,0,0,0,0
+2025-03-16,0,0,0,0,0,0,0,0
+2025-03-17,0,4,4,6,3,0,0,0
+2025-03-18,1,1,2,1,4,1,1,0
+2025-03-19,1,1,2,2,3,1,6,0
+2025-03-20,2,2,4,6,15,2,5,0
+2025-03-21,2,2,4,0,2,3,4,0
+2025-03-22,0,0,0,0,0,0,0,0
+2025-03-23,0,0,0,0,0,0,0,0
+2025-03-24,1,2,3,6,5,1,1,0
+2025-03-25,3,1,4,7,6,5,14,0
+2025-03-26,2,1,3,3,1,2,6,0
+2025-03-27,0,2,2,3,2,0,0,0
+2025-03-28,1,0,1,0,0,1,1,0
+2025-03-29,0,0,0,0,0,0,0,0
+2025-03-30,0,0,0,0,0,0,0,0
+2025-03-31,1,1,2,2,2,1,4,0
+2025-04-01,2,4,6,0,1,1,2,0
+2025-04-02,1,3,4,1,2,1,5,0
+2025-04-03,1,5,6,0,0,1,2,0
+2025-04-04,1,4,5,0,0,1,2,0
+2025-04-05,0,3,3,0,0,0,0,0
+2025-04-06,0,3,3,0,0,0,0,0
+2025-04-07,4,2,6,0,0,5,8,0
+2025-04-08,3,1,4,0,0,5,5,0
+2025-04-09,0,5,5,0,0,0,0,0
+2025-04-10,2,5,7,0,0,7,19,0
+2025-04-11,0,3,3,0,0,0,0,0
+2025-04-12,0,0,0,0,0,0,0,0
+2025-04-13,0,0,0,0,0,0,0,0
+2025-04-14,1,6,7,0,0,2,8,0
+2025-04-15,2,3,5,0,0,4,9,0
+2025-04-16,2,4,6,0,0,2,8,0
+2025-04-17,2,3,5,0,0,3,7,0
+2025-04-18,0,2,2,0,0,0,0,0
+2025-04-19,0,0,0,0,0,0,0,0
+2025-04-20,0,0,0,0,0,0,0,0
+2025-04-21,0,3,3,0,1,0,0,0
+2025-04-22,3,5,8,0,0,5,9,0
+2025-04-23,3,3,6,0,0,6,14,0
+2025-04-24,4,5,9,0,2,10,26,0
+2025-04-25,2,3,5,0,0,4,6,0
+2025-04-26,0,0,0,0,0,0,0,0
+2025-04-27,0,0,0,0,0,0,0,0
+2025-04-28,0,9,9,0,0,0,0,0
+2025-04-29,3,3,6,0,0,3,4,0
+2025-04-30,1,4,5,0,0,1,6,0
+2025-05-01,1,3,4,0,0,1,1,0
+2025-05-02,1,0,1,0,1,2,3,0
+2025-05-03,0,0,0,0,0,0,0,0
+2025-05-04,0,0,0,0,0,0,0,0
+2025-05-05,2,3,5,0,0,4,7,0
+2025-05-06,4,4,8,0,4,4,7,0
+2025-05-07,2,0,2,0,1,3,8,0
+2025-05-08,3,2,5,0,0,10,25,0
+2025-05-09,1,0,1,0,0,1,3,0
+2025-05-10,0,0,0,0,0,0,0,0
+2025-05-11,0,0,0,0,0,0,0,0
+2025-05-12,0,3,3,0,0,0,0,0
+2025-05-13,2,5,7,0,0,3,3,0
+2025-05-14,3,0,3,0,0,3,6,0
+2025-05-15,2,2,4,0,0,3,9,0
+2025-05-16,0,0,0,0,1,0,0,0
+2025-05-17,0,0,0,0,0,0,0,0
+2025-05-18,0,0,0,0,0,0,0,0
+2025-05-19,0,4,4,0,1,0,0,0
+2025-05-20,2,4,6,0,0,2,2,0
+2025-05-21,5,0,5,0,0,5,25,0
+2025-05-22,2,0,2,0,0,7,15,0
+2025-05-23,1,0,1,0,0,1,1,0
+2025-05-24,0,0,0,0,0,0,0,0
+2025-05-25,0,0,0,0,0,0,0,0
+2025-05-26,0,0,0,0,0,0,0,0
+2025-05-27,4,5,9,0,0,6,11,0
+2025-05-28,1,4,5,0,1,2,4,0
+2025-05-29,2,1,3,0,0,3,5,0
+2025-05-30,2,1,3,0,1,2,6,0
+2025-05-31,0,0,0,0,0,0,0,0
+2025-06-01,0,0,0,0,0,0,0,0
+2025-06-02,1,7,8,0,0,1,1,0
+2025-06-03,1,3,4,0,7,1,1,0
+2025-06-04,3,2,5,3,2,3,9,0
+2025-06-05,2,6,8,2,3,7,18,0
+2025-06-06,1,2,3,1,3,1,2,0
+2025-06-07,0,0,0,0,0,0,0,0
+2025-06-08,0,0,0,0,0,0,0,0
+2025-06-09,4,6,10,3,2,7,16,0
+2025-06-10,2,4,6,1,6,3,4,0
+2025-06-11,0,3,3,2,1,0,0,0
+2025-06-12,3,3,6,14,10,3,5,0
+2025-06-13,1,2,3,0,5,1,1,0
+2025-06-14,0,0,0,0,0,0,0,0
+2025-06-15,0,0,0,0,0,0,0,0
+2025-06-16,2,7,9,2,1,2,5,0
+2025-06-17,3,3,6,3,5,3,6,0
+2025-06-18,2,3,5,1,5,2,3,0
+2025-06-19,1,4,5,1,1,6,14,0
+2025-06-20,0,2,2,4,5,0,0,0
+2025-06-21,0,0,0,0,0,0,0,0
+2025-06-22,0,0,0,0,0,0,0,0
+2025-06-23,1,5,6,5,4,1,2,0
+2025-06-24,2,7,9,1,7,2,7,0
+2025-06-25,1,5,6,2,0,1,1,0
+2025-06-26,5,4,9,3,1,6,9,0
+2025-06-27,2,2,4,0,0,2,3,0
+2025-06-28,0,0,0,0,0,0,0,0
+2025-06-29,0,0,0,0,1,0,0,0
+2025-06-30,1,6,7,7,5,2,3,0
+2025-07-01,2,4,6,0,1,2,5,0
+2025-07-02,3,3,6,0,1,3,9,0
+2025-07-03,2,4,6,0,0,7,19,0
+2025-07-04,0,0,0,0,0,0,0,0
+2025-07-05,0,0,0,0,0,0,0,0
+2025-07-06,0,0,0,0,0,0,0,0
+2025-07-07,2,4,6,0,1,2,2,0
+2025-07-08,2,5,7,0,1,2,4,0
+2025-07-09,3,3,6,0,0,3,5,0
+2025-07-10,3,6,9,0,1,6,15,0
+2025-07-11,1,2,3,0,0,3,8,0
+2025-07-12,0,0,0,0,0,0,0,0
+2025-07-13,0,0,0,0,0,0,0,0
+2025-07-14,0,4,4,0,0,0,0,0
+2025-07-15,5,7,12,0,0,6,12,0
+2025-07-16,1,3,4,0,0,1,5,0
+2025-07-17,5,6,11,0,0,11,32,0
+2025-07-18,3,3,6,0,0,4,8,0
+2025-07-19,0,0,0,0,0,0,0,0
+2025-07-20,0,0,0,0,0,0,0,0
+2025-07-21,2,5,7,0,0,3,7,0
+2025-07-22,4,7,11,0,0,6,9,0
+2025-07-23,2,5,7,0,0,2,3,0
+2025-07-24,2,5,7,0,0,3,5,0
+2025-07-25,2,2,4,0,0,3,10,0
+2025-07-26,0,0,0,0,0,0,0,0
+2025-07-27,0,0,0,0,0,0,0,0
+2025-07-28,0,4,4,0,0,0,0,0
+2025-07-29,0,1,1,0,0,0,0,0
+2025-07-30,5,6,11,0,0,5,17,0
+2025-07-31,4,5,9,0,0,4,13,0
+2025-08-01,0,0,0,0,0,0,0,0
+2025-08-02,0,0,0,0,0,0,0,0
+2025-08-03,0,0,0,0,0,0,0,0
+2025-08-04,0,0,0,0,0,0,0,0
+2025-08-05,0,0,0,0,0,0,0,0
+2025-08-06,0,0,0,0,0,0,0,0
+2025-08-07,0,0,0,0,0,0,0,0
+2025-08-08,0,0,0,0,0,0,0,0
+2025-08-09,0,0,0,0,0,0,0,0
+2025-08-10,0,0,0,0,0,0,0,0
+2025-08-11,0,0,0,0,0,0,0,0
+2025-08-12,0,0,0,0,0,0,0,0
+2025-08-13,0,0,0,0,0,0,0,0
+2025-08-14,0,0,0,0,0,0,0,0
+2025-08-15,0,0,0,0,0,0,0,0
+2025-08-16,0,0,0,0,0,0,0,0
+2025-08-17,0,0,0,0,0,0,0,0
+2025-08-18,0,0,0,0,0,0,0,0
+2025-08-19,0,0,0,0,0,0,0,0
+2025-08-20,0,0,0,0,0,0,0,0
+2025-08-21,0,0,0,0,0,0,0,0
+2025-08-22,0,0,0,0,0,0,0,0
+2025-08-23,0,0,0,0,0,0,0,0
+2025-08-24,0,0,0,0,0,0,0,0
+2025-08-25,0,0,0,0,0,0,0,0
+2025-08-26,0,0,0,0,0,0,0,0
+2025-08-27,0,0,0,0,0,0,0,0
+2025-08-28,0,0,0,0,0,0,0,0
+2025-08-29,0,0,0,0,0,0,0,0
+2025-08-30,0,0,0,0,0,0,0,0
+2025-08-31,0,0,0,0,0,0,0,0
+2025-09-01,0,4,4,0,0,0,0,0
+2025-09-02,0,37,37,0,0,0,0,0
+2025-09-03,0,20,20,0,0,0,0,0
+2025-09-04,3,62,65,0,0,2,3,0
+2025-09-05,0,2,2,0,0,0,0,0
+2025-09-06,0,0,0,0,0,0,0,0
+2025-09-07,0,0,0,0,0,0,0,0
+2025-09-08,3,32,35,0,0,1,3,0
+2025-09-09,7,19,26,0,0,4,7,0
+2025-09-10,6,9,15,0,0,2,6,0
+2025-09-11,21,33,54,0,0,7,21,0
+2025-09-12,0,3,3,0,0,0,0,0
+2025-09-13,0,0,0,0,0,0,0,0
+2025-09-14,0,0,0,0,0,0,0,0
+2025-09-15,5,37,42,0,0,2,5,0
+2025-09-16,5,16,21,0,0,3,5,0
+2025-09-17,9,27,36,0,0,3,9,0
+2025-09-18,5,33,38,0,0,1,5,0
+2025-09-19,0,3,3,0,0,0,0,0
+2025-09-20,0,0,0,0,0,0,0,0
+2025-09-21,0,0,0,0,0,0,0,0
+2025-09-22,6,33,39,0,1,4,6,0
+2025-09-23,21,25,46,2,1,9,19,0
+2025-09-24,10,30,40,0,0,4,10,0
+2025-09-25,20,63,83,0,0,10,20,0
+2025-09-26,0,3,3,0,0,0,0,0
+2025-09-27,0,0,0,0,0,0,0,0
+2025-09-28,0,0,0,0,0,0,0,0
+2025-09-29,0,29,29,0,0,0,0,0
+2025-09-30,0,12,12,0,0,0,0,0
+2025-10-01,2,6,8,0,0,3,7,0
+2025-10-02,0,5,5,0,0,0,0,0
+2025-10-03,3,3,6,0,0,3,8,0
+2025-10-04,0,0,0,0,0,0,0,0
+2025-10-05,0,0,0,0,0,0,0,0
+2025-10-06,1,7,8,0,0,1,1,0
+2025-10-07,2,3,5,0,0,2,4,0
+2025-10-08,3,3,6,0,0,3,14,0
+2025-10-09,4,5,9,0,0,10,30,0
+2025-10-10,2,2,4,0,0,2,5,0
+2025-10-11,0,0,0,0,0,0,0,0
+2025-10-12,0,0,0,0,0,0,0,0
+2025-10-13,0,3,3,0,0,0,0,0
+2025-10-14,4,7,11,0,4,5,7,0
+2025-10-15,4,9,13,0,0,5,11,0
+2025-10-16,4,8,12,0,0,6,13,0
+2025-10-17,0,2,2,0,0,0,0,0
+2025-10-18,0,0,0,0,0,0,0,0
+2025-10-19,0,0,0,0,0,0,0,0
+2025-10-20,1,4,5,0,0,1,2,0
+2025-10-21,5,5,10,0,0,6,8,0
+2025-10-22,0,6,6,0,0,0,0,0
+2025-10-23,3,5,8,0,0,9,22,0
+2025-10-24,3,3,6,0,0,5,13,0
+2025-10-25,0,0,0,0,0,0,0,0
+2025-10-26,0,0,0,0,0,0,0,0
+2025-10-27,2,6,8,2,2,2,6,0
+2025-10-28,4,4,8,0,0,5,12,0
+2025-10-29,4,6,10,0,0,5,14,0
+2025-10-30,4,5,9,0,0,6,10,0
+2025-10-31,3,3,6,0,0,3,6,0
+2025-11-01,0,0,0,0,0,0,0,0
+2025-11-02,0,0,0,0,0,0,0,0
+2025-11-03,1,3,4,0,0,1,1,0
+2025-11-04,5,3,8,0,0,8,15,0
+2025-11-05,7,1,8,0,0,8,25,0
+2025-11-06,3,3,6,0,0,11,25,0
+2025-11-07,3,1,4,0,0,3,17,0
+2025-11-08,0,0,0,0,0,0,0,0
+2025-11-09,0,0,0,0,0,0,0,0
+2025-11-10,4,1,5,0,0,5,13,0
+2025-11-11,2,2,4,0,0,2,5,0
+2025-11-12,5,4,9,0,0,7,12,0
+2025-11-13,4,2,6,0,0,8,16,0
+2025-11-14,4,0,4,0,0,7,18,0
+2025-11-15,0,0,0,0,0,0,0,0
+2025-11-16,0,0,0,0,0,0,0,0
+2025-11-17,4,4,8,0,0,8,10,0
+2025-11-18,9,2,11,0,0,11,18,0
+2025-11-19,8,2,10,0,0,12,43,0
+2025-11-20,8,4,12,0,0,15,50,0
+2025-11-21,2,1,3,0,5,2,4,0
+2025-11-22,0,0,0,0,2,0,0,0
+2025-11-23,0,0,0,0,0,0,0,0
+2025-11-24,2,2,4,4,7,2,2,0
+2025-11-25,6,2,8,0,1,8,19,0
+2025-11-26,5,1,6,0,0,7,10,0
+2025-11-27,1,1,2,1,0,2,3,0
+2025-11-28,0,0,0,0,0,0,0,0
+2025-11-29,0,0,0,0,0,0,0,0
+2025-11-30,0,0,0,0,0,0,0,0
+2025-12-01,1,6,7,4,2,1,4,0
+2025-12-02,3,4,7,2,2,4,7,0
+2025-12-03,4,3,7,0,1,5,12,0
+2025-12-04,4,3,7,2,2,8,14,0
+2025-12-05,2,2,4,1,2,2,4,0
+2025-12-06,0,0,0,0,0,0,0,0
+2025-12-07,0,0,0,0,0,0,0,0
+2025-12-08,2,3,5,4,1,2,2,0
+2025-12-09,3,5,8,1,4,3,3,0
+2025-12-10,7,5,12,3,6,11,34,0
+2025-12-11,4,3,7,3,6,4,6,0
+2025-12-12,0,2,2,3,4,0,0,0
+2025-12-13,0,0,0,0,0,0,0,0
+2025-12-14,0,0,0,0,0,0,0,0
+2025-12-15,2,4,6,3,1,2,7,0
+2025-12-16,6,3,9,4,6,6,8,0
+2025-12-17,2,3,5,8,7,3,7,0
+2025-12-18,4,4,8,1,0,12,27,0
+2025-12-19,2,4,6,4,2,2,4,0
+2025-12-20,0,0,0,0,0,0,0,0
+2025-12-21,0,0,0,0,0,0,0,0
+2025-12-22,1,2,3,4,0,1,2,0
+2025-12-23,2,3,5,0,0,4,8,0
+2025-12-24,0,2,2,0,0,0,0,0
+2025-12-25,1,3,4,1,0,2,3,0
+2025-12-26,0,2,2,1,0,0,0,0
+2025-12-27,0,0,0,0,0,0,0,0
+2025-12-28,0,0,0,0,0,0,0,0
+2025-12-29,0,2,2,1,0,0,0,0
+2025-12-30,0,2,2,0,0,0,0,0
+2025-12-31,0,2,2,0,0,0,0,0
+2026-01-01,0,0,0,0,0,0,0,0
+2026-01-02,0,0,0,0,0,0,0,0
+2026-01-03,0,0,0,0,0,0,0,0
+2026-01-04,0,0,0,0,0,0,0,0
+2026-01-05,0,0,0,2,1,0,0,0
+2026-01-06,0,0,0,0,0,0,0,0
+2026-01-07,0,0,0,2,1,0,0,0
+2026-01-08,0,0,0,3,5,0,0,0
+2026-01-09,0,0,0,1,2,0,0,0
+2026-01-10,0,0,0,0,0,0,0,0
+2026-01-11,0,0,0,0,0,0,0,0
+2026-01-12,0,0,0,0,0,0,0,0
+2026-01-13,0,0,0,0,0,0,0,0
+2026-01-14,0,0,0,0,0,0,0,0
+2026-01-15,1,0,1,0,0,1,3,0
+2026-01-16,0,0,0,0,0,0,0,0
+2026-01-17,0,0,0,0,0,0,0,0
+2026-01-18,0,0,0,0,0,0,0,0
+2026-01-19,0,0,0,0,0,0,0,0
+2026-01-20,0,0,0,0,0,0,0,0
+2026-01-21,0,0,0,0,0,0,0,0
+2026-01-22,0,0,0,0,0,0,0,0
+2026-01-23,0,0,0,0,0,0,0,0
+2026-01-24,0,0,0,0,0,0,0,0
+2026-01-25,0,0,0,0,0,0,0,0
+2026-01-26,0,0,0,0,6,0,0,0
+2026-01-27,0,0,0,0,0,0,0,0
+2026-01-28,0,0,0,0,0,0,0,0
+2026-01-29,0,0,0,0,0,0,0,0
+2026-01-30,0,0,0,0,0,0,0,0
+2026-01-31,0,0,0,0,0,0,0,0
+2026-02-01,0,0,0,0,0,0,0,0
+2026-02-02,1,7,8,0,0,1,1,0
+2026-02-03,1,4,5,0,0,1,1,0
+2026-02-04,3,5,8,0,0,4,11,0
+2026-02-05,4,9,13,0,0,8,17,0
+2026-02-06,2,2,4,0,0,3,4,0
+2026-02-07,0,0,0,0,0,0,0,0
+2026-02-08,0,0,0,0,0,0,0,0
+2026-02-09,1,5,6,0,0,1,1,0
+2026-02-10,4,5,9,0,0,6,12,0
+2026-02-11,9,3,12,0,0,10,29,0
+2026-02-12,3,4,7,0,2,3,7,0
+2026-02-13,0,2,2,0,0,0,0,0
+2026-02-14,1,0,1,0,0,1,3,0
+2026-02-15,0,0,0,0,0,0,0,0
+2026-02-16,1,3,4,0,0,1,3,0
+2026-02-17,5,4,9,0,0,6,9,0
+2026-02-18,8,5,13,0,0,9,28,0
+2026-02-19,4,7,11,0,0,11,24,0
+2026-02-20,5,2,7,0,0,8,15,0
+2026-02-21,0,0,0,0,0,0,0,0
+2026-02-22,0,0,0,0,0,0,0,0
+2026-02-23,2,5,7,0,6,2,3,0
+2026-02-24,8,4,12,0,4,10,18,0
+2026-02-25,8,4,12,0,0,10,23,0
+2026-02-26,5,4,9,0,10,5,20,0
+2026-02-27,2,4,6,0,0,3,10,0
+2026-02-28,0,0,0,0,0,0,0,0
+2026-03-01,0,0,0,0,0,0,0,0
+2026-03-02,2,5,7,0,0,3,9,0
+2026-03-03,1,4,5,4,2,1,1,0
+2026-03-04,8,4,12,0,6,10,19,0
+2026-03-05,5,6,11,6,12,13,24,0
+2026-03-06,1,2,3,6,18,2,2,0
+2026-03-07,0,0,0,0,0,0,0,0
+2026-03-08,0,0,0,0,0,0,0,0
+2026-03-09,1,6,7,14,18,1,3,0
+2026-03-10,1,4,5,12,14,1,2,0
+2026-03-11,10,2,12,2,8,12,28,0
+2026-03-12,5,3,8,6,4,6,23,0
+2026-03-13,0,3,3,2,2,0,0,0
+2026-03-14,0,0,0,0,0,0,0,0
+2026-03-15,0,0,0,0,0,0,0,0
+2026-03-16,5,6,11,2,6,6,18,0
+2026-03-17,5,2,7,2,4,7,15,0
+2026-03-18,7,6,13,0,0,8,19,0
+2026-03-19,7,5,12,6,10,13,29,0
+2026-03-20,1,4,5,0,4,1,2,0
+2026-03-21,0,0,0,0,0,0,0,0
+2026-03-22,0,0,0,0,0,0,0,0
+2026-03-23,4,6,10,10,8,3,6,0
+2026-03-24,4,2,6,10,16,6,12,0
+2026-03-25,5,3,8,18,14,7,17,0
 2026-03-26,1,1,2,4,6,1,3,0
 2026-03-27,3,2,5,2,2,5,15,0
 2026-03-28,0,0,0,0,0,0,0,0
@@ -719,8 +1268,8 @@
         let filteredData = [];
         let dataSource = 'cached';
         let charts = {};
+        const ACQUISITION_DATE = new Date(2025, 1, 4);
 
-        // Parse CSV data
         function parseCSV(csvText) {
             const lines = csvText.trim().split('\n');
             const headers = lines[0].split(',');
@@ -739,43 +1288,48 @@
             return data.sort((a, b) => a.Date - b.Date);
         }
 
-        // Fetch data from Google Sheets
         async function fetchData() {
-            const csvUrl = 'https://docs.google.com/spreadsheets/d/1u2LVXgHLCnKGmpa7ZmmgELFvr-CA5UbWZ4-_pxNcmGM/gviz/tq?tqx=out:csv';
+            const backupUrl = 'https://docs.google.com/spreadsheets/d/1knBj_mMf4JTvU365oHd3Ezi8ABDLBPMoO-avfvWmEkU/gviz/tq?tqx=out:csv';
+            const primaryUrl = 'https://docs.google.com/spreadsheets/d/1u2LVXgHLCnKGmpa7ZmmgELFvr-CA5UbWZ4-_pxNcmGM/gviz/tq?tqx=out:csv';
 
             try {
-                const response = await fetch(csvUrl);
+                const response = await fetch(backupUrl);
                 if (response.ok) {
                     const csvText = await response.text();
                     allData = parseCSV(csvText);
                     dataSource = 'live';
-                    console.log('Data fetched from Google Sheets');
                 } else {
-                    throw new Error('Failed to fetch');
+                    throw new Error('Backup failed');
                 }
             } catch (error) {
-                console.log('Using fallback embedded data:', error);
-                allData = parseCSV(FALLBACK_DATA);
-                dataSource = 'cached';
+                try {
+                    const response = await fetch(primaryUrl);
+                    if (response.ok) {
+                        const csvText = await response.text();
+                        allData = parseCSV(csvText);
+                        dataSource = 'live';
+                    } else {
+                        throw new Error('Primary failed');
+                    }
+                } catch (error2) {
+                    allData = parseCSV(FALLBACK_DATA);
+                    dataSource = 'cached';
+                }
             }
 
             updateStatus();
             applyDateFilter('30');
         }
 
-        // Update status indicator
         function updateStatus() {
             const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
-
             statusDot.className = 'status-dot ' + dataSource;
             statusText.textContent = dataSource === 'live' ? '🟢 Live Data' : '🟡 Cached Data';
-
             const now = new Date();
             document.getElementById('lastUpdated').textContent = `Last updated: ${now.toLocaleTimeString()}`;
         }
 
-        // Filter data by date range
         function filterDataByDateRange(startDate, endDate) {
             return allData.filter(row => {
                 const date = new Date(row.Date);
@@ -783,7 +1337,6 @@
             });
         }
 
-        // Calculate KPIs
         function calculateKPIs(data) {
             const metrics = {
                 customerMeetings: 0,
@@ -807,41 +1360,31 @@
                 metrics.totalCalls += row['Total Calls'];
             });
 
-            metrics.uniqueOrgsCount = metrics.uniqueOrgs.size > 0 ?
-                Math.max(...Array.from(metrics.uniqueOrgs)) : 0;
-
+            metrics.uniqueOrgsCount = metrics.uniqueOrgs.size > 0 ? Math.max(...Array.from(metrics.uniqueOrgs)) : 0;
             return metrics;
         }
 
-        // Calculate delta percentage
         function calculateDelta(current, previous) {
-            if (previous === 0) return current > 0 ? '↑ New' : '→ No change';
+            if (previous === 0) return current > 0 ? '+' : '0%';
             const delta = ((current - previous) / previous * 100).toFixed(0);
-            const sign = delta > 0 ? '+' : '';
-            return `${sign}${delta}%`;
+            return (delta > 0 ? '+' : '') + delta + '%';
         }
 
-        // Get delta class
         function getDeltaClass(current, previous) {
             if (previous === 0) return 'neutral';
             return current >= previous ? 'positive' : 'negative';
         }
 
-        // Update KPI cards
         function updateKPICards() {
             const currentKPIs = calculateKPIs(filteredData);
-
-            // Get last week's data for comparison
             const today = new Date();
             const lastWeekStart = new Date(today);
             lastWeekStart.setDate(today.getDate() - 14);
             const lastWeekEnd = new Date(today);
             lastWeekEnd.setDate(today.getDate() - 7);
-
             const lastWeekData = filterDataByDateRange(lastWeekStart, lastWeekEnd);
             const lastWeekKPIs = calculateKPIs(lastWeekData);
 
-            // Update display
             const kpiUpdates = [
                 { id: 'kpiCustomerMeetings', deltaId: 'deltaCustomerMeetings', value: currentKPIs.customerMeetings, prevValue: lastWeekKPIs.customerMeetings },
                 { id: 'kpiInternalMeetings', deltaId: 'deltaInternalMeetings', value: currentKPIs.internalMeetings, prevValue: lastWeekKPIs.internalMeetings },
@@ -861,7 +1404,6 @@
             return currentKPIs;
         }
 
-        // Update charts
         function updateCharts(currentKPIs) {
             const chartDates = filteredData.map(d => d.Date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
             const customerMeetings = filteredData.map(d => d['Customer Meetings']);
@@ -870,153 +1412,49 @@
             const emailsReceived = filteredData.map(d => d['Emails Received']);
             const uniqueOrgs = filteredData.map(d => d['Unique Orgs Contacted']);
 
-            // Destroy existing charts
             Object.values(charts).forEach(chart => chart?.destroy?.());
 
-            // Meetings Chart
             charts.meetings = new Chart(document.getElementById('meetingsChart'), {
                 type: 'bar',
                 data: {
                     labels: chartDates,
                     datasets: [
-                        {
-                            label: 'Customer Meetings',
-                            data: customerMeetings,
-                            backgroundColor: 'rgba(0, 212, 255, 0.8)',
-                            borderColor: 'rgb(0, 212, 255)',
-                            borderWidth: 0,
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'Internal Meetings',
-                            data: internalMeetings,
-                            backgroundColor: 'rgba(0, 136, 255, 0.8)',
-                            borderColor: 'rgb(0, 136, 255)',
-                            borderWidth: 0,
-                            borderRadius: 4
-                        }
+                        { label: 'Customer Meetings', data: customerMeetings, backgroundColor: 'rgba(0, 212, 255, 0.8)', borderColor: 'rgb(0, 212, 255)', borderWidth: 0, borderRadius: 4 },
+                        { label: 'Internal Meetings', data: internalMeetings, backgroundColor: 'rgba(0, 136, 255, 0.8)', borderColor: 'rgb(0, 136, 255)', borderWidth: 0, borderRadius: 4 }
                     ]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } }
-                        }
-                    },
-                    scales: {
-                        x: { stacked: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } },
-                        y: { stacked: true, beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } } } }, scales: { x: { stacked: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }, y: { stacked: true, beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } } } }
             });
 
-            // Emails Chart
             charts.emails = new Chart(document.getElementById('emailsChart'), {
                 type: 'line',
                 data: {
                     labels: chartDates,
                     datasets: [
-                        {
-                            label: 'Emails Sent',
-                            data: emailsSent,
-                            borderColor: 'rgb(0, 230, 118)',
-                            backgroundColor: 'rgba(0, 230, 118, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 4,
-                            pointBackgroundColor: 'rgb(0, 230, 118)',
-                            pointBorderColor: '#1a2332',
-                            pointBorderWidth: 2
-                        },
-                        {
-                            label: 'Emails Received',
-                            data: emailsReceived,
-                            borderColor: 'rgb(255, 145, 0)',
-                            backgroundColor: 'rgba(255, 145, 0, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 4,
-                            pointBackgroundColor: 'rgb(255, 145, 0)',
-                            pointBorderColor: '#1a2332',
-                            pointBorderWidth: 2
-                        }
+                        { label: 'Emails Sent', data: emailsSent, borderColor: 'rgb(0, 230, 118)', backgroundColor: 'rgba(0, 230, 118, 0.1)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: 'rgb(0, 230, 118)', pointBorderColor: '#1a2332', pointBorderWidth: 2 },
+                        { label: 'Emails Received', data: emailsReceived, borderColor: 'rgb(255, 145, 0)', backgroundColor: 'rgba(255, 145, 0, 0.1)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: 'rgb(255, 145, 0)', pointBorderColor: '#1a2332', pointBorderWidth: 2 }
                     ]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } }
-                        }
-                    },
-                    scales: {
-                        x: { ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } },
-                        y: { beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } } } }, scales: { x: { ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }, y: { beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } } } }
             });
 
-            // Orgs Chart
             charts.orgs = new Chart(document.getElementById('orgsChart'), {
                 type: 'bar',
-                data: {
-                    labels: chartDates,
-                    datasets: [
-                        {
-                            label: 'Unique Orgs Contacted',
-                            data: uniqueOrgs,
-                            backgroundColor: 'rgba(179, 136, 255, 0.8)',
-                            borderColor: 'rgb(179, 136, 255)',
-                            borderWidth: 0,
-                            borderRadius: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } }
-                        }
-                    },
-                    scales: {
-                        x: { ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } },
-                        y: { beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }
-                    }
-                }
+                data: { labels: chartDates, datasets: [{ label: 'Unique Orgs Contacted', data: uniqueOrgs, backgroundColor: 'rgba(179, 136, 255, 0.8)', borderColor: 'rgb(179, 136, 255)', borderWidth: 0, borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: 'rgba(224, 224, 224, 0.8)', font: { size: 12 } } } }, scales: { x: { ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } }, y: { beginAtZero: true, ticks: { color: 'rgba(160, 160, 160, 0.8)' }, grid: { color: 'rgba(58, 74, 90, 0.3)' } } } }
             });
         }
 
-        // Generate weekly summary
         function generateWeeklySummary() {
             const weeks = {};
-
             filteredData.forEach(row => {
                 const date = new Date(row.Date);
                 const weekStart = new Date(date);
                 weekStart.setDate(date.getDate() - date.getDay());
                 const weekKey = weekStart.toLocaleDateString();
-
                 if (!weeks[weekKey]) {
-                    weeks[weekKey] = {
-                        start: weekStart,
-                        customerMeetings: 0,
-                        internalMeetings: 0,
-                        totalMeetings: 0,
-                        emailsSent: 0,
-                        emailsReceived: 0,
-                        uniqueOrgs: new Set(),
-                        uniqueContacts: 0,
-                        days: 0
-                    };
+                    weeks[weekKey] = { start: weekStart, customerMeetings: 0, internalMeetings: 0, totalMeetings: 0, emailsSent: 0, emailsReceived: 0, uniqueOrgs: new Set(), uniqueContacts: 0, days: 0 };
                 }
-
                 weeks[weekKey].customerMeetings += row['Customer Meetings'];
                 weeks[weekKey].internalMeetings += row['Internal Meetings'];
                 weeks[weekKey].totalMeetings += row['Total Meetings'];
@@ -1026,146 +1464,113 @@
                 weeks[weekKey].uniqueContacts += row['Unique Contacts'];
                 weeks[weekKey].days++;
             });
-
             const tbody = document.getElementById('weeklySummaryBody');
             tbody.innerHTML = '';
-
             Object.values(weeks).sort((a, b) => a.start - b.start).forEach(week => {
                 const weekStr = `${week.start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(week.start.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
-
                 const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td class="week-cell">${weekStr}</td>
-                    <td>${week.customerMeetings}</td>
-                    <td>${week.internalMeetings}</td>
-                    <td>${week.totalMeetings}</td>
-                    <td>${week.emailsSent}</td>
-                    <td>${week.emailsReceived}</td>
-                    <td>${Math.max(...Array.from(week.uniqueOrgs))}</td>
-                    <td>${week.uniqueContacts}</td>
-                `;
+                row.innerHTML = `<td class="week-cell">${weekStr}</td><td>${week.customerMeetings}</td><td>${week.internalMeetings}</td><td>${week.totalMeetings}</td><td>${week.emailsSent}</td><td>${week.emailsReceived}</td><td>${Math.max(...Array.from(week.uniqueOrgs))}</td><td>${week.uniqueContacts}</td>`;
             });
         }
 
-        // Generate comparisons
         function generateComparisons() {
             const today = new Date();
-
-            // This week vs last week
             const thisWeekStart = new Date(today);
             thisWeekStart.setDate(today.getDate() - today.getDay());
             const thisWeekEnd = new Date(thisWeekStart);
             thisWeekEnd.setDate(thisWeekStart.getDate() + 6);
-
             const lastWeekStart = new Date(thisWeekStart);
             lastWeekStart.setDate(thisWeekStart.getDate() - 7);
             const lastWeekEnd = new Date(lastWeekStart);
             lastWeekEnd.setDate(lastWeekStart.getDate() + 6);
-
             const thisWeek = calculateKPIs(filterDataByDateRange(thisWeekStart, thisWeekEnd));
             const lastWeek = calculateKPIs(filterDataByDateRange(lastWeekStart, lastWeekEnd));
 
-            // This month vs last month
             const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
             const thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
             const lastMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
             const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0);
-
             const thisMonth = calculateKPIs(filterDataByDateRange(thisMonthStart, thisMonthEnd));
             const lastMonth = calculateKPIs(filterDataByDateRange(lastMonthStart, lastMonthEnd));
 
-            // Render week comparison
             const weekContent = document.getElementById('weekComparisonContent');
-            weekContent.innerHTML = `
-                <div class="metric-row">
-                    <span class="metric-name">Customer Meetings</span>
-                    <span class="metric-change ${getDeltaClass(thisWeek.customerMeetings, lastWeek.customerMeetings)}">${calculateDelta(thisWeek.customerMeetings, lastWeek.customerMeetings)}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Internal Meetings</span>
-                    <span class="metric-change ${getDeltaClass(thisWeek.internalMeetings, lastWeek.internalMeetings)}">${calculateDelta(thisWeek.internalMeetings, lastWeek.internalMeetings)}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Emails Sent</span>
-                    <span class="metric-change ${getDeltaClass(thisWeek.emailsSent, lastWeek.emailsSent)}">${calculateDelta(thisWeek.emailsSent, lastWeek.emailsSent)}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Unique Orgs</span>
-                    <span class="metric-change ${getDeltaClass(thisWeek.uniqueOrgsCount, lastWeek.uniqueOrgsCount)}">${calculateDelta(thisWeek.uniqueOrgsCount, lastWeek.uniqueOrgsCount)}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Unique Contacts</span>
-                    <span class="metric-change ${getDeltaClass(thisWeek.uniqueContacts, lastWeek.uniqueContacts)}">${calculateDelta(thisWeek.uniqueContacts, lastWeek.uniqueContacts)}</span>
-                </div>
-            `;
+            weekContent.innerHTML = `<div class="metric-row"><span class="metric-name">Customer Meetings</span><span class="metric-change ${getDeltaClass(thisWeek.customerMeetings, lastWeek.customerMeetings)}">${calculateDelta(thisWeek.customerMeetings, lastWeek.customerMeetings)}</span></div><div class="metric-row"><span class="metric-name">Internal Meetings</span><span class="metric-change ${getDeltaClass(thisWeek.internalMeetings, lastWeek.internalMeetings)}">${calculateDelta(thisWeek.internalMeetings, lastWeek.internalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Total Meetings</span><span class="metric-change ${getDeltaClass(thisWeek.totalMeetings, lastWeek.totalMeetings)}">${calculateDelta(thisWeek.totalMeetings, lastWeek.totalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Emails Sent</span><span class="metric-change ${getDeltaClass(thisWeek.emailsSent, lastWeek.emailsSent)}">${calculateDelta(thisWeek.emailsSent, lastWeek.emailsSent)}</span></div><div class="metric-row"><span class="metric-name">Unique Orgs</span><span class="metric-change ${getDeltaClass(thisWeek.uniqueOrgsCount, lastWeek.uniqueOrgsCount)}">${calculateDelta(thisWeek.uniqueOrgsCount, lastWeek.uniqueOrgsCount)}</span></div><div class="metric-row"><span class="metric-name">Unique Contacts</span><span class="metric-change ${getDeltaClass(thisWeek.uniqueContacts, lastWeek.uniqueContacts)}">${calculateDelta(thisWeek.uniqueContacts, lastWeek.uniqueContacts)}</span></div>`;
 
-            // Render month comparison
             const monthContent = document.getElementById('monthComparisonContent');
-            monthContent.innerHTML = `
-                <div class="metric-row">
-                    <span class="metric-name">Customer Meetings</span>
-                    <span class="metric-change ${getDeltaClass(thisMonth.customerMeetings, lastMonth.customerMeetings)}">${calculateDelta(thisMonth.customerMeetings, lastMonth.customerMeetings)}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Internal Meetings</span>
-                    <span class="metric-change ${getDeltaClass(thisMonth.internalMeetings, lastMonth.internalMeetings)}">${calculateDelta(thisMonth.internalMeetings, lastMonth.internalMeetings)}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Emails Sent</span>
-                    <span class="metric-change ${getDeltaClass(thisMonth.emailsSent, lastMonth.emailsSent)}">${calculateDelta(thisMonth.emailsSent, lastMonth.emailsSent)}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Unique Orgs</span>
-                    <span class="metric-change ${getDeltaClass(thisMonth.uniqueOrgsCount, lastMonth.uniqueOrgsCount)}">${calculateDelta(thisMonth.uniqueOrgsCount, lastMonth.uniqueOrgsCount)}</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Unique Contacts</span>
-                    <span class="metric-change ${getDeltaClass(thisMonth.uniqueContacts, lastMonth.uniqueContacts)}">${calculateDelta(thisMonth.uniqueContacts, lastMonth.uniqueContacts)}</span>
-                </div>
-            `;
+            monthContent.innerHTML = `<div class="metric-row"><span class="metric-name">Customer Meetings</span><span class="metric-change ${getDeltaClass(thisMonth.customerMeetings, lastMonth.customerMeetings)}">${calculateDelta(thisMonth.customerMeetings, lastMonth.customerMeetings)}</span></div><div class="metric-row"><span class="metric-name">Internal Meetings</span><span class="metric-change ${getDeltaClass(thisMonth.internalMeetings, lastMonth.internalMeetings)}">${calculateDelta(thisMonth.internalMeetings, lastMonth.internalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Total Meetings</span><span class="metric-change ${getDeltaClass(thisMonth.totalMeetings, lastMonth.totalMeetings)}">${calculateDelta(thisMonth.totalMeetings, lastMonth.totalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Emails Sent</span><span class="metric-change ${getDeltaClass(thisMonth.emailsSent, lastMonth.emailsSent)}">${calculateDelta(thisMonth.emailsSent, lastMonth.emailsSent)}</span></div><div class="metric-row"><span class="metric-name">Unique Orgs</span><span class="metric-change ${getDeltaClass(thisMonth.uniqueOrgsCount, lastMonth.uniqueOrgsCount)}">${calculateDelta(thisMonth.uniqueOrgsCount, lastMonth.uniqueOrgsCount)}</span></div><div class="metric-row"><span class="metric-name">Unique Contacts</span><span class="metric-change ${getDeltaClass(thisMonth.uniqueContacts, lastMonth.uniqueContacts)}">${calculateDelta(thisMonth.uniqueContacts, lastMonth.uniqueContacts)}</span></div>`;
         }
 
-        // Apply date filter
+        function generateHistoricalComparisons() {
+            const currentStart = filteredData[0]?.Date || new Date();
+            const currentEnd = filteredData[filteredData.length - 1]?.Date || new Date();
+            const daysDiff = Math.floor((currentEnd - currentStart) / (1000 * 60 * 60 * 24));
+
+            const yoyStart = new Date(currentStart);
+            yoyStart.setFullYear(yoyStart.getFullYear() - 1);
+            const yoyEnd = new Date(currentEnd);
+            yoyEnd.setFullYear(yoyEnd.getFullYear() - 1);
+            const currentData = calculateKPIs(filteredData);
+            const yoyData = calculateKPIs(filterDataByDateRange(yoyStart, yoyEnd));
+
+            document.getElementById('yoyLabel').innerHTML = `📅 Year-over-Year: ${currentStart.toLocaleDateString()} - ${currentEnd.toLocaleDateString()} vs ${yoyStart.toLocaleDateString()} - ${yoyEnd.toLocaleDateString()}`;
+            const yoyContent = document.getElementById('yoyComparisonContent');
+            yoyContent.innerHTML = `<div class="metric-row"><span class="metric-name">Customer Meetings</span><span class="metric-change ${getDeltaClass(currentData.customerMeetings, yoyData.customerMeetings)}">${calculateDelta(currentData.customerMeetings, yoyData.customerMeetings)}</span></div><div class="metric-row"><span class="metric-name">Internal Meetings</span><span class="metric-change ${getDeltaClass(currentData.internalMeetings, yoyData.internalMeetings)}">${calculateDelta(currentData.internalMeetings, yoyData.internalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Total Meetings</span><span class="metric-change ${getDeltaClass(currentData.totalMeetings, yoyData.totalMeetings)}">${calculateDelta(currentData.totalMeetings, yoyData.totalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Emails Sent</span><span class="metric-change ${getDeltaClass(currentData.emailsSent, yoyData.emailsSent)}">${calculateDelta(currentData.emailsSent, yoyData.emailsSent)}</span></div><div class="metric-row"><span class="metric-name">Unique Orgs</span><span class="metric-change ${getDeltaClass(currentData.uniqueOrgsCount, yoyData.uniqueOrgsCount)}">${calculateDelta(currentData.uniqueOrgsCount, yoyData.uniqueOrgsCount)}</span></div><div class="metric-row"><span class="metric-name">Unique Contacts</span><span class="metric-change ${getDeltaClass(currentData.uniqueContacts, yoyData.uniqueContacts)}">${calculateDelta(currentData.uniqueContacts, yoyData.uniqueContacts)}</span></div>`;
+
+            const qoqStart = new Date(currentStart);
+            qoqStart.setDate(qoqStart.getDate() - 90);
+            const qoqEnd = new Date(qoqStart);
+            qoqEnd.setDate(qoqEnd.getDate() + daysDiff);
+            const qoqCurrentData = calculateKPIs(filterDataByDateRange(currentStart, currentEnd));
+            const qoqPreviousData = calculateKPIs(filterDataByDateRange(qoqStart, qoqEnd));
+
+            document.getElementById('qoqLabel').innerHTML = `📊 Quarter-over-Quarter: Current vs 3 months prior`;
+            const qoqContent = document.getElementById('qoqComparisonContent');
+            qoqContent.innerHTML = `<div class="metric-row"><span class="metric-name">Customer Meetings</span><span class="metric-change ${getDeltaClass(qoqCurrentData.customerMeetings, qoqPreviousData.customerMeetings)}">${calculateDelta(qoqCurrentData.customerMeetings, qoqPreviousData.customerMeetings)}</span></div><div class="metric-row"><span class="metric-name">Internal Meetings</span><span class="metric-change ${getDeltaClass(qoqCurrentData.internalMeetings, qoqPreviousData.internalMeetings)}">${calculateDelta(qoqCurrentData.internalMeetings, qoqPreviousData.internalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Total Meetings</span><span class="metric-change ${getDeltaClass(qoqCurrentData.totalMeetings, qoqPreviousData.totalMeetings)}">${calculateDelta(qoqCurrentData.totalMeetings, qoqPreviousData.totalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Emails Sent</span><span class="metric-change ${getDeltaClass(qoqCurrentData.emailsSent, qoqPreviousData.emailsSent)}">${calculateDelta(qoqCurrentData.emailsSent, qoqPreviousData.emailsSent)}</span></div><div class="metric-row"><span class="metric-name">Unique Orgs</span><span class="metric-change ${getDeltaClass(qoqCurrentData.uniqueOrgsCount, qoqPreviousData.uniqueOrgsCount)}">${calculateDelta(qoqCurrentData.uniqueOrgsCount, qoqPreviousData.uniqueOrgsCount)}</span></div><div class="metric-row"><span class="metric-name">Unique Contacts</span><span class="metric-change ${getDeltaClass(qoqCurrentData.uniqueContacts, qoqPreviousData.uniqueContacts)}">${calculateDelta(qoqCurrentData.uniqueContacts, qoqPreviousData.uniqueContacts)}</span></div>`;
+
+            const preEnd = new Date(ACQUISITION_DATE);
+            preEnd.setDate(preEnd.getDate() - 1);
+            const preStart = new Date(preEnd);
+            preStart.setDate(preStart.getDate() - daysDiff);
+            const postData = calculateKPIs(filteredData);
+            const preData = calculateKPIs(filterDataByDateRange(preStart, preEnd));
+            const meetingMultiplier = preData.totalMeetings > 0 ? (postData.totalMeetings / preData.totalMeetings).toFixed(2) : 0;
+
+            document.getElementById('acqLabel').innerHTML = `🚀 Post-Acquisition (Feb 4, 2025): ${currentStart.toLocaleDateString()} - ${currentEnd.toLocaleDateString()}`;
+            const acqContent = document.getElementById('acqComparisonContent');
+            acqContent.innerHTML = `<div class="metric-row"><span class="metric-name">Customer Meetings</span><span class="metric-change ${getDeltaClass(postData.customerMeetings, preData.customerMeetings)}">${calculateDelta(postData.customerMeetings, preData.customerMeetings)}</span></div><div class="metric-row"><span class="metric-name">Internal Meetings</span><span class="metric-change ${getDeltaClass(postData.internalMeetings, preData.internalMeetings)}">${calculateDelta(postData.internalMeetings, preData.internalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Total Meetings</span><span class="metric-change ${getDeltaClass(postData.totalMeetings, preData.totalMeetings)}">${calculateDelta(postData.totalMeetings, preData.totalMeetings)}</span></div><div class="metric-row"><span class="metric-name">Emails Sent</span><span class="metric-change ${getDeltaClass(postData.emailsSent, preData.emailsSent)}">${calculateDelta(postData.emailsSent, preData.emailsSent)}</span></div><div class="metric-row"><span class="metric-name">Unique Orgs</span><span class="metric-change ${getDeltaClass(postData.uniqueOrgsCount, preData.uniqueOrgsCount)}">${calculateDelta(postData.uniqueOrgsCount, preData.uniqueOrgsCount)}</span></div><div class="metric-row"><span class="metric-name">Unique Contacts</span><span class="metric-change ${getDeltaClass(postData.uniqueContacts, preData.uniqueContacts)}">${calculateDelta(postData.uniqueContacts, preData.uniqueContacts)}</span></div><div class="multiplier-badge"><span>Productivity Multiplier:</span><span class="multiplier-value">${meetingMultiplier}x</span><span>more meetings</span></div>`;
+        }
+
+        function toggleComparison(event) {
+            const title = event.currentTarget;
+            const content = title.nextElementSibling;
+            title.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        }
+
         function applyDateFilter(preset) {
             const today = new Date();
             let startDate;
-
             switch (preset) {
-                case '7':
-                    startDate = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    break;
-                case '14':
-                    startDate = new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000);
-                    break;
-                case '30':
-                    startDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-                    break;
-                case 'all':
-                    startDate = new Date(1970, 0, 1);
-                    break;
-                default:
-                    startDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                case '7': startDate = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000); break;
+                case '14': startDate = new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000); break;
+                case '30': startDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000); break;
+                case 'all': startDate = new Date(1970, 0, 1); break;
+                default: startDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
             }
-
             filteredData = filterDataByDateRange(startDate, today);
-
-            // Update date inputs
             document.getElementById('startDate').valueAsDate = startDate;
             document.getElementById('endDate').valueAsDate = today;
-
             updateDisplay();
         }
 
-        // Update display
         function updateDisplay() {
             const currentKPIs = updateKPICards();
             updateCharts(currentKPIs);
             generateWeeklySummary();
             generateComparisons();
+            generateHistoricalComparisons();
         }
 
-        // Event listeners
         document.querySelectorAll('.preset-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
@@ -1174,7 +1579,7 @@
             });
         });
 
-        document.getElementById('startDate').addEventListener('change', () => {
+        function handleCustomDateChange() {
             const start = document.getElementById('startDate').valueAsDate;
             const end = document.getElementById('endDate').valueAsDate;
             if (start && end && start <= end) {
@@ -1182,24 +1587,14 @@
                 document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
                 updateDisplay();
             }
+        }
+
+        ['change', 'input'].forEach(evt => {
+            document.getElementById('startDate').addEventListener(evt, handleCustomDateChange);
+            document.getElementById('endDate').addEventListener(evt, handleCustomDateChange);
         });
 
-        document.getElementById('endDate').addEventListener('change', () => {
-            const start = document.getElementById('startDate').valueAsDate;
-            const end = document.getElementById('endDate').valueAsDate;
-            if (start && end && start <= end) {
-                filteredData = filterDataByDateRange(start, end);
-                document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-                updateDisplay();
-            }
-        });
-
-        // Auto-refresh data every 5 minutes
-        setInterval(() => {
-            fetchData();
-        }, 5 * 60 * 1000);
-
-        // Initialize
+        setInterval(() => { fetchData(); }, 5 * 60 * 1000);
         fetchData();
     </script>
 </body>
