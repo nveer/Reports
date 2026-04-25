@@ -162,6 +162,45 @@
     .ep-sensor-state.unavailable{ color: var(--text-muted); opacity: 0.5; }
     .ep-time { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
 
+    /* ── Favorites subsection ── */
+    .fav-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+    .fav-header:hover { background: var(--surface2); }
+    .fav-title {
+      font-size: 10px;
+      font-weight: 700;
+      flex: 1;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .fav-chevron {
+      font-size: 10px;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+    }
+    .fav-chevron.collapsed { transform: rotate(-90deg); }
+    .fav-empty {
+      padding: 10px 14px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-style: italic;
+      border-bottom: 1px solid var(--border);
+    }
+    .fav-divider {
+      height: 1px;
+      background: var(--border);
+      opacity: 0.5;
+    }
+
     /* ── Automation compact list ── */
     .auto-list { display: flex; flex-direction: column; }
     .auto-row {
@@ -175,6 +214,22 @@
     .auto-row:last-child { border-bottom: none; }
     .auto-row:hover { background: var(--surface2); }
     .auto-row.hidden { display: none; }
+
+    /* ── Star button ── */
+    .star-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 15px;
+      padding: 1px 3px;
+      flex-shrink: 0;
+      line-height: 1;
+      transition: color 0.15s, transform 0.1s;
+      border-radius: 3px;
+    }
+    .star-btn:hover { color: var(--yellow); transform: scale(1.2); }
+    .star-btn.favorited { color: var(--yellow); }
 
     .auto-info { flex: 1; min-width: 0; }
     .auto-name {
@@ -273,6 +328,17 @@
       <div class="section-search">
         <input type="text" placeholder="Filter automations…" oninput="filterAuto(this.value)">
       </div>
+      <!-- Favorites subsection -->
+      <div id="fav-subsection">
+        <div class="fav-header" onclick="toggleFavSection()">
+          <span class="fav-title">⭐ Favorites</span>
+          <span class="section-count" id="fav-count">0</span>
+          <span class="fav-chevron" id="fav-chevron">▼</span>
+        </div>
+        <div class="auto-list" id="fav-list"></div>
+      </div>
+      <div class="fav-divider" id="fav-divider"></div>
+      <!-- Main list -->
       <div class="auto-list" id="auto-list"></div>
     </div>
   </div>
@@ -287,6 +353,30 @@ const HA_TOKEN  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2NzkzZmFhZDhh
 // ─── State ─────────────────────────────────────────────────────────────────
 let ws, msgId = 1, reconnectTimer = null;
 const states = {};
+
+// ─── Favorites (persisted via localStorage) ────────────────────────────────
+let favorites = new Set(JSON.parse(localStorage.getItem('ha-fav-autos') || '[]'));
+let favCollapsed = false;
+
+function saveFavorites() {
+  localStorage.setItem('ha-fav-autos', JSON.stringify([...favorites]));
+}
+
+function toggleFavorite(eid, btn) {
+  if (favorites.has(eid)) {
+    favorites.delete(eid);
+  } else {
+    favorites.add(eid);
+  }
+  saveFavorites();
+  renderAutomations();
+}
+
+function toggleFavSection() {
+  favCollapsed = !favCollapsed;
+  document.getElementById('fav-list').style.display = favCollapsed ? 'none' : 'flex';
+  document.getElementById('fav-chevron').classList.toggle('collapsed', favCollapsed);
+}
 
 // ─── EP Sensor groupings ───────────────────────────────────────────────────
 const EP_GROUPS = {
@@ -307,8 +397,12 @@ const EP_GROUPS = {
     humidity:  'sensor.ep_one_office_humidity',
   },
   'Living Room (EP Lite)': {
-    cloud:   'binary_sensor.eplite_livingroom_power_cloud_connection',
-    power_w: 'sensor.eplite_livingroom_power_current_consumption',
+    cloud:       'binary_sensor.eplite_livingroom_power_cloud_connection',
+    power_w:     'sensor.eplite_livingroom_power_current_consumption',
+    voltage:     'sensor.eplite_livingroom_power_voltage',
+    current_a:   'sensor.eplite_livingroom_power_current',
+    today_kwh:   'sensor.eplite_livingroom_power_today_s_consumption',
+    month_kwh:   'sensor.eplite_livingroom_power_this_month_s_consumption',
   },
   'Master Bathroom (EP One)': {
     cloud: 'binary_sensor.epone_master_bathroom_power_cloud_connection',
@@ -319,6 +413,7 @@ const EP_LABELS = {
   mmwave: 'mmWave', occupancy: 'Occupancy', pir: 'PIR',
   co2: 'CO₂', temp: 'Temp', humidity: 'Humidity',
   cloud: 'Cloud', power_w: 'Power (W)',
+  voltage: 'Voltage', current_a: 'Current', today_kwh: 'Today', month_kwh: 'This Month',
 };
 const EP_BINARY = ['mmwave','occupancy','pir','cloud'];
 
@@ -353,7 +448,13 @@ function renderEP() {
       } else {
         cls = 'detected';
         const unit = s?.attributes?.unit_of_measurement || '';
-        displayVal = sv !== 'unavailable' ? `${sv}${unit ? ' '+unit : ''}` : 'unavailable';
+        if (sv !== 'unavailable') {
+          const num = parseFloat(sv);
+          const formatted = !isNaN(num) ? +num.toFixed(2) : sv;
+          displayVal = `${formatted}${unit ? ' '+unit : ''}`;
+        } else {
+          displayVal = 'unavailable';
+        }
       }
 
       rows += `<div class="ep-sensor-row" id="ep-${eid.replace(/\./g,'-')}">
@@ -372,6 +473,36 @@ function renderEP() {
 
   document.getElementById('ep-grid').innerHTML = html;
   document.getElementById('ep-count').textContent = count + ' sensors';
+}
+
+// ─── Build automation row HTML ─────────────────────────────────────────────
+function autoRowHTML(a) {
+  const eid = a.entity_id;
+  const name = a.attributes?.friendly_name || friendlyName(eid);
+  const isOn = a.state === 'on';
+  const lt = a.attributes?.last_triggered;
+  const rowId = `auto-row-${eid.replace(/\./g,'-')}`;
+  const isFav = favorites.has(eid);
+  const safeEid = eid.replace(/'/g, "\\'");
+
+  return `<div class="auto-row${isOn ? '' : ' disabled'}"
+             id="${rowId}"
+             data-id="${eid}"
+             data-name="${name.toLowerCase()} ${eid.toLowerCase()}">
+    <button class="star-btn${isFav ? ' favorited' : ''}"
+            onclick="toggleFavorite('${safeEid}', this)"
+            title="${isFav ? 'Remove from favorites' : 'Add to favorites'}">${isFav ? '★' : '☆'}</button>
+    <div class="auto-info">
+      <div class="auto-name" title="${name}">${name}</div>
+      <div class="auto-meta">
+        <div class="auto-triggered">Triggered: <span id="lt-${eid.replace(/\./g,'-')}">${lt ? timeAgo(lt) : 'never'}</span></div>
+      </div>
+    </div>
+    <label class="toggle" id="tog-${eid.replace(/\./g,'-')}" title="${isOn ? 'Enabled — click to disable' : 'Disabled — click to enable'}">
+      <input type="checkbox" ${isOn ? 'checked' : ''} onchange="toggleAutomation('${safeEid}', this)">
+      <span class="toggle-slider"></span>
+    </label>
+  </div>`;
 }
 
 // ─── Render automation list ────────────────────────────────────────────────
@@ -393,35 +524,27 @@ function renderAutomations() {
      <div class="stat"><span class="on">●</span> <strong>${on}</strong> enabled</div>
      <div class="stat"><span class="off">●</span> <strong>${off}</strong> disabled</div>`;
 
-  const list = document.getElementById('auto-list');
-  const q = list.closest('.section-body').querySelector('input')?.value.toLowerCase() || '';
+  const favAutos  = autos.filter(a => favorites.has(a.entity_id));
+  const mainAutos = autos.filter(a => !favorites.has(a.entity_id));
 
-  let html = '';
-  for (const a of autos) {
-    const eid = a.entity_id;
-    const name = a.attributes?.friendly_name || friendlyName(eid);
-    const isOn = a.state === 'on';
-    const lt = a.attributes?.last_triggered;
-    const rowId = `auto-row-${eid.replace(/\./g,'-')}`;
-
-    html += `<div class="auto-row${isOn ? '' : ' disabled'}"
-               id="${rowId}"
-               data-id="${eid}"
-               data-name="${name.toLowerCase()} ${eid.toLowerCase()}">
-      <div class="auto-info">
-        <div class="auto-name" title="${name}">${name}</div>
-        <div class="auto-meta">
-          <div class="auto-triggered">Triggered: <span id="lt-${eid.replace(/\./g,'-')}">${lt ? timeAgo(lt) : 'never'}</span></div>
-        </div>
-      </div>
-      <label class="toggle" id="tog-${eid.replace(/\./g,'-')}" title="${isOn ? 'Enabled — click to disable' : 'Disabled — click to enable'}">
-        <input type="checkbox" ${isOn ? 'checked' : ''} onchange="toggleAutomation('${eid}', this)">
-        <span class="toggle-slider"></span>
-      </label>
-    </div>`;
+  // Favorites subsection
+  document.getElementById('fav-count').textContent = favAutos.length;
+  const favList = document.getElementById('fav-list');
+  if (favAutos.length > 0) {
+    favList.innerHTML = favAutos.map(autoRowHTML).join('');
+  } else {
+    favList.innerHTML = '<div class="fav-empty">No favorites yet — click ☆ to pin an automation here.</div>';
   }
+  favList.style.display = favCollapsed ? 'none' : 'flex';
 
-  list.innerHTML = html;
+  // Divider only when there are favorites
+  document.getElementById('fav-divider').style.display = favAutos.length > 0 ? 'block' : 'none';
+
+  // Main list
+  document.getElementById('auto-list').innerHTML = mainAutos.map(autoRowHTML).join('');
+
+  // Re-apply active search filter
+  const q = document.querySelector('#sec-auto .section-search input')?.value.toLowerCase() || '';
   if (q) filterAuto(q);
 }
 
@@ -440,10 +563,10 @@ function toggleAutomation(eid, checkbox) {
   }));
 }
 
-// ─── Filter automations ────────────────────────────────────────────────────
+// ─── Filter automations (searches both favorites and main list) ────────────
 function filterAuto(query) {
   const q = query.toLowerCase().trim();
-  for (const row of document.querySelectorAll('#auto-list .auto-row')) {
+  for (const row of document.querySelectorAll('#fav-list .auto-row, #auto-list .auto-row')) {
     const name = row.dataset.name || '';
     row.classList.toggle('hidden', q.length > 0 && !name.includes(q));
   }
@@ -488,7 +611,9 @@ function updateEpSensor(entity) {
     else { stateEl.className = 'ep-sensor-state unavailable'; stateEl.textContent = sv; }
   } else {
     const unit = entity.attributes?.unit_of_measurement || '';
-    stateEl.textContent = `${sv}${unit ? ' '+unit : ''}`;
+    const num = parseFloat(sv);
+    const formatted = !isNaN(num) ? +num.toFixed(2) : sv;
+    stateEl.textContent = `${formatted}${unit ? ' '+unit : ''}`;
   }
   if (timeEl) timeEl.textContent = timeAgo(entity.last_changed);
 }
