@@ -24,8 +24,8 @@
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 13px;
+      line-height: 1.4;
     }
     header {
       position: sticky;
@@ -33,82 +33,84 @@
       z-index: 100;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 12px 20px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
     }
-    header h1 {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-      flex: 1;
-    }
+    header h1 { font-size: 15px; font-weight: 700; flex: 1; }
     #conn-status {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 12px;
+      gap: 5px;
+      font-size: 11px;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 20px;
       background: var(--surface2);
     }
     #conn-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px; height: 7px;
       border-radius: 50%;
       background: var(--gray);
     }
-    #conn-dot.connected { background: var(--green); }
+    #conn-dot.connected  { background: var(--green); }
     #conn-dot.connecting { background: var(--yellow); animation: pulse 1s infinite; }
-    #conn-dot.error { background: var(--red); }
-    #last-updated {
-      font-size: 11px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
+    #conn-dot.error      { background: var(--red); }
+    #last-updated { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-    .main { padding: 20px; max-width: 1600px; margin: 0 auto; }
+    .main { padding: 12px; max-width: 900px; margin: 0 auto; }
 
+    /* ── Section shell ── */
     .section {
-      margin-bottom: 24px;
+      margin-bottom: 14px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
     }
     .section-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
+      gap: 10px;
+      padding: 10px 14px;
       cursor: pointer;
       user-select: none;
       background: var(--surface2);
       border-bottom: 1px solid var(--border);
     }
     .section-header:hover { background: var(--border); }
-    .section-title {
-      font-size: 15px;
-      font-weight: 700;
-      flex: 1;
-    }
+    .section-title { font-size: 13px; font-weight: 700; flex: 1; }
     .section-count {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
       background: var(--bg);
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 10px;
     }
-    .section-chevron { transition: transform 0.2s; font-size: 12px; }
+    .section-chevron { transition: transform 0.2s; font-size: 11px; }
     .section.collapsed .section-chevron { transform: rotate(-90deg); }
     .section.collapsed .section-body { display: none; }
 
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: flex;
+      gap: 12px;
+      padding: 7px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      flex-wrap: wrap;
+    }
+    .stat { font-size: 11px; color: var(--text-muted); }
+    .stat strong { color: var(--text); }
+    .stat .on  { color: var(--green); }
+    .stat .off { color: var(--red); }
+
+    /* ── Search ── */
     .section-search {
-      padding: 10px 18px;
+      padding: 7px 14px;
       border-bottom: 1px solid var(--border);
       background: var(--surface);
     }
@@ -117,181 +119,120 @@
       background: var(--bg);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 12px;
       outline: none;
     }
     .section-search input:focus { border-color: var(--accent); }
 
-    .entity-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1px;
-      background: var(--border);
-    }
-    .entity-card {
-      background: var(--surface);
-      padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      transition: background 0.15s;
-    }
-    .entity-card:hover { background: var(--surface2); }
-    .entity-card.hidden { display: none; }
-
-    .entity-top {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .dot-on, .dot-active, .dot-occupied { background: var(--green); }
-    .dot-off, .dot-disabled { background: var(--red); }
-    .dot-clear { background: var(--gray); }
-    .dot-unavailable { background: var(--gray); opacity: 0.4; }
-    .dot-unknown { background: var(--yellow); }
-
-    .entity-name {
-      font-size: 13px;
-      font-weight: 500;
-      flex: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .entity-state {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 1px 7px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .state-on { background: rgba(34,197,94,0.15); color: var(--green); }
-    .state-off { background: rgba(239,68,68,0.12); color: var(--red); }
-    .state-occupied { background: rgba(34,197,94,0.15); color: var(--green); }
-    .state-clear { background: rgba(71,85,105,0.2); color: var(--gray); }
-    .state-unavailable { background: rgba(71,85,105,0.15); color: var(--text-muted); }
-    .state-unknown { background: rgba(245,158,11,0.15); color: var(--yellow); }
-
-    .entity-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .entity-id {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-family: monospace;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
-    }
-    .entity-time {
-      font-size: 11px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    /* EP Sensors special layout */
+    /* ── EP Sensor grid ── */
     .ep-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1px;
       background: var(--border);
     }
-    .ep-card {
-      background: var(--surface);
-      padding: 16px;
-    }
-    .ep-card:hover { background: var(--surface2); }
+    .ep-card { background: var(--surface); padding: 11px 12px; }
     .ep-location {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 7px;
       color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
-    .ep-sensors {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .ep-sensors { display: flex; flex-direction: column; gap: 3px; }
     .ep-sensor-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
+      gap: 6px;
+      padding: 3px 7px;
       background: var(--bg);
-      border-radius: 6px;
+      border-radius: 4px;
     }
     .ep-sensor-label {
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 600;
       color: var(--text-muted);
-      width: 80px;
+      width: 68px;
       flex-shrink: 0;
     }
-    .ep-sensor-state {
+    .ep-sensor-state { font-size: 11px; font-weight: 700; flex: 1; }
+    .ep-sensor-state.detected   { color: var(--green); }
+    .ep-sensor-state.clear      { color: var(--gray); }
+    .ep-sensor-state.unavailable{ color: var(--text-muted); opacity: 0.5; }
+    .ep-time { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+
+    /* ── Automation compact list ── */
+    .auto-list { display: flex; flex-direction: column; }
+    .auto-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    .auto-row:last-child { border-bottom: none; }
+    .auto-row:hover { background: var(--surface2); }
+    .auto-row.hidden { display: none; }
+
+    .auto-info { flex: 1; min-width: 0; }
+    .auto-name {
       font-size: 12px;
-      font-weight: 700;
-      flex: 1;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .ep-sensor-state.detected { color: var(--green); }
-    .ep-sensor-state.clear { color: var(--gray); }
-    .ep-sensor-state.unavailable { color: var(--text-muted); opacity: 0.5; }
-    .ep-time { font-size: 10px; color: var(--text-muted); }
-
-    /* Group labels */
-    .group-label {
-      grid-column: 1 / -1;
-      padding: 8px 16px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      background: var(--bg);
-      border-top: 1px solid var(--border);
+    .auto-row.disabled .auto-name { color: var(--text-muted); }
+    .auto-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 2px;
     }
-    .group-label:first-child { border-top: none; }
-
-    /* Automation specific */
-    .auto-last-triggered {
+    .auto-triggered {
       font-size: 10px;
       color: var(--text-muted);
+      white-space: nowrap;
     }
-    .auto-last-triggered span { color: var(--blue); }
+    .auto-triggered span { color: var(--blue); }
 
-    /* Stats bar */
-    .stats-bar {
-      display: flex;
-      gap: 16px;
-      padding: 10px 18px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
-      flex-wrap: wrap;
+    /* ── Toggle switch ── */
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 22px;
+      flex-shrink: 0;
     }
-    .stat { font-size: 12px; color: var(--text-muted); }
-    .stat strong { color: var(--text); }
-    .stat .on { color: var(--green); }
-    .stat .off { color: var(--red); }
+    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--gray);
+      border-radius: 22px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+      left: 3px; top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .toggle input:checked + .toggle-slider { background: var(--green); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+    .toggle.pending .toggle-slider { opacity: 0.5; cursor: wait; pointer-events: none; }
 
-    @media (max-width: 600px) {
-      .main { padding: 12px; }
-      .entity-grid { grid-template-columns: 1fr; }
+    @media (max-width: 540px) {
       .ep-grid { grid-template-columns: 1fr; }
+      .main { padding: 8px; }
     }
   </style>
 </head>
@@ -307,6 +248,7 @@
 </header>
 
 <div class="main">
+
   <!-- EP Sensors -->
   <div class="section" id="sec-ep">
     <div class="section-header" onclick="toggleSection('sec-ep')">
@@ -329,43 +271,12 @@
     <div class="section-body">
       <div class="stats-bar" id="auto-stats"></div>
       <div class="section-search">
-        <input type="text" placeholder="Filter automations…" oninput="filterSection('auto', this.value)">
+        <input type="text" placeholder="Filter automations…" oninput="filterAuto(this.value)">
       </div>
-      <div class="entity-grid" id="auto-grid"></div>
+      <div class="auto-list" id="auto-list"></div>
     </div>
   </div>
 
-  <!-- Lights -->
-  <div class="section" id="sec-lights">
-    <div class="section-header" onclick="toggleSection('sec-lights')">
-      <span class="section-title">💡 Lights</span>
-      <span class="section-count" id="lights-count">–</span>
-      <span class="section-chevron">▼</span>
-    </div>
-    <div class="section-body">
-      <div class="stats-bar" id="lights-stats"></div>
-      <div class="section-search">
-        <input type="text" placeholder="Filter lights…" oninput="filterSection('lights', this.value)">
-      </div>
-      <div class="entity-grid" id="lights-grid"></div>
-    </div>
-  </div>
-
-  <!-- Switches -->
-  <div class="section" id="sec-switches">
-    <div class="section-header" onclick="toggleSection('sec-switches')">
-      <span class="section-title">🔌 Switches</span>
-      <span class="section-count" id="switches-count">–</span>
-      <span class="section-chevron">▼</span>
-    </div>
-    <div class="section-body">
-      <div class="stats-bar" id="switches-stats"></div>
-      <div class="section-search">
-        <input type="text" placeholder="Filter switches…" oninput="filterSection('switches', this.value)">
-      </div>
-      <div class="entity-grid" id="switches-grid"></div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -375,130 +286,95 @@ const HA_TOKEN  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2NzkzZmFhZDhh
 
 // ─── State ─────────────────────────────────────────────────────────────────
 let ws, msgId = 1, reconnectTimer = null;
-const states = {};   // entity_id → state object
+const states = {};
 
 // ─── EP Sensor groupings ───────────────────────────────────────────────────
 const EP_GROUPS = {
   'Kitchen': {
-    mmwave:     'binary_sensor.ep_one_kitchen_mmwave',
-    occupancy:  'binary_sensor.ep_one_kitchen_occupancy',
-    pir:        'binary_sensor.ep_one_kitchen_pir',
-    co2:        'sensor.ep_one_kitchen_co2',
-    temp:       'sensor.ep_one_kitchen_temperature',
-    humidity:   'sensor.ep_one_kitchen_humidity',
+    mmwave:    'binary_sensor.ep_one_kitchen_mmwave',
+    occupancy: 'binary_sensor.ep_one_kitchen_occupancy',
+    pir:       'binary_sensor.ep_one_kitchen_pir',
+    co2:       'sensor.ep_one_kitchen_co2',
+    temp:      'sensor.ep_one_kitchen_temperature',
+    humidity:  'sensor.ep_one_kitchen_humidity',
   },
   'Office': {
-    mmwave:     'binary_sensor.ep_one_office_mmwave',
-    occupancy:  'binary_sensor.ep_one_office_occupancy',
-    pir:        'binary_sensor.ep_one_office_pir',
-    co2:        'sensor.ep_one_office_co2',
-    temp:       'sensor.ep_one_office_temperature',
-    humidity:   'sensor.ep_one_office_humidity',
+    mmwave:    'binary_sensor.ep_one_office_mmwave',
+    occupancy: 'binary_sensor.ep_one_office_occupancy',
+    pir:       'binary_sensor.ep_one_office_pir',
+    co2:       'sensor.ep_one_office_co2',
+    temp:      'sensor.ep_one_office_temperature',
+    humidity:  'sensor.ep_one_office_humidity',
   },
   'Living Room (EP Lite)': {
-    cloud:      'binary_sensor.eplite_livingroom_power_cloud_connection',
-    power_w:    'sensor.eplite_livingroom_power_current_consumption',
+    cloud:   'binary_sensor.eplite_livingroom_power_cloud_connection',
+    power_w: 'sensor.eplite_livingroom_power_current_consumption',
   },
   'Master Bathroom (EP One)': {
-    cloud:      'binary_sensor.epone_master_bathroom_power_cloud_connection',
+    cloud: 'binary_sensor.epone_master_bathroom_power_cloud_connection',
   },
 };
 
-// ─── Room grouping for lights/switches ────────────────────────────────────
-function getRoom(entity_id) {
-  const id = entity_id.split('.')[1];
-  if (id.match(/^livingroom|^living_room|^mantel|^eplite_livingroom/)) return '🛋️ Living Room';
-  if (id.match(/^kitchen|^ep_one_kitchen|^epone_kitchen/)) return '🍳 Kitchen';
-  if (id.match(/^bedroom|^night_stand|^sleepnumber/)) return '🛏️ Master Bedroom';
-  if (id.match(/^bathroom|^master_bathroom|^master_toilet|^epone_master_bathroom/)) return '🚿 Master Bathroom';
-  if (id.match(/^master_hallway/)) return '🚪 Master Hallway';
-  if (id.match(/^office|^ep_one_office|^epone_office|^big_light|^on_air|^fill_light|^left_desk|^right_desk|^overhead_light/)) return '💼 Office';
-  if (id.match(/^hall|^entryway|^entry_door/)) return '🚶 Entryway / Hall';
-  if (id.match(/^diningroom/)) return '🍽️ Dining Room';
-  if (id.match(/^garage/)) return '🚗 Garage';
-  if (id.match(/^back_porch/)) return '🌿 Back Porch';
-  if (id.match(/^driveway|^front_yard/)) return '🏡 Driveway / Front';
-  if (id.match(/^laundry/)) return '🧺 Laundry Room';
-  if (id.match(/^guestroom/)) return '🛌 Guest Room';
-  if (id.match(/^plant/)) return '🌱 Plants';
-  if (id.match(/^wyze_cam|^doorbell|^outdoor_cam|^front_yard_cam|^garage_cam|^driveway_cam/)) return '📷 Cameras';
-  if (id.match(/^air_purifier|^dwaynes_air/)) return '💨 Air Purifiers';
-  if (id.match(/^bhyve|^sprinkler/)) return '💧 Sprinklers';
-  return '🔧 Other';
-}
-
-// Switches to hide by default (LED indicators & camera sub-controls)
-function isNoiseSwitch(entity_id) {
-  const id = entity_id.split('.')[1];
-  if (id.endsWith('_led')) return true;
-  if (id.match(/(flip_horizontal|flip_vertical|_ir$|motion_tagging|motion_tracking|night_vision|pan_cruise|status_light|_stream$)$/)) return true;
-  return false;
-}
-
-// Lights to hide (EP internal LEDs)
-function isNoiseLight(entity_id) {
-  const id = entity_id.split('.')[1];
-  return id.match(/^ep_one.*_(esp32_status|mmwave)_led/) || id.match(/^esphome_lite.*_esp32_led/);
-}
+const EP_LABELS = {
+  mmwave: 'mmWave', occupancy: 'Occupancy', pir: 'PIR',
+  co2: 'CO₂', temp: 'Temp', humidity: 'Humidity',
+  cloud: 'Cloud', power_w: 'Power (W)',
+};
+const EP_BINARY = ['mmwave','occupancy','pir','cloud'];
 
 // ─── Formatting ────────────────────────────────────────────────────────────
 function timeAgo(isoStr) {
   if (!isoStr) return '–';
   const diff = Math.floor((Date.now() - new Date(isoStr).getTime()) / 1000);
-  if (diff < 60) return diff + 's ago';
-  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 60)    return diff + 's ago';
+  if (diff < 3600)  return Math.floor(diff/60) + 'm ago';
   if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
   return Math.floor(diff/86400) + 'd ago';
 }
 
 function friendlyName(entity_id) {
-  return entity_id.split('.')[1]
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
+  return entity_id.split('.')[1].replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
-function stateDotClass(state, domain) {
-  if (state === 'on') return 'dot-on';
-  if (state === 'off') {
-    if (domain === 'automation') return 'dot-disabled';
-    return 'dot-off';
-  }
-  if (state === 'unavailable' || state === 'unknown') return 'dot-unavailable';
-  return 'dot-unknown';
-}
+// ─── Render EP sensors ─────────────────────────────────────────────────────
+function renderEP() {
+  let html = '', count = 0;
 
-function stateLabelClass(state) {
-  if (state === 'on') return 'state-on';
-  if (state === 'off') return 'state-off';
-  if (state === 'unavailable' || state === 'unknown') return 'state-unavailable';
-  return 'state-unknown';
-}
+  for (const [location, sensors] of Object.entries(EP_GROUPS)) {
+    let rows = '';
+    for (const [key, eid] of Object.entries(sensors)) {
+      const s = states[eid];
+      const sv = s?.state ?? 'unavailable';
+      let cls = 'unavailable', displayVal = sv;
 
-// ─── Render helpers ────────────────────────────────────────────────────────
-function renderEntityCard(entity, domain, extraHtml = '') {
-  const s = entity.state;
-  const eid = entity.entity_id;
-  const name = entity.attributes?.friendly_name || friendlyName(eid);
-  const changed = entity.last_changed;
-  const dotCls = stateDotClass(s, domain);
-  const lblCls = stateLabelClass(s);
+      if (EP_BINARY.includes(key)) {
+        if (sv === 'on')  { cls = 'detected'; displayVal = key === 'cloud' ? 'Online' : 'Detected'; }
+        else if (sv === 'off') { cls = 'clear'; displayVal = key === 'cloud' ? 'Offline' : 'Clear'; }
+      } else {
+        cls = 'detected';
+        const unit = s?.attributes?.unit_of_measurement || '';
+        displayVal = sv !== 'unavailable' ? `${sv}${unit ? ' '+unit : ''}` : 'unavailable';
+      }
 
-  return `
-    <div class="entity-card" data-name="${name.toLowerCase()} ${eid.toLowerCase()}" id="card-${eid.replace(/\./g,'-')}">
-      <div class="entity-top">
-        <div class="status-dot ${dotCls}"></div>
-        <span class="entity-name" title="${name}">${name}</span>
-        <span class="entity-state ${lblCls}">${s}</span>
-      </div>
-      ${extraHtml}
-      <div class="entity-meta">
-        <span class="entity-id">${eid}</span>
-        <span class="entity-time">${timeAgo(changed)}</span>
-      </div>
+      rows += `<div class="ep-sensor-row" id="ep-${eid.replace(/\./g,'-')}">
+        <span class="ep-sensor-label">${EP_LABELS[key]}</span>
+        <span class="ep-sensor-state ${cls}">${displayVal}</span>
+        <span class="ep-time">${timeAgo(s?.last_changed)}</span>
+      </div>`;
+      count++;
+    }
+
+    html += `<div class="ep-card">
+      <div class="ep-location">⚡ ${location}</div>
+      <div class="ep-sensors">${rows}</div>
     </div>`;
+  }
+
+  document.getElementById('ep-grid').innerHTML = html;
+  document.getElementById('ep-count').textContent = count + ' sensors';
 }
 
-// ─── Render automations ────────────────────────────────────────────────────
+// ─── Render automation list ────────────────────────────────────────────────
 function renderAutomations() {
   const autos = Object.values(states)
     .filter(s => s.entity_id.startsWith('automation.'))
@@ -508,8 +384,8 @@ function renderAutomations() {
       return na.localeCompare(nb);
     });
 
-  const on = autos.filter(a => a.state === 'on').length;
-  const off = autos.filter(a => a.state === 'off').length;
+  const on  = autos.filter(a => a.state === 'on').length;
+  const off = autos.length - on;
 
   document.getElementById('auto-count').textContent = autos.length;
   document.getElementById('auto-stats').innerHTML =
@@ -517,230 +393,107 @@ function renderAutomations() {
      <div class="stat"><span class="on">●</span> <strong>${on}</strong> enabled</div>
      <div class="stat"><span class="off">●</span> <strong>${off}</strong> disabled</div>`;
 
-  const grid = document.getElementById('auto-grid');
-  const q = grid.parentElement.querySelector('input')?.value.toLowerCase() || '';
+  const list = document.getElementById('auto-list');
+  const q = list.closest('.section-body').querySelector('input')?.value.toLowerCase() || '';
 
   let html = '';
   for (const a of autos) {
-    const lastTriggered = a.attributes?.last_triggered;
-    const extra = `<div class="auto-last-triggered">Last triggered: <span>${lastTriggered ? timeAgo(lastTriggered) : 'never'}</span></div>`;
-    html += renderEntityCard(a, 'automation', extra);
-  }
-  grid.innerHTML = html;
-  if (q) filterSection('auto', q);
-}
+    const eid = a.entity_id;
+    const name = a.attributes?.friendly_name || friendlyName(eid);
+    const isOn = a.state === 'on';
+    const lt = a.attributes?.last_triggered;
+    const rowId = `auto-row-${eid.replace(/\./g,'-')}`;
 
-// ─── Render EP sensors ─────────────────────────────────────────────────────
-function renderEP() {
-  const epGrid = document.getElementById('ep-grid');
-  let html = '';
-  let count = 0;
-
-  for (const [location, sensors] of Object.entries(EP_GROUPS)) {
-    let rows = '';
-
-    if (sensors.mmwave !== undefined) {
-      const labels = {
-        mmwave: 'mmWave', occupancy: 'Occupancy', pir: 'PIR',
-        co2: 'CO₂', temp: 'Temp', humidity: 'Humidity',
-        cloud: 'Cloud', power_w: 'Power (W)',
-      };
-      for (const [key, eid] of Object.entries(sensors)) {
-        const s = states[eid];
-        const sv = s?.state ?? 'unavailable';
-        let cls = 'unavailable';
-        let displayVal = sv;
-
-        if (['mmwave','occupancy','pir','cloud'].includes(key)) {
-          if (sv === 'on') { cls = 'detected'; displayVal = key === 'cloud' ? 'Online' : 'Detected'; }
-          else if (sv === 'off') { cls = 'clear'; displayVal = key === 'cloud' ? 'Offline' : 'Clear'; }
-        } else if (['co2','temp','humidity','power_w'].includes(key)) {
-          cls = 'detected';
-          const unit = s?.attributes?.unit_of_measurement || '';
-          displayVal = sv !== 'unavailable' ? `${sv} ${unit}` : 'unavailable';
-        }
-
-        const changed = s?.last_changed;
-        rows += `
-          <div class="ep-sensor-row" id="ep-${eid.replace(/\./g,'-')}">
-            <span class="ep-sensor-label">${labels[key]}</span>
-            <span class="ep-sensor-state ${cls}">${displayVal}</span>
-            <span class="ep-time">${timeAgo(changed)}</span>
-          </div>`;
-        count++;
-      }
-    }
-
-    html += `
-      <div class="ep-card">
-        <div class="ep-location">⚡ ${location}</div>
-        <div class="ep-sensors">${rows}</div>
-      </div>`;
+    html += `<div class="auto-row${isOn ? '' : ' disabled'}"
+               id="${rowId}"
+               data-id="${eid}"
+               data-name="${name.toLowerCase()} ${eid.toLowerCase()}">
+      <div class="auto-info">
+        <div class="auto-name" title="${name}">${name}</div>
+        <div class="auto-meta">
+          <div class="auto-triggered">Triggered: <span id="lt-${eid.replace(/\./g,'-')}">${lt ? timeAgo(lt) : 'never'}</span></div>
+        </div>
+      </div>
+      <label class="toggle" id="tog-${eid.replace(/\./g,'-')}" title="${isOn ? 'Enabled — click to disable' : 'Disabled — click to enable'}">
+        <input type="checkbox" ${isOn ? 'checked' : ''} onchange="toggleAutomation('${eid}', this)">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>`;
   }
 
-  epGrid.innerHTML = html;
-  document.getElementById('ep-count').textContent = count + ' sensors';
+  list.innerHTML = html;
+  if (q) filterAuto(q);
 }
 
-// ─── Render lights ─────────────────────────────────────────────────────────
-function renderLights() {
-  const lights = Object.values(states)
-    .filter(s => s.entity_id.startsWith('light.') && !isNoiseLight(s.entity_id))
-    .sort((a,b) => {
-      const ra = getRoom(a.entity_id), rb = getRoom(b.entity_id);
-      if (ra !== rb) return ra.localeCompare(rb);
-      return (a.attributes?.friendly_name||a.entity_id).localeCompare(b.attributes?.friendly_name||b.entity_id);
-    });
+// ─── Toggle automation via WebSocket ──────────────────────────────────────
+function toggleAutomation(eid, checkbox) {
+  const service = checkbox.checked ? 'turn_on' : 'turn_off';
+  const togEl = document.getElementById(`tog-${eid.replace(/\./g,'-')}`);
+  togEl?.classList.add('pending');
 
-  const on = lights.filter(l => l.state === 'on').length;
-  document.getElementById('lights-count').textContent = lights.length;
-  document.getElementById('lights-stats').innerHTML =
-    `<div class="stat"><strong>${lights.length}</strong> total</div>
-     <div class="stat"><span class="on">●</span> <strong>${on}</strong> on</div>
-     <div class="stat"><span class="off">●</span> <strong>${lights.length - on}</strong> off</div>`;
-
-  const grid = document.getElementById('lights-grid');
-  const q = grid.parentElement.querySelector('input')?.value.toLowerCase() || '';
-
-  let html = '';
-  let currentRoom = null;
-  for (const l of lights) {
-    const room = getRoom(l.entity_id);
-    if (room !== currentRoom) {
-      currentRoom = room;
-      html += `<div class="group-label">${room}</div>`;
-    }
-    html += renderEntityCard(l, 'light');
-  }
-  grid.innerHTML = html;
-  if (q) filterSection('lights', q);
+  ws.send(JSON.stringify({
+    id: msgId++,
+    type: 'call_service',
+    domain: 'automation',
+    service,
+    service_data: { entity_id: eid },
+  }));
 }
 
-// ─── Render switches ───────────────────────────────────────────────────────
-function renderSwitches() {
-  const switches = Object.values(states)
-    .filter(s => s.entity_id.startsWith('switch.'))
-    .sort((a,b) => {
-      const ra = getRoom(a.entity_id), rb = getRoom(b.entity_id);
-      if (ra !== rb) return ra.localeCompare(rb);
-      // noise last
-      const na = isNoiseSwitch(a.entity_id), nb = isNoiseSwitch(b.entity_id);
-      if (na !== nb) return na ? 1 : -1;
-      return (a.attributes?.friendly_name||a.entity_id).localeCompare(b.attributes?.friendly_name||b.entity_id);
-    });
-
-  const on = switches.filter(s => s.state === 'on').length;
-  document.getElementById('switches-count').textContent = switches.length;
-  document.getElementById('switches-stats').innerHTML =
-    `<div class="stat"><strong>${switches.length}</strong> total</div>
-     <div class="stat"><span class="on">●</span> <strong>${on}</strong> on</div>
-     <div class="stat"><span class="off">●</span> <strong>${switches.length - on}</strong> off</div>`;
-
-  const grid = document.getElementById('switches-grid');
-  const q = grid.parentElement.querySelector('input')?.value.toLowerCase() || '';
-
-  let html = '';
-  let currentRoom = null;
-  for (const sw of switches) {
-    const room = getRoom(sw.entity_id);
-    if (room !== currentRoom) {
-      currentRoom = room;
-      html += `<div class="group-label">${room}</div>`;
-    }
-    html += renderEntityCard(sw, 'switch');
-  }
-  grid.innerHTML = html;
-  if (q) filterSection('switches', q);
-}
-
-// ─── Filter ────────────────────────────────────────────────────────────────
-function filterSection(section, query) {
-  const gridId = { auto: 'auto-grid', lights: 'lights-grid', switches: 'switches-grid' }[section];
-  const grid = document.getElementById(gridId);
+// ─── Filter automations ────────────────────────────────────────────────────
+function filterAuto(query) {
   const q = query.toLowerCase().trim();
-  for (const card of grid.querySelectorAll('.entity-card')) {
-    const name = card.dataset.name || '';
-    card.classList.toggle('hidden', q.length > 0 && !name.includes(q));
+  for (const row of document.querySelectorAll('#auto-list .auto-row')) {
+    const name = row.dataset.name || '';
+    row.classList.toggle('hidden', q.length > 0 && !name.includes(q));
   }
 }
 
-// ─── Timestamp refresh ─────────────────────────────────────────────────────
-function refreshTimestamps() {
-  // EP sensor times
-  for (const [, sensors] of Object.entries(EP_GROUPS)) {
-    for (const [, eid] of Object.entries(sensors)) {
-      const el = document.getElementById(`ep-${eid.replace(/\./g,'-')}`);
-      if (el && states[eid]) {
-        const timeEl = el.querySelector('.ep-time');
-        if (timeEl) timeEl.textContent = timeAgo(states[eid].last_changed);
-      }
-    }
-  }
-  // Entity card times
-  for (const [eid, s] of Object.entries(states)) {
-    const card = document.getElementById(`card-${eid.replace(/\./g,'-')}`);
-    if (card) {
-      const timeEl = card.querySelector('.entity-time');
-      if (timeEl) timeEl.textContent = timeAgo(s.last_changed);
-      // automation last_triggered
-      const ltEl = card.querySelector('.auto-last-triggered span');
-      if (ltEl && s.attributes?.last_triggered) {
-        ltEl.textContent = timeAgo(s.attributes.last_triggered);
-      }
-    }
-  }
-}
-setInterval(refreshTimestamps, 30000);
-
-// ─── Single-entity update (no full re-render) ──────────────────────────────
-function updateEntityCard(entity) {
+// ─── Update single automation row ──────────────────────────────────────────
+function updateAutoRow(entity) {
   const eid = entity.entity_id;
-  const card = document.getElementById(`card-${eid.replace(/\./g,'-')}`);
-  if (!card) return; // new entity, needs full render
+  const rowId = `auto-row-${eid.replace(/\./g,'-')}`;
+  const row = document.getElementById(rowId);
+  if (!row) return;
 
-  const s = entity.state;
-  const domain = eid.split('.')[0];
-  const dotCls = stateDotClass(s, domain);
-  const lblCls = stateLabelClass(s);
+  const isOn = entity.state === 'on';
+  row.classList.toggle('disabled', !isOn);
 
-  card.querySelector('.status-dot').className = `status-dot ${dotCls}`;
-  const stateEl = card.querySelector('.entity-state');
-  stateEl.className = `entity-state ${lblCls}`;
-  stateEl.textContent = s;
-  card.querySelector('.entity-time').textContent = timeAgo(entity.last_changed);
-
-  if (domain === 'automation') {
-    const ltEl = card.querySelector('.auto-last-triggered span');
-    if (ltEl && entity.attributes?.last_triggered) {
-      ltEl.textContent = timeAgo(entity.attributes.last_triggered);
-    }
+  const togEl = document.getElementById(`tog-${eid.replace(/\./g,'-')}`);
+  if (togEl) {
+    togEl.classList.remove('pending');
+    const cb = togEl.querySelector('input');
+    if (cb) cb.checked = isOn;
+    togEl.title = isOn ? 'Enabled — click to disable' : 'Disabled — click to enable';
   }
 
-  // Update stats bars
-  if (domain === 'automation') updateAutoStats();
-  if (domain === 'light') updateLightStats();
-  if (domain === 'switch') updateSwitchStats();
+  const lt = entity.attributes?.last_triggered;
+  const ltEl = document.getElementById(`lt-${eid.replace(/\./g,'-')}`);
+  if (ltEl) ltEl.textContent = lt ? timeAgo(lt) : 'never';
+
+  updateAutoStats();
 }
 
+// ─── Update EP sensor inline ───────────────────────────────────────────────
 function updateEpSensor(entity) {
   const eid = entity.entity_id;
   const el = document.getElementById(`ep-${eid.replace(/\./g,'-')}`);
   if (!el) return;
   const sv = entity.state;
   const stateEl = el.querySelector('.ep-sensor-state');
-  const timeEl = el.querySelector('.ep-time');
-  const isBinary = eid.startsWith('binary_sensor.');
-  if (isBinary) {
-    if (sv === 'on') { stateEl.className = 'ep-sensor-state detected'; stateEl.textContent = eid.includes('cloud') ? 'Online' : 'Detected'; }
+  const timeEl  = el.querySelector('.ep-time');
+  if (eid.startsWith('binary_sensor.')) {
+    if (sv === 'on')  { stateEl.className = 'ep-sensor-state detected'; stateEl.textContent = eid.includes('cloud') ? 'Online' : 'Detected'; }
     else if (sv === 'off') { stateEl.className = 'ep-sensor-state clear'; stateEl.textContent = eid.includes('cloud') ? 'Offline' : 'Clear'; }
     else { stateEl.className = 'ep-sensor-state unavailable'; stateEl.textContent = sv; }
   } else {
     const unit = entity.attributes?.unit_of_measurement || '';
-    stateEl.textContent = `${sv} ${unit}`;
+    stateEl.textContent = `${sv}${unit ? ' '+unit : ''}`;
   }
   if (timeEl) timeEl.textContent = timeAgo(entity.last_changed);
 }
 
+// ─── Update stats bar only ────────────────────────────────────────────────
 function updateAutoStats() {
   const autos = Object.values(states).filter(s => s.entity_id.startsWith('automation.'));
   const on = autos.filter(a => a.state === 'on').length;
@@ -748,31 +501,41 @@ function updateAutoStats() {
     `<div class="stat"><strong>${autos.length}</strong> total</div>
      <div class="stat"><span class="on">●</span> <strong>${on}</strong> enabled</div>
      <div class="stat"><span class="off">●</span> <strong>${autos.length - on}</strong> disabled</div>`;
-}
-function updateLightStats() {
-  const lights = Object.values(states).filter(s => s.entity_id.startsWith('light.') && !isNoiseLight(s.entity_id));
-  const on = lights.filter(l => l.state === 'on').length;
-  document.getElementById('lights-stats').innerHTML =
-    `<div class="stat"><strong>${lights.length}</strong> total</div>
-     <div class="stat"><span class="on">●</span> <strong>${on}</strong> on</div>
-     <div class="stat"><span class="off">●</span> <strong>${lights.length - on}</strong> off</div>`;
-}
-function updateSwitchStats() {
-  const switches = Object.values(states).filter(s => s.entity_id.startsWith('switch.'));
-  const on = switches.filter(s => s.state === 'on').length;
-  document.getElementById('switches-stats').innerHTML =
-    `<div class="stat"><strong>${switches.length}</strong> total</div>
-     <div class="stat"><span class="on">●</span> <strong>${on}</strong> on</div>
-     <div class="stat"><span class="off">●</span> <strong>${switches.length - on}</strong> off</div>`;
+  document.getElementById('auto-count').textContent = autos.length;
 }
 
-// ─── Full render all sections ──────────────────────────────────────────────
+// ─── Timestamp refresh (every 30s) ────────────────────────────────────────
+function refreshTimestamps() {
+  for (const [, sensors] of Object.entries(EP_GROUPS)) {
+    for (const [, eid] of Object.entries(sensors)) {
+      const el = document.getElementById(`ep-${eid.replace(/\./g,'-')}`);
+      if (el && states[eid]) {
+        const t = el.querySelector('.ep-time');
+        if (t) t.textContent = timeAgo(states[eid].last_changed);
+      }
+    }
+  }
+  for (const [eid, s] of Object.entries(states)) {
+    if (!eid.startsWith('automation.')) continue;
+    const ltEl = document.getElementById(`lt-${eid.replace(/\./g,'-')}`);
+    if (ltEl && s.attributes?.last_triggered) {
+      ltEl.textContent = timeAgo(s.attributes.last_triggered);
+    }
+  }
+}
+setInterval(refreshTimestamps, 30000);
+
+// ─── Full render ───────────────────────────────────────────────────────────
 function renderAll() {
   renderEP();
   renderAutomations();
-  renderLights();
-  renderSwitches();
-  document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', {timeZone:'America/Chicago', hour:'2-digit', minute:'2-digit'}) + ' CT';
+  document.getElementById('last-updated').textContent =
+    'Updated ' + new Date().toLocaleTimeString('en-US', {timeZone:'America/Chicago', hour:'2-digit', minute:'2-digit'}) + ' CT';
+}
+
+// ─── Section toggle ────────────────────────────────────────────────────────
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
 }
 
 // ─── WebSocket ─────────────────────────────────────────────────────────────
@@ -795,34 +558,25 @@ function connect() {
     }
     else if (msg.type === 'auth_ok') {
       setConnStatus('connected', 'Live');
-      // Get all states
       ws.send(JSON.stringify({ id: msgId++, type: 'get_states' }));
-      // Subscribe to state_changed events
       ws.send(JSON.stringify({ id: msgId++, type: 'subscribe_events', event_type: 'state_changed' }));
     }
     else if (msg.type === 'auth_invalid') {
       setConnStatus('error', 'Auth Failed');
     }
     else if (msg.type === 'result' && msg.result && Array.isArray(msg.result)) {
-      // get_states response
-      for (const s of msg.result) {
-        states[s.entity_id] = s;
-      }
+      for (const s of msg.result) states[s.entity_id] = s;
       renderAll();
     }
     else if (msg.type === 'event' && msg.event?.event_type === 'state_changed') {
-      const data = msg.event.data;
-      const newState = data.new_state;
+      const newState = msg.event.data?.new_state;
       if (!newState) return;
       const eid = newState.entity_id;
       states[eid] = newState;
 
-      // Targeted updates
       const domain = eid.split('.')[0];
-      if (['automation','light','switch'].includes(domain)) {
-        updateEntityCard(newState);
-      }
-      // EP entity?
+      if (domain === 'automation') updateAutoRow(newState);
+
       const isEP = Object.values(EP_GROUPS).some(g => Object.values(g).includes(eid));
       if (isEP) updateEpSensor(newState);
     }
@@ -839,12 +593,6 @@ function connect() {
   };
 }
 
-// ─── Section toggle ────────────────────────────────────────────────────────
-function toggleSection(id) {
-  document.getElementById(id).classList.toggle('collapsed');
-}
-
-// ─── Boot ──────────────────────────────────────────────────────────────────
 connect();
 </script>
 </body>
