@@ -397,15 +397,14 @@ const EP_GROUPS = {
     humidity:  'sensor.ep_one_office_humidity',
   },
   'Living Room (EP Lite)': {
-    cloud:       'binary_sensor.eplite_livingroom_power_cloud_connection',
-    power_w:     'sensor.eplite_livingroom_power_current_consumption',
-    voltage:     'sensor.eplite_livingroom_power_voltage',
-    current_a:   'sensor.eplite_livingroom_power_current',
-    today_kwh:   'sensor.eplite_livingroom_power_today_s_consumption',
-    month_kwh:   'sensor.eplite_livingroom_power_this_month_s_consumption',
+    occupancy:   'binary_sensor.esphome_lite_livingroom_occupancy',
+    zone1:       'binary_sensor.esphome_lite_livingroom_zone_1_occupancy',
+    illuminance: 'sensor.esphome_lite_livingroom_illuminance',
   },
-  'Master Bathroom (EP One)': {
-    cloud: 'binary_sensor.epone_master_bathroom_power_cloud_connection',
+  'Master Bathroom (EP Lite)': {
+    occupancy:   'binary_sensor.esphome_lite_mater_bathroom_occupancy',
+    zone1:       'binary_sensor.esphome_lite_mater_bathroom_zone_1_occupancy',
+    illuminance: 'sensor.esphome_lite_mater_bathroom_illuminance',
   },
 };
 
@@ -413,9 +412,9 @@ const EP_LABELS = {
   mmwave: 'mmWave', occupancy: 'Occupancy', pir: 'PIR',
   co2: 'CO₂', temp: 'Temp', humidity: 'Humidity',
   cloud: 'Cloud', power_w: 'Power (W)',
-  voltage: 'Voltage', current_a: 'Current', today_kwh: 'Today', month_kwh: 'This Month',
+  zone1: 'Zone 1', illuminance: 'Illuminance',
 };
-const EP_BINARY = ['mmwave','occupancy','pir','cloud'];
+const EP_BINARY = ['mmwave','occupancy','pir','cloud','zone1'];
 
 // ─── Formatting ────────────────────────────────────────────────────────────
 function timeAgo(isoStr) {
