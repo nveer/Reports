@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CatholicTV — Cross-Platform Tracking Architecture</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f1117; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 32px 24px; }
+  h1 { font-size: 20px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #94a3b8; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  .tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .track { background: #1e2330; border-radius: 12px; padding: 20px; border: 1px solid #2d3748; }
+  .track-header { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #2d3748; }
+  .track-web .track-header { color: #38bdf8; }
+  .track-app .track-header { color: #a78bfa; }
+
+  .step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; position: relative; }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 32px;
+    width: 2px;
+    height: calc(100% - 10px);
+    background: #2d3748;
+  }
+  .step-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; z-index: 1; }
+  .step-body { flex: 1; }
+  .step-title { font-size: 13px; font-weight: 600; color: #f1f5f9; margin-bottom: 3px; }
+  .step-desc { font-size: 11px; color: #64748b; line-height: 1.5; }
+  .owner-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 99px; margin-top: 5px; }
+
+  /* Owner colors */
+  .own-brightcove { background: #1e3a5f; color: #38bdf8; }
+  .own-applicaster { background: #2d1f5f; color: #a78bfa; }
+  .own-cetdigit { background: #1f3d2a; color: #4ade80; }
+  .own-catholictv { background: #3d2a1f; color: #fb923c; }
+  .own-shared { background: #2d2d1f; color: #fbbf24; }
+
+  /* Step icon colors */
+  .ic-brightcove { background: #1e3a5f; color: #38bdf8; }
+  .ic-applicaster { background: #2d1f5f; color: #a78bfa; }
+  .ic-cetdigit { background: #1f3d2a; color: #4ade80; }
+  .ic-catholictv { background: #3d2a1f; color: #fb923c; }
+  .ic-ga { background: #1f3535; color: #2dd4bf; }
+
+  /* OIDC Disclaimer */
+  .notice { background: #1a2740; border: 1px solid #1d4ed8; border-radius: 10px; padding: 14px 18px; margin-bottom: 24px; }
+  .notice-title { font-size: 12px; font-weight: 700; color: #93c5fd; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .notice-body { font-size: 12px; color: #cbd5e1; line-height: 1.6; }
+  .notice-body strong { color: #93c5fd; }
+
+  /* Resolved callout */
+  .resolved { background: #1a2e1a; border: 1px solid #166534; border-radius: 8px; padding: 8px 12px; margin-top: 6px; font-size: 11px; color: #4ade80; line-height: 1.5; }
+  .resolved-label { font-weight: 700; }
+
+  /* Middleware callout */
+  .middleware { background: #1a2e1a; border: 1px solid #166534; border-radius: 10px; padding: 18px 20px; margin-bottom: 24px; }
+  .middleware-title { font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 12px; }
+  .mw-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 12px; color: #cbd5e1; line-height: 1.5; }
+  .mw-num { width: 20px; height: 20px; background: #166534; color: #4ade80; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* Converge arrow */
+  .converge { text-align: center; margin: 0 0 24px; }
+  .converge-arrow { font-size: 28px; color: #334155; margin-bottom: 8px; }
+  .hubspot-box { display: inline-block; background: #1c2e1c; border: 2px solid #4ade80; border-radius: 10px; padding: 14px 32px; }
+  .hubspot-label { font-size: 14px; font-weight: 700; color: #4ade80; }
+  .hubspot-sub { font-size: 11px; color: #64748b; margin-top: 3px; }
+
+  /* Owner table */
+  .owners { background: #1e2330; border-radius: 12px; padding: 20px; border: 1px solid #2d3748; }
+  .owners h3 { font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; color: #64748b; font-weight: 600; padding: 6px 10px; border-bottom: 1px solid #2d3748; }
+  td { padding: 8px 10px; border-bottom: 1px solid #1e2330; color: #cbd5e1; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 99px; }
+  .tag-build { background: #1f3d2a; color: #4ade80; }
+  .tag-config { background: #1e3a5f; color: #38bdf8; }
+  .tag-confirm { background: #3d2a1f; color: #fb923c; }
+  .tag-contract { background: #2d2d1f; color: #fbbf24; }
+
+  .gap-flag { font-size: 10px; color: #f87171; font-weight: 600; margin-top: 3px; }
+  .status-done { color: #4ade80; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>CatholicTV — Cross-Platform Tracking Architecture</h1>
+<p class="subtitle">Goal: Connect individual viewer engagement across all 9 platforms into HubSpot for lead scoring + donation attribution &nbsp;|&nbsp; Updated: 2026-05-13</p>
+
+<div class="notice">
+  <div class="notice-title">ℹ️ Architecture Assumption — Identity Provider</div>
+  <div class="notice-body">This diagram assumes <strong>Beacon User Management System (UMS)</strong> as the identity provider for all app platforms. If CatholicTV switches to an <strong>Open ID Connect (OIDC)</strong> provider (e.g. Microsoft Entra External ID), this architecture requires re-validation and Applicaster reconfiguration. The email-as-join-key approach may still apply, but the endpoint used to retrieve it will change. Raise with Sandro Fraga and Ran Meirman before proceeding with any identity provider migration.</div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#38bdf8"></div> Brightcove</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Applicaster (Ran Meirman)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4ade80"></div> CETDIGIT — Middleware to build</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fb923c"></div> CatholicTV</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div> Shared / Multiple parties</div>
+</div>
+
+<div class="tracks">
+
+  <!-- TRACK 1: WEB -->
+  <div class="track track-web">
+    <div class="track-header">🌐 Track 1 — Web (Brightcove Campaign)</div>
+
+    <div class="step">
+      <div class="step-icon ic-catholictv">👤</div>
+      <div class="step-body">
+        <div class="step-title">User visits CatholicTV.org</div>
+        <div class="step-desc">Lands on page with Brightcove web player embedded</div>
+        <span class="owner-badge own-catholictv">CatholicTV</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon ic-brightcove">▶</div>
+      <div class="step-body">
+        <div class="step-title">Brightcove Campaign player fires</div>
+        <div class="step-desc">Campaign-enabled player captures HubSpot cookie + video engagement events. 30-day anonymous lookback attribution included.</div>
+        <span class="owner-badge own-brightcove">Brightcove</span>
+        <div class="gap-flag">⚠ Campaign module likely not in current contract — cost TBD (Morgan Drake to confirm)</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon ic-brightcove">⚡</div>
+      <div class="step-body">
+        <div class="step-title">Brightcove → HubSpot native sync</div>
+        <div class="step-desc">Viewer-level data (who watched what, how far) syncs directly into HubSpot contact record. No middleware required.</div>
+        <span class="owner-badge own-brightcove">Brightcove</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon" style="background:#1c2e1c; color:#4ade80;">H</div>
+      <div class="step-body">
+        <div class="step-title">HubSpot contact updated</div>
+        <div class="step-desc">Video engagement tied to contact via HubSpot cookie / email. Donor score updated.</div>
+        <span class="owner-badge own-cetdigit">CETDIGIT</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACK 2: APPS -->
+  <div class="track track-app">
+    <div class="track-header">📱 Track 2 — Apps (Applicaster + Google Analytics 4)</div>
+
+    <div class="step">
+      <div class="step-icon ic-catholictv">👤</div>
+      <div class="step-body">
+        <div class="step-title">User logs into Applicaster app</div>
+        <div class="step-desc">iOS, Android, Roku, Fire TV, LG, Samsung, Apple TV etc. (9 platforms)</div>
+        <span class="owner-badge own-catholictv">CatholicTV</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon ic-brightcove">🔐</div>
+      <div class="step-body">
+        <div class="step-title">Beacon UMS authenticates — returns account_token</div>
+        <div class="step-desc">Beacon User Management System validates credentials. Login response returns an <strong>account_token</strong> only — email address is not included in the login response.</div>
+        <span class="owner-badge own-brightcove">Brightcove / Beacon</span>
+        <div class="resolved"><span class="resolved-label">✅ Confirmed — Sandro Fraga, May 13 2026:</span> Login returns token only. Email retrieved via separate API call in next step.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon ic-brightcove">📧</div>
+      <div class="step-body">
+        <div class="step-title">Applicaster calls Beacon Profiles Application Programming Interface to get email</div>
+        <div class="step-desc">Using the account_token, Applicaster calls <code style="background:#0f1117; padding:1px 5px; border-radius:4px; color:#38bdf8; font-size:10px;">GET api/account/{user_token}/profiles</code> on the Beacon API. This returns the user's email address.</div>
+        <span class="owner-badge own-applicaster">Applicaster — Ran Meirman</span>
+        <div class="resolved"><span class="resolved-label">✅ Confirmed — Sandro Fraga, May 13 2026:</span> This endpoint returns the user profile including email. Primary path — no fallback lookup table required.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon ic-applicaster">⚙</div>
+      <div class="step-body">
+        <div class="step-title">Applicaster sets email as Google Analytics 4 user_id at player init</div>
+        <div class="step-desc">Ran Meirman configures the email (retrieved from Beacon Profiles API) as the <strong>user_id</strong> at player initialization. This becomes the universal join key across all 9 platforms.</div>
+        <span class="owner-badge own-applicaster">Applicaster — Ran Meirman</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon ic-ga">GA</div>
+      <div class="step-body">
+        <div class="step-title">Google Analytics 4 receives view events with email</div>
+        <div class="step-desc">Applicaster's GA4 integration fires view events across all platforms, each carrying the email as user_id. All 9 platforms report into one GA4 property.</div>
+        <span class="owner-badge own-applicaster">Applicaster</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon ic-cetdigit">🔧</div>
+      <div class="step-body">
+        <div class="step-title">CETDIGIT middleware pulls from Google Analytics 4</div>
+        <div class="step-desc">Custom service or iPaaS (Workato / Tray) queries GA4 Reporting Application Programming Interface on a schedule, extracts viewing events keyed on email. <strong>This is the custom build CETDIGIT owns.</strong></div>
+        <span class="owner-badge own-cetdigit">CETDIGIT — Build required</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-icon" style="background:#1c2e1c; color:#4ade80;">H</div>
+      <div class="step-body">
+        <div class="step-title">Join email → HubSpot contact</div>
+        <div class="step-desc">CETDIGIT matches GA4 email to HubSpot contact record. Video engagement data written to contact. Donor score updated.</div>
+        <span class="owner-badge own-cetdigit">CETDIGIT — Build required</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Converge to HubSpot -->
+<div class="converge">
+  <div class="converge-arrow">⬇ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ⬇</div>
+  <div class="hubspot-box">
+    <div class="hubspot-label">HubSpot — Unified Viewer Profile</div>
+    <div class="hubspot-sub">Web engagement (Track 1) + App engagement (Track 2) joined on email address → single contact record → donor conversion scoring</div>
+  </div>
+</div>
+
+<!-- Middleware detail -->
+<div class="middleware">
+  <div class="middleware-title">🔧 CETDIGIT Middleware — What needs to be built</div>
+  <div class="mw-item">
+    <div class="mw-num">1</div>
+    <div><strong>Google Analytics 4 data pull:</strong> Query GA4 Reporting Application Programming Interface on a schedule (daily/hourly), extract view events with user_id (email) dimension. Requires GA4 property access from CatholicTV.</div>
+  </div>
+  <div class="mw-item">
+    <div class="mw-num">2</div>
+    <div><strong>HubSpot contact match:</strong> For each email in GA4, look up or upsert the corresponding HubSpot contact. Map video engagement fields (content watched, % complete, last viewed) to HubSpot contact properties.</div>
+  </div>
+  <div class="mw-item">
+    <div class="mw-num">3</div>
+    <div><strong>Fallback handling (secondary):</strong> If any platform fails to resolve email via the Beacon Profiles Application Programming Interface, CETDIGIT can cross-reference a Beacon Registered Users export (token → email lookup). Export is currently manual UI only — no public Application Programming Interface. Feature request logged with Brightcove.</div>
+  </div>
+  <div class="mw-item">
+    <div class="mw-num">4</div>
+    <div><strong>Orchestration:</strong> iPaaS recommended (Workato / Tray / Zapier Enterprise) or custom microservice. Brightcove Analytics Application Programming Interface does not push to HubSpot natively — pull-based architecture required.</div>
+  </div>
+</div>
+
+<!-- Owner table -->
+<div class="owners">
+  <h3>Task Ownership Summary</h3>
+  <table>
+    <tr>
+      <th>Task</th>
+      <th>Owner</th>
+      <th>Type</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>Confirm Beacon login response + Profiles API returns email</td>
+      <td>Nathan Veer → Sandro Fraga</td>
+      <td><span class="tag tag-confirm">Confirm</span></td>
+      <td><span class="status-done">✅ Resolved — May 13</span></td>
+    </tr>
+    <tr>
+      <td>Configure Applicaster to call <code style="background:#0f1117; padding:1px 4px; border-radius:3px; font-size:10px; color:#38bdf8;">api/account/{token}/profiles</code> and set email as Google Analytics 4 user_id at player init</td>
+      <td>Ran Meirman (Applicaster)</td>
+      <td><span class="tag tag-config">Configure</span></td>
+      <td>🔴 Not started</td>
+    </tr>
+    <tr>
+      <td>Confirm Campaign module is in CatholicTV contract</td>
+      <td>Morgan Drake → Nathan Veer</td>
+      <td><span class="tag tag-contract">Contract</span></td>
+      <td>🔴 Open</td>
+    </tr>
+    <tr>
+      <td>Enable Brightcove Campaign player on CatholicTV web</td>
+      <td>Brightcove (Nathan / Tomas)</td>
+      <td><span class="tag tag-config">Configure</span></td>
+      <td>🟡 Pending contract confirm</td>
+    </tr>
+    <tr>
+      <td>Build GA4 → HubSpot middleware (pull, match, write)</td>
+      <td>CETDIGIT (Olsen Antos)</td>
+      <td><span class="tag tag-build">Build</span></td>
+      <td>🔴 Not started</td>
+    </tr>
+    <tr>
+      <td>Grant CETDIGIT access to GA4 property</td>
+      <td>CatholicTV (Gabriel Nicolau)</td>
+      <td><span class="tag tag-config">Configure</span></td>
+      <td>🔴 Open</td>
+    </tr>
+    <tr>
+      <td>Define HubSpot contact properties for video engagement fields</td>
+      <td>CETDIGIT (Olsen Antos)</td>
+      <td><span class="tag tag-build">Build</span></td>
+      <td>🔴 Not started</td>
+    </tr>
+    <tr>
+      <td>Log feature request: Beacon Registered Users programmatic export Application Programming Interface</td>
+      <td>Nathan Veer</td>
+      <td><span class="tag tag-confirm">Confirm</span></td>
+      <td>🟡 Committed — May 6</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>
