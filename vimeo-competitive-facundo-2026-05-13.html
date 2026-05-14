@@ -149,6 +149,7 @@
   <a href="#gaps">Product Gaps</a>
   <a href="#qual">Qual Question</a>
   <a href="#teardown">2020 Teardown</a>
+  <a href="#workflow">Workflow Data</a>
   <a href="#video">Reliability</a>
   <a href="#features">Feature Comparison</a>
 </nav>
@@ -444,20 +445,60 @@
 
   <!-- QUAL QUESTION -->
   <section id="qual">
-    <h2>6. Qualification Question</h2>
-    <div class="qual-box">
-      <div class="q">"Are you trying to run a streaming business where your end-users pay for access to your content — or are you trying to manage and distribute video for your organization's marketing, internal comms, or media publishing?"</div>
+    <h2>6. Qualification Questions — Enterprise Focus</h2>
+
+    <div class="callout blue" style="margin-bottom:16px;">
+      <h3>How to use these</h3>
+      <p>Ask Q1 first to establish the use case. Then use Q2–Q5 to size the consequence — the higher the consequence of failure, the stronger the BC argument. A "yes" to any of Q2–Q5 is a BC signal regardless of what Q1 returns.</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="qual-box" style="margin-bottom:12px;">
+      <div class="q">"What does video actually do for your business — is it a channel you use to reach employees or customers, or is it the product you sell?"</div>
       <div class="qual-routes">
-        <span class="qual-route vimeo">Streaming business → Vimeo OTT first</span>
-        <span class="qual-route bc">Enterprise distribution → Brightcove</span>
-        <span class="qual-route dig">Unclear / hybrid → Dig deeper</span>
+        <span class="qual-route vimeo">Video is what they sell → consumer subscription path</span>
+        <span class="qual-route bc">Video serves the business → Brightcove territory</span>
       </div>
     </div>
-    <div class="callout blue" style="margin-top:12px;">
-      <h3>Why "streaming business → Vimeo OTT first" — not a quality statement</h3>
-      <p>Brightcove is the stronger media platform. The routing is about <strong>what comes bundled</strong>. "Streaming business" = a consumer-facing service where end-users pay for access and need branded apps on Roku, Apple TV, etc. Vimeo OTT ships billing + subscriber management + 11 consumer apps as a pre-packaged unit. BC requires Beacon + an OTT partner (Leyra, Applicaster, Enveu) + external billing integration — more capable at scale, but more infrastructure to stand up. If the prospect has a hard 90-day launch deadline, Vimeo wins on speed, not quality. For media publishing, broadcasters, or any org that needs SSAI + live DRM + MAP integration + enterprise security, BC wins decisively — Vimeo cannot compete.</p>
+
+    <!-- Q2 -->
+    <div class="qual-box" style="margin-bottom:12px;">
+      <div class="q">"If your all-hands stream went down in the middle of a CEO message to 10,000 employees — who gets the call?"</div>
+      <div class="qual-routes">
+        <span class="qual-route bc">Someone senior gets a call → reliability is a business requirement → Brightcove</span>
+        <span class="qual-route dig">Inconvenient but no consequences → Vimeo may be sufficient</span>
+      </div>
     </div>
-    <div class="callout yellow" style="margin-top:12px;">
+
+    <!-- Q3 -->
+    <div class="qual-box" style="margin-bottom:12px;">
+      <div class="q">"Does your video platform need to connect to your Marketing Automation Platform — Marketo, Eloqua, or HubSpot — to track who watched what and for how long?"</div>
+      <div class="qual-routes">
+        <span class="qual-route bc">Yes → Brightcove Campaign is the only enterprise-grade solution (Eloqua alone disqualifies Vimeo)</span>
+        <span class="qual-route dig">No MAP needs → dig into other requirements</span>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qual-box" style="margin-bottom:12px;">
+      <div class="q">"Does IT or Legal need to control who can watch your video content — Single Sign-On, domain restrictions, or proof that specific employees completed a video?"</div>
+      <div class="qual-routes">
+        <span class="qual-route bc">Any yes → SSO + playback restrictions + compliance reporting → Brightcove</span>
+        <span class="qual-route vimeo">No gating or compliance requirements → Vimeo can handle it</span>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qual-box" style="margin-bottom:12px;">
+      <div class="q">"How many videos does your team publish per month — and how many people are involved in getting each one live?"</div>
+      <div class="qual-routes">
+        <span class="qual-route bc">50+ videos/month or 3+ people in the workflow → BC workflow efficiency wins decisively</span>
+        <span class="qual-route vimeo">Under 20 videos, one person → Vimeo's simplicity is a fair fit</span>
+        <span class="qual-route dig">Unsure → ask about their current process and count the manual steps</span>
+      </div>
+    </div>
+
+    <div class="callout yellow" style="margin-top:16px;">
       <h3>Churn risk signal</h3>
       <p>If a customer bought Brightcove because it was "better than Vimeo" but never stood up Campaign, Gallery, or live — and they're using it as a basic video host — they're a churn risk. The workflow efficiency and integration story is what keeps customers.</p>
     </div>
@@ -665,6 +706,207 @@
         </tbody>
       </table>
     </div>
+  </section>
+
+  <!-- WORKFLOW EFFICIENCY CHARTS -->
+  <section id="workflow">
+    <h2>10. The Real Cost of Vimeo — Workflow Efficiency <span class="label">FIRST-HAND DATA</span></h2>
+    <div class="callout blue" style="margin-bottom:16px;">
+      <h3>Source: Nathan Veer — "Life Without Brightcove" (Jan 2023)</h3>
+      <p>Based on Nathan's firsthand experience as Director of Product Marketing at Visionular — a video-centric AI/ML startup using Vimeo. He produced 180 videos over one year, documented every workflow step, and quantified the cost vs. Brightcove. Presented to ~40 Brightcove employees in January 2023.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+      <!-- Chart 1: Error Opportunities -->
+      <div class="card" style="padding:20px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Human Error Opportunities Per Video</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Every manual touchpoint is a chance to make a mistake</div>
+        <canvas id="errorsChart" height="220"></canvas>
+        <div style="display:flex;justify-content:center;gap:24px;margin-top:12px;font-size:11px;color:var(--muted);">
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--red);border-radius:2px;margin-right:4px;"></span>Vimeo stack</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--green);border-radius:2px;margin-right:4px;"></span>Brightcove</span>
+        </div>
+      </div>
+
+      <!-- Chart 2: Time Lost -->
+      <div class="card" style="padding:20px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Hours Lost Fixing Mistakes (Per Video Run)</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Avg 30 min per error × total error opportunities</div>
+        <canvas id="timeChart" height="220"></canvas>
+        <div style="display:flex;justify-content:center;gap:24px;margin-top:12px;font-size:11px;color:var(--muted);">
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--red);border-radius:2px;margin-right:4px;"></span>Vimeo stack</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--green);border-radius:2px;margin-right:4px;"></span>Brightcove</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 3: Platform Count + Workflow Steps breakdown -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+      <div class="card" style="padding:20px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Platforms Required to Publish One Video</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Tools you must touch every single time</div>
+        <canvas id="platformChart" height="220"></canvas>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Workflow Steps by Category</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Vimeo stack — breakdown of where time goes</div>
+        <canvas id="stepsChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Stat callouts -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
+      <div class="card" style="text-align:center;padding:20px 12px;">
+        <div style="font-size:32px;font-weight:800;color:var(--green);">67%</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Fewer error opportunities with Brightcove</div>
+      </div>
+      <div class="card" style="text-align:center;padding:20px 12px;">
+        <div style="font-size:32px;font-weight:800;color:var(--green);">14.5hrs</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Time saved per video run (worst case)</div>
+      </div>
+      <div class="card" style="text-align:center;padding:20px 12px;">
+        <div style="font-size:32px;font-weight:800;color:var(--yellow);">$9–70</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Per-video caption cost on Vimeo (Rev.com)</div>
+      </div>
+      <div class="card" style="text-align:center;padding:20px 12px;">
+        <div style="font-size:32px;font-weight:800;color:var(--yellow);">180</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Videos produced in one year on the Vimeo stack</div>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <h3>The punchline</h3>
+      <p>One typo in a video title cascades to <strong>15 locations</strong> that need manual checking and fixing — across Vimeo, WordPress, LinkedIn, Facebook, Twitter, Instagram, email, and thumbnails. With Brightcove Video Cloud + Gallery, it's one fix, pushed everywhere. That's not a feature — it's hours of a marketing director's week, every week, at scale.</p>
+    </div>
+
+    <script>
+      const chartDefaults = {
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9A9A9A', font: { size: 11 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9A9A9A', font: { size: 11 } } }
+        }
+      };
+
+      // Chart 1: Error opportunities
+      new Chart(document.getElementById('errorsChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Vimeo Stack', 'Brightcove'],
+          datasets: [{
+            data: [43, 14],
+            backgroundColor: ['rgba(239,68,68,0.7)', 'rgba(88,238,176,0.7)'],
+            borderColor: ['#ef4444', '#58EEB0'],
+            borderWidth: 1,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          ...chartDefaults,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.raw} error opportunities` } }
+          },
+          scales: {
+            ...chartDefaults.scales,
+            y: { ...chartDefaults.scales.y, beginAtZero: true, max: 50,
+              ticks: { ...chartDefaults.scales.y.ticks, callback: v => v + ' errors' } }
+          }
+        }
+      });
+
+      // Chart 2: Time lost
+      new Chart(document.getElementById('timeChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Vimeo Stack', 'Brightcove'],
+          datasets: [{
+            data: [21.5, 7],
+            backgroundColor: ['rgba(239,68,68,0.7)', 'rgba(88,238,176,0.7)'],
+            borderColor: ['#ef4444', '#58EEB0'],
+            borderWidth: 1,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          ...chartDefaults,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.raw} hours` } }
+          },
+          scales: {
+            ...chartDefaults.scales,
+            y: { ...chartDefaults.scales.y, beginAtZero: true, max: 25,
+              ticks: { ...chartDefaults.scales.y.ticks, callback: v => v + 'h' } }
+          }
+        }
+      });
+
+      // Chart 3: Platforms
+      new Chart(document.getElementById('platformChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Vimeo Stack', 'Brightcove'],
+          datasets: [{
+            data: [4, 1],
+            backgroundColor: ['rgba(239,68,68,0.7)', 'rgba(88,238,176,0.7)'],
+            borderColor: ['#ef4444', '#58EEB0'],
+            borderWidth: 1,
+            borderRadius: 8,
+            label: 'Platforms'
+          }]
+        },
+        options: {
+          ...chartDefaults,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.raw} platform${ctx.raw > 1 ? 's' : ''}` } }
+          },
+          scales: {
+            ...chartDefaults.scales,
+            y: { ...chartDefaults.scales.y, beginAtZero: true, max: 5,
+              ticks: { ...chartDefaults.scales.y.ticks, stepSize: 1, callback: v => v === 1 ? '1 platform' : v + ' platforms' } }
+          }
+        }
+      });
+
+      // Chart 4: Workflow steps by category (Vimeo stack)
+      new Chart(document.getElementById('stepsChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Captions (Rev.com)', 'Metadata & Thumbnails', 'Vimeo Upload', 'WordPress / Gallery', 'Social (4 channels)', 'Archiving & Misc'],
+          datasets: [{
+            data: [4, 9, 5, 9, 20, 6],
+            backgroundColor: [
+              'rgba(239,68,68,0.75)',
+              'rgba(255,212,83,0.75)',
+              'rgba(88,238,176,0.75)',
+              'rgba(248,187,255,0.75)',
+              'rgba(251,146,60,0.75)',
+              'rgba(154,154,154,0.5)'
+            ],
+            borderColor: '#1a1a1a',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: { color: '#9A9A9A', font: { size: 10 }, padding: 8, boxWidth: 10 }
+            },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} steps` } }
+          },
+          cutout: '55%'
+        }
+      });
+    </script>
   </section>
 
   <!-- VIDEO EMBED -->
