@@ -191,6 +191,32 @@
   .cost-box .bottom-line-lbl{font-size:11px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin:0 0 8px;}
   .cost-box .lbl{font-size:12px;color:#666;font-weight:600;margin-top:4px;}
   .cost-box.tbd{border-color:#C99A00;border-style:dashed;background:#FFFCF3;}
+  .year-badge{
+    display:inline-block;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--white);
+    background:#333;
+    border-radius:999px;
+    padding:4px 14px;
+    margin-bottom:10px;
+  }
+  .payback-strip{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-top:14px;
+    background:var(--green);
+    color:#0a3d24;
+    border-radius:16px;
+    padding:14px 20px;
+    font-size:13px;
+    font-weight:700;
+    line-height:1.5;
+  }
+  .payback-strip .icon{font-size:22px;}
   footer{
     margin-top:26px;
     font-size:11px;
@@ -282,17 +308,23 @@
       <p class="caption" style="margin:18px 0 8px;font-weight:800;color:#333;">If nothing changes — projected at Regent's actual ~116 GB/month growth rate:</p>
       <div class="cost-grid">
         <div class="cost-box">
+          <div class="year-badge">Year 1 · Next Renewal</div>
           <div class="amt" style="color:#C0392B;">+215 GB over</div>
           <p class="bottom-line-lbl">Bottom line — annual run rate</p>
           <div class="bottom-line">≈ $1,164–$1,296/yr</div>
           <div class="lbl"><b>At next year's renewal (~12 months):</b> 20,215 GB projected (101.1% of cap)<br>Est. overage cost: <b>~$97–$108/month</b> at the smaller-account comparable rate</div>
         </div>
         <div class="cost-box">
+          <div class="year-badge" style="background:#8a1f14;">Year 2 · No Change</div>
           <div class="amt" style="color:#C0392B;">+1,607 GB over</div>
           <p class="bottom-line-lbl">Bottom line — annual run rate</p>
           <div class="bottom-line">≈ $8,676–$9,648/yr</div>
           <div class="lbl"><b>After 2 years, no change:</b> 21,607 GB projected (108.0% of cap)<br>Est. overage cost: <b>~$723–$804/month</b> at the smaller-account comparable rate</div>
         </div>
+      </div>
+      <div class="payback-strip">
+        <span class="icon">💰</span>
+        <span>By <b>Year 2</b>, the cost of doing nothing (~$8.7K–$9.6K <i>every year</i>) is roughly the same as the entire one-time CAE fee (~$10K). That's the rough payback point — the fix costs about one year of inaction to fix, and every year after is pure avoided cost, on top of the storage runway itself.</span>
       </div>
       <div class="callout pending">⚠ These are illustrative, not confirmed — based on other customers' contracts, not Regent's own rate (which has never been triggered). They're also likely a <i>floor</i>: in practice, a renewal conversation is more likely to push Regent into a bigger storage-entitlement tier altogether rather than letting metered overage run indefinitely, which would be a materially bigger cost than shown here. <b>Morgan should confirm which mechanism (metered overage vs. tier upgrade) actually applies at Regent's renewal</b>, plus the official CAE quote, before this goes final.</div>
     </div>
