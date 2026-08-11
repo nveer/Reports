@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>My Mission Plan</title>
+<style>
+:root{--bg:#FBF8F2;--card:#FFF;--ink:#2B303A;--soft:#5A6270;--blue:#1F5C8B;--blueDeep:#173F5F;--amber:#E8952F;--amberSoft:#FBEBD3;--line:#E7E1D6}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;font-size:20px;line-height:1.7;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:680px;margin:0 auto;padding:26px 20px 90px}
+.hero{background:var(--blueDeep);color:#fff;border-radius:22px;padding:30px 26px;margin-bottom:14px}
+.hero .badge{display:inline-block;background:rgba(255,255,255,.15);border-radius:999px;padding:6px 15px;font-size:15px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.hero h1{margin:0 0 10px;font-size:34px;line-height:1.2;font-weight:800}
+.hero p{margin:0;font-size:19px;color:#EAF1F7}
+.readaloud{background:var(--amberSoft);border:2px solid #EFCF9C;border-radius:16px;padding:16px 18px;margin-bottom:18px;font-size:18px}
+.readaloud b{color:#9A5B12}
+#next{background:#fff;border:3px solid var(--amber);border-radius:18px;padding:20px 22px;margin-bottom:16px}
+#next .lbl{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:800;margin-bottom:6px}
+#next h2{margin:0 0 8px;font-size:24px;font-weight:800;color:var(--blueDeep)}
+#next p{margin:0 0 12px}
+#next ul{margin:0 0 14px;padding-left:22px;color:var(--soft);font-size:18px}
+.jump{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px;font-size:18px}
+.prog{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:26px;font-size:17px;color:var(--soft)}
+.pct{display:flex;align-items:baseline;gap:12px}
+.prog b{color:var(--blue);font-size:44px;font-weight:800;line-height:1}
+.pct span{font-size:17px;color:var(--soft)}
+.bar{height:10px;background:#EDE7DC;border-radius:99px;margin-top:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);width:0;transition:width .25s}
+.facts{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:26px}
+.facts h2{margin:0 0 4px;font-size:21px;color:var(--blue)}
+.facts dt{font-weight:800;color:var(--blueDeep);margin-top:14px;font-size:18px}
+.facts dd{margin:2px 0 0;color:var(--soft);font-size:17px}
+.facts dl{margin:0}
+.mon{background:#fff;border:1px solid var(--line);border-radius:18px;margin-bottom:14px;overflow:hidden}
+.mon>summary{cursor:pointer;padding:20px 22px;list-style:none;display:block}
+.mon>summary::-webkit-details-marker{display:none}
+.mon>summary::after{content:"+";float:right;font-size:28px;font-weight:800;color:var(--blue);line-height:1;margin-top:-4px}
+.mon[open]>summary::after{content:"\2013"}
+.eyebrow{display:block;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);font-weight:800}
+.mt{display:block;font-size:23px;font-weight:800;color:var(--blueDeep);line-height:1.25}
+.ms{display:block;color:var(--soft);font-size:17px;margin-top:2px}
+.mbody{padding:0 16px 16px}
+.card{background:#FCFBF8;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px;scroll-margin-top:12px}
+.card.hit{border:3px solid var(--amber);background:#fff;box-shadow:0 6px 22px rgba(232,149,47,.25)}
+.card h3{margin:0 0 6px;font-size:21px;font-weight:800;line-height:1.25}
+.say{margin:0 0 10px;font-size:19px}
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin-bottom:5px;font-size:18px;color:var(--soft)}
+.go{display:block;text-decoration:none;background:var(--blue);color:#fff;font-weight:700;font-size:18px;text-align:center;padding:13px 16px;border-radius:12px;margin:10px 0 4px}
+.done{display:flex;align-items:center;gap:12px;margin-top:12px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.done .box{flex:none;width:32px;height:32px;border-radius:9px;border:3px solid var(--blue);background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff}
+.done .txt{font-weight:800;color:var(--blue);font-size:17px}
+.done.checked .box{background:var(--blue)}.done.checked .box::after{content:"\2713"}
+.done.checked .txt{color:var(--soft);text-decoration:line-through}
+.footer{text-align:center;color:var(--soft);font-size:15px;margin-top:36px;line-height:1.6}
+b.k{color:var(--blueDeep)}
+</style></head><body><div class="wrap">
+
+<div class="hero"><span class="badge">Your Mission Plan</span>
+<h1>Is this you?</h1>
+<p>Ninety small missions. Each one takes about five minutes. There are no dates and no due dates. Do the next one when you are ready. When you get to the end, you will know whether being a deputy is really what you want.</p></div>
+
+<div class="readaloud"><b>Want it read out loud?</b><br>
+In Safari, tap the <b>AA</b> button in the address bar, then tap <b>Listen to Page</b>. Or swipe down with two fingers for Speak Screen. 🎧</div>
+
+<div id="next"><div class="lbl">Your next mission</div><h2 id="tt">Loading</h2><p id="ts"></p><ul id="tb"></ul><a class="jump" id="tj" href="#">Open it</a></div>
+
+<div class="prog"><div class="pct"><b id="pp">0%</b><span id="pc">0 of 90 missions</span></div>
+<div class="bar"><i id="pb"></i></div>
+<div id="pn" style="margin-top:8px;font-size:16px"></div></div>
+
+<div class="facts"><h2>Good to know</h2>
+<dd style="margin-bottom:6px">This is not about qualifying. It is about finding out. Here is what is true either way.</dd><dl>
+<dt>You do not need a college degree</dt><dd>Florida wants a high school diploma or equivalent, then a training academy.</dd>
+<dt>You have to be 19</dt><dd>That is the age to be a sworn law enforcement officer in Florida. There is no rush at all.</dd>
+<dt>The academy is about six months</dt><dd>Northwest Florida State College in Niceville runs it, starting each August and January.</dd>
+<dt>A two year degree skips a test</dt><dd>An associate degree exempts you from the Basic Abilities Test. That is a real Florida rule.</dd>
+<dt>What it pays here</dt><dd>A certified deputy at the Santa Rosa County Sheriff's Office starts at about $55,600 a year.</dd>
+<dt>What you can do right now at 17</dt><dd>The Teen Driver Challenge. Free, ages 15 to 19, taught by real deputies. Ride-alongs start at 18.</dd>
+</dl></div>
+
+<details class="mon" id="bA">
+<summary><span class="eyebrow">Part 1 &middot; 20 missions</span><span class="mt">See the job</span><span class="ms">What a deputy really does all day. Including the boring parts.</span></summary>
+<div class="mbody"><div class="card" id="s001" data-n="1">
+<h3>Make your note</h3>
+<p class="say">Open the Notes app and make one note called My Missions. Use the microphone to say the name instead of typing it.</p>
+<ul class="steps"><li>Open the Notes app</li><li>Tap the microphone</li><li>Say My Missions</li></ul>
+
+<div class="done" data-k="s001"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s002" data-n="2">
+<h3>Ten minute walk</h3>
+<p class="say">Walk for ten minutes. Any direction, no running, phone timer on.</p>
+<ul class="steps"><li>Set a ten minute timer</li><li>Walk outside</li><li>Come home</li></ul>
+
+<div class="done" data-k="s002"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s003" data-n="3">
+<h3>Meet the dogs</h3>
+<p class="say">Open the Santa Rosa County Sheriff K-9 page and just look at the dogs. Say one dog name out loud.</p>
+<ul class="steps"><li>Open the K-9 page</li><li>Look at the dogs</li><li>Say one name aloud</li></ul>
+<a class="go" href="https://santarosasheriff.org/k-9/" target="_blank" rel="noopener">Santa Rosa County Sheriff K-9</a>
+<div class="done" data-k="s003"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s004" data-n="4">
+<h3>Watch a K-9</h3>
+<p class="say">Watch one short video of a police K-9 working. Stop after one video.</p>
+<ul class="steps"><li>Open the video search</li><li>Pick a short one</li><li>Watch it once</li></ul>
+<a class="go" href="https://www.youtube.com/results?search_query=police+k9+unit+day+in+the+life" target="_blank" rel="noopener">K-9 unit videos</a>
+<div class="done" data-k="s004"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s005" data-n="5">
+<h3>Walk and think</h3>
+<p class="say">Walk ten minutes. While you walk, think about that dog video. Nothing to write down.</p>
+<ul class="steps"><li>Set a ten minute timer</li><li>Walk outside</li><li>Think about the dog</li></ul>
+
+<div class="done" data-k="s005"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s006" data-n="6">
+<h3>Eleven minute walk</h3>
+<p class="say">Walk for eleven minutes. One minute more than last time.</p>
+<ul class="steps"><li>Set an eleven minute timer</li><li>Walk outside</li><li>Come home</li></ul>
+
+<div class="done" data-k="s006"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s007" data-n="7">
+<h3>A real shift</h3>
+<p class="say">Watch one short ride along video of a deputy on patrol. Just one.</p>
+<ul class="steps"><li>Open the video search</li><li>Pick a short one</li><li>Watch it once</li></ul>
+<a class="go" href="https://www.youtube.com/results?search_query=sheriff+deputy+ride+along+patrol+shift" target="_blank" rel="noopener">Ride along videos</a>
+<div class="done" data-k="s007"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s008" data-n="8">
+<h3>Say two sentences</h3>
+<p class="say">Open My Missions and dictate two sentences about the ride along video. What looked good and what looked boring.</p>
+<ul class="steps"><li>Open My Missions</li><li>Tap the microphone</li><li>Say two sentences</li></ul>
+
+<div class="done" data-k="s008"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s009" data-n="9">
+<h3>Eleven minute walk</h3>
+<p class="say">Walk eleven minutes again. Same as last time, no faster.</p>
+<ul class="steps"><li>Set an eleven minute timer</li><li>Walk outside</li><li>Come home</li></ul>
+
+<div class="done" data-k="s009"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s010" data-n="10">
+<h3>Teen Driver Challenge</h3>
+<p class="say">Look at the Teen Driver Challenge page. It is free and you are the right age, so ask Dad for five minutes to talk about it.</p>
+<ul class="steps"><li>Open the page</li><li>See the age rule</li><li>Ask Dad for five minutes</li></ul>
+<a class="go" href="https://santarosasheriff.org/teen-driver-challenge/" target="_blank" rel="noopener">Teen Driver Challenge</a>
+<div class="done" data-k="s010"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s011" data-n="11">
+<h3>How dogs train</h3>
+<p class="say">Watch one short video of K-9 training. Notice how many times they repeat the same thing.</p>
+<ul class="steps"><li>Open the video search</li><li>Pick a short one</li><li>Watch the repeats</li></ul>
+<a class="go" href="https://www.youtube.com/results?search_query=police+k9+training+day+handler" target="_blank" rel="noopener">K-9 training videos</a>
+<div class="done" data-k="s011"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s012" data-n="12">
+<h3>Twelve minute walk</h3>
+<p class="say">Walk twelve minutes. Still a walk, never a run.</p>
+<ul class="steps"><li>Set a twelve minute timer</li><li>Walk outside</li><li>Come home</li></ul>
+
+<div class="done" data-k="s012"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s013" data-n="13">
+<h3>The hard part</h3>
+<p class="say">Open My Missions and dictate two sentences. Say what part of this job looks hardest to you so far.</p>
+<ul class="steps"><li>Open My Missions</li><li>Tap the microphone</li><li>Say two sentences</li></ul>
+
+<div class="done" data-k="s013"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s014" data-n="14">
+<h3>Where training happens</h3>
+<p class="say">Open the Northwest Florida State College academy page and find how long the academy lasts. Say the number out loud.</p>
+<ul class="steps"><li>Open the page</li><li>Find the length</li><li>Say it out loud</li></ul>
+<a class="go" href="https://www.nwfsc.edu/academics/degrees-offered/law-enforcement-officer-basic/" target="_blank" rel="noopener">Northwest Florida State College academy</a>
+<div class="done" data-k="s014"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s015" data-n="15">
+<h3>Thirteen minute walk</h3>
+<p class="say">Walk thirteen minutes today. You have added three minutes since you started.</p>
+<ul class="steps"><li>Set a thirteen minute timer</li><li>Walk outside</li><li>Come home</li></ul>
+
+<div class="done" data-k="s015"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s016" data-n="16">
+<h3>The paperwork part</h3>
+<p class="say">Watch one short video about police report writing. This is a real part of the job every shift.</p>
+<ul class="steps"><li>Open the video search</li><li>Pick a short one</li><li>Watch it once</li></ul>
+<a class="go" href="https://www.youtube.com/results?search_query=police+report+writing+what+it+is+really+like" target="_blank" rel="noopener">Report writing videos</a>
+<div class="done" data-k="s016"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s017" data-n="17">
+<h3>Fourteen minute walk</h3>
+<p class="say">Walk fourteen minutes. Almost at fifteen.</p>
+<ul class="steps"><li>Set a fourteen minute timer</li><li>Walk outside</li><li>Come home</li></ul>
+
+<div class="done" data-k="s017"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s018" data-n="18">
+<h3>Another road in</h3>
+<p class="say">Open the Pensacola State College criminal justice page and look at the name of the degree. That is all.</p>
+<ul class="steps"><li>Open the page</li><li>Read the degree name</li><li>Close it</li></ul>
+<a class="go" href="https://pensacolastate.edu/academic-programs/law-as/" target="_blank" rel="noopener">Pensacola State College criminal justice</a>
+<div class="done" data-k="s018"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s019" data-n="19">
+<h3>Fifteen minute walk</h3>
+<p class="say">Walk fifteen minutes. This is your number now.</p>
+<ul class="steps"><li>Set a fifteen minute timer</li><li>Walk outside</li><li>Come home</li></ul>
+
+<div class="done" data-k="s019"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s020" data-n="20">
+<h3>What surprised you</h3>
+<p class="say">Open My Missions and dictate two sentences about the biggest surprise so far. Say it, do not type it.</p>
+<ul class="steps"><li>Open My Missions</li><li>Tap the microphone</li><li>Say two sentences</li></ul>
+
+<div class="done" data-k="s020"><div class="box"></div><div class="txt">Done</div></div>
+</div></div></details><details class="mon" id="bB">
+<summary><span class="eyebrow">Part 2 &middot; 20 missions</span><span class="mt">Your tools</span><span class="ms">Your voice instead of your pen. This is the one that matters most.</span></summary>
+<div class="mbody"><div class="card" id="s021" data-n="21">
+<h3>Turn on dictation</h3>
+<p class="say">Go to Settings, then General, then Keyboard, and turn on Enable Dictation. One switch and you are done.</p>
+<ul class="steps"><li>Open Settings</li><li>Tap General then Keyboard</li><li>Turn on Enable Dictation</li></ul>
+
+<div class="done" data-k="s021"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s022" data-n="22">
+<h3>Say one sentence</h3>
+<p class="say">Open your My Missions note, tap the microphone, and say one sentence about your day out loud.</p>
+<ul class="steps"><li>Open My Missions note</li><li>Tap the microphone key</li><li>Say one sentence</li></ul>
+
+<div class="done" data-k="s022"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s023" data-n="23">
+<h3>Turn on Speak Screen</h3>
+<p class="say">Settings, then Accessibility, then Spoken Content, then turn on Speak Screen.</p>
+<ul class="steps"><li>Open Settings then Accessibility</li><li>Tap Spoken Content</li><li>Turn on Speak Screen</li></ul>
+
+<div class="done" data-k="s023"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s024" data-n="24">
+<h3>Two finger swipe</h3>
+<p class="say">Open the Santa Rosa County Sheriff&#x27;s Office K-9 page and swipe down with two fingers to hear it read.</p>
+<ul class="steps"><li>Open the K-9 page</li><li>Swipe down two fingers</li><li>Listen for one minute</li></ul>
+<a class="go" href="https://santarosasheriff.org/k-9/" target="_blank" rel="noopener">K-9 page</a>
+<div class="done" data-k="s024"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s025" data-n="25">
+<h3>Walk and notice</h3>
+<p class="say">Walk fifteen minutes and pick one thing you could describe to a dispatcher later.</p>
+<ul class="steps"><li>Walk fifteen minutes</li><li>Pick one thing</li><li>Remember three details</li></ul>
+
+<div class="done" data-k="s025"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s026" data-n="26">
+<h3>Describe a car</h3>
+<p class="say">Look at one parked car and dictate a description into your note. Color, make, damage, plate if you can see it.</p>
+<ul class="steps"><li>Pick one parked car</li><li>Dictate color and make</li><li>Add any damage</li></ul>
+
+<div class="done" data-k="s026"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s027" data-n="27">
+<h3>Speak the punctuation</h3>
+<p class="say">Dictate two sentences and say period and comma out loud where they belong.</p>
+<ul class="steps"><li>Open My Missions note</li><li>Dictate two sentences</li><li>Say period and comma</li></ul>
+
+<div class="done" data-k="s027"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s028" data-n="28">
+<h3>Listen to Page</h3>
+<p class="say">In Safari, tap the AA button in the address bar and choose Listen to Page on any article.</p>
+<ul class="steps"><li>Open any article in Safari</li><li>Tap the AA button</li><li>Choose Listen to Page</li></ul>
+<a class="go" href="https://santarosasheriff.org/" target="_blank" rel="noopener">Sheriff&#x27;s Office site</a>
+<div class="done" data-k="s028"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s029" data-n="29">
+<h3>Race yourself</h3>
+<p class="say">Write one sentence by hand, then dictate the same sentence. Notice which was faster.</p>
+<ul class="steps"><li>Write one sentence by hand</li><li>Dictate the same sentence</li><li>Say which won</li></ul>
+
+<div class="done" data-k="s029"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s030" data-n="30">
+<h3>Walk and dictate</h3>
+<p class="say">Walk twenty minutes and dictate three things you saw before you go back inside.</p>
+<ul class="steps"><li>Walk twenty minutes</li><li>Stop outside the door</li><li>Dictate three things</li></ul>
+
+<div class="done" data-k="s030"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s031" data-n="31">
+<h3>Describe a person</h3>
+<p class="say">Describe someone in a K-9 video out loud. Height, build, clothes, top to bottom.</p>
+<ul class="steps"><li>Play one K-9 video</li><li>Pause on one person</li><li>Dictate top to bottom</li></ul>
+<a class="go" href="https://www.youtube.com/results?search_query=police+K-9+deputy+traffic+stop" target="_blank" rel="noopener">K-9 videos</a>
+<div class="done" data-k="s031"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s032" data-n="32">
+<h3>Fix one word</h3>
+<p class="say">Dictate a sentence, find the one word it got wrong, and fix that word only.</p>
+<ul class="steps"><li>Dictate one sentence</li><li>Find the wrong word</li><li>Fix only that</li></ul>
+
+<div class="done" data-k="s032"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s033" data-n="33">
+<h3>Say a timeline</h3>
+<p class="say">Dictate what you did this morning in order. First, then, after that. Order is the whole skill.</p>
+<ul class="steps"><li>Open My Missions note</li><li>Dictate three steps in order</li><li>Use first then after</li></ul>
+
+<div class="done" data-k="s033"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s034" data-n="34">
+<h3>Hear it back</h3>
+<p class="say">Use Speak Screen on something you dictated earlier and listen for anything that does not make sense.</p>
+<ul class="steps"><li>Open your note</li><li>Swipe down two fingers</li><li>Listen for one mistake</li></ul>
+
+<div class="done" data-k="s034"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s035" data-n="35">
+<h3>Walk one loop</h3>
+<p class="say">Walk fifteen minutes with no phone in your hand. Just look around.</p>
+<ul class="steps"><li>Walk fifteen minutes</li><li>Leave phone in pocket</li><li>Look at everything</li></ul>
+
+<div class="done" data-k="s035"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s036" data-n="36">
+<h3>Ask about handwriting</h3>
+<p class="say">Ask Dad for five minutes and ask him when he last wrote something important by hand.</p>
+<ul class="steps"><li>Ask Dad for five minutes</li><li>Ask his last handwritten thing</li><li>Listen to the answer</li></ul>
+
+<div class="done" data-k="s036"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s037" data-n="37">
+<h3>Dictate a report</h3>
+<p class="say">Dictate a short report about something that happened today. Who, what, where, when.</p>
+<ul class="steps"><li>Open My Missions note</li><li>Dictate who and what</li><li>Add where and when</li></ul>
+
+<div class="done" data-k="s037"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s038" data-n="38">
+<h3>Read a real page</h3>
+<p class="say">Open the Teen Driver Challenge page and use Listen to Page instead of reading it.</p>
+<ul class="steps"><li>Open the page in Safari</li><li>Tap AA then Listen</li><li>Say one thing you heard</li></ul>
+<a class="go" href="https://santarosasheriff.org/teen-driver-challenge/" target="_blank" rel="noopener">Teen Driver Challenge</a>
+<div class="done" data-k="s038"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s039" data-n="39">
+<h3>Time the race</h3>
+<p class="say">Dictate five sentences and time it. That number is your proof.</p>
+<ul class="steps"><li>Start a timer</li><li>Dictate five sentences</li><li>Say the time out loud</li></ul>
+
+<div class="done" data-k="s039"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s040" data-n="40">
+<h3>Name your tools</h3>
+<p class="say">Dictate one line into your note about which tool you will keep using and why.</p>
+<ul class="steps"><li>Open My Missions note</li><li>Name your best tool</li><li>Say why in one line</li></ul>
+
+<div class="done" data-k="s040"><div class="box"></div><div class="txt">Done</div></div>
+</div></div></details><details class="mon" id="bC">
+<summary><span class="eyebrow">Part 3 &middot; 20 missions</span><span class="mt">Real people</span><span class="ms">Stop watching. Start talking. The phone call is in here.</span></summary>
+<div class="mbody"><div class="card" id="s041" data-n="41">
+<h3>Write three lines</h3>
+<p class="say">Build three short lines for a phone call. Your name, your age, and the one thing you want to ask.</p>
+<ul class="steps"><li>Open My Missions note</li><li>Dictate your three lines</li><li>Save it</li></ul>
+
+<div class="done" data-k="s041"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s042" data-n="42">
+<h3>Say it out loud</h3>
+<p class="say">Read your three lines out loud in your room. Nobody is listening. It just needs to leave your mouth once.</p>
+<ul class="steps"><li>Open your note</li><li>Use Speak Screen first</li><li>Say it once yourself</li></ul>
+
+<div class="done" data-k="s042"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s043" data-n="43">
+<h3>Walk and think</h3>
+<p class="say">Walk 20 minutes. While you walk, think of one more question you actually want answered by a deputy.</p>
+<ul class="steps"><li>Walk 20 minutes</li><li>Pick one real question</li><li>Voice note it after</li></ul>
+
+<div class="done" data-k="s043"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s044" data-n="44">
+<h3>Add the big question</h3>
+<p class="say">Add one line to your script asking about the Teen Driver Challenge. That class is free and you are the right age for it.</p>
+<ul class="steps"><li>Open the class page</li><li>Dictate one new line</li><li>Save it</li></ul>
+<a class="go" href="https://santarosasheriff.org/teen-driver-challenge/" target="_blank" rel="noopener">Teen Driver Challenge</a>
+<div class="done" data-k="s044"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s045" data-n="45">
+<h3>Walk it off</h3>
+<p class="say">Walk 25 minutes today. No phone script, no thinking about it. Just move.</p>
+<ul class="steps"><li>Walk 25 minutes</li><li>Go your usual way</li><li>Come back</li></ul>
+
+<div class="done" data-k="s045"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s046" data-n="46">
+<h3>Say it again</h3>
+<p class="say">Say the whole script out loud again, start to finish. Second time is always easier than the first.</p>
+<ul class="steps"><li>Open your note</li><li>Say all your lines</li><li>Fix one clunky word</li></ul>
+
+<div class="done" data-k="s046"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s047" data-n="47">
+<h3>Add two questions</h3>
+<p class="say">Add two more lines. Ask if they have a teen Explorer program, and ask what age a ride-along starts.</p>
+<ul class="steps"><li>Open your note</li><li>Dictate both questions</li><li>Save it</li></ul>
+
+<div class="done" data-k="s047"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s048" data-n="48">
+<h3>Walk before the call</h3>
+<p class="say">Walk 20 minutes. The call is coming soon and your legs are a good place to put nerves.</p>
+<ul class="steps"><li>Walk 20 minutes</li><li>Leave the phone alone</li><li>Head home</li></ul>
+
+<div class="done" data-k="s048"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s049" data-n="49">
+<h3>Practice with Dad</h3>
+<p class="say">Ask Dad for five minutes and read your script to him like he is the front desk.</p>
+<ul class="steps"><li>Ask Dad for five minutes</li><li>Read your script aloud</li><li>Ask what sounded unclear</li></ul>
+
+<div class="done" data-k="s049"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s050" data-n="50">
+<h3>Make the call</h3>
+<p class="say">This is the one. Call the Santa Rosa County Sheriff&#x27;s Office at 850-983-1100 and read your lines. You have practiced this.</p>
+<ul class="steps"><li>Sit somewhere quiet</li><li>Open your script</li><li>Call 850-983-1100</li></ul>
+<a class="go" href="https://santarosasheriff.org/contact-us/" target="_blank" rel="noopener">Sheriff&#x27;s Office contact</a>
+<div class="done" data-k="s050"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s051" data-n="51">
+<h3>Say what happened</h3>
+<p class="say">Dictate everything you remember from that call while it is still fresh. Messy is fine.</p>
+<ul class="steps"><li>Open My Missions note</li><li>Dictate what they said</li><li>Save it</li></ul>
+
+<div class="done" data-k="s051"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s052" data-n="52">
+<h3>Walk and replay</h3>
+<p class="say">Walk 25 minutes. Let the call replay in your head and notice how you feel about it now.</p>
+<ul class="steps"><li>Walk 25 minutes</li><li>Replay the call</li><li>Notice how it felt</li></ul>
+
+<div class="done" data-k="s052"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s053" data-n="53">
+<h3>Find the form</h3>
+<p class="say">Find the Teen Driver Challenge sign up form and ask Dad to print one copy.</p>
+<ul class="steps"><li>Open the class page</li><li>Find the form</li><li>Ask Dad to print</li></ul>
+<a class="go" href="https://santarosasheriff.org/teen-driver-challenge/" target="_blank" rel="noopener">Teen Driver Challenge</a>
+<div class="done" data-k="s053"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s054" data-n="54">
+<h3>Ask about a notary</h3>
+<p class="say">The form needs a notary. Ask Dad where you two can get something notarized near Navarre.</p>
+<ul class="steps"><li>Tell Dad about the notary</li><li>Ask where to go</li><li>Voice note his answer</li></ul>
+
+<div class="done" data-k="s054"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s055" data-n="55">
+<h3>Note the deadline</h3>
+<p class="say">The form is due two weeks before the class. Say that date out loud into your note so you do not miss it.</p>
+<ul class="steps"><li>Open My Missions note</li><li>Dictate the due date</li><li>Save it</li></ul>
+
+<div class="done" data-k="s055"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s056" data-n="56">
+<h3>Walk 20</h3>
+<p class="say">Walk 20 minutes today. That is the whole mission.</p>
+<ul class="steps"><li>Walk 20 minutes</li><li>No phone needed</li><li>Come back</li></ul>
+
+<div class="done" data-k="s056"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s057" data-n="57">
+<h3>Explorer follow up</h3>
+<p class="say">If the Explorer program answer was fuzzy, call back and ask one clear time. Who runs it and what age.</p>
+<ul class="steps"><li>Say the question aloud once</li><li>Call 850-983-1100</li><li>Dictate their answer</li></ul>
+<a class="go" href="https://santarosasheriff.org/contact-us/" target="_blank" rel="noopener">Sheriff&#x27;s Office contact</a>
+<div class="done" data-k="s057"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s058" data-n="58">
+<h3>Ride along at 18</h3>
+<p class="say">Ride-alongs start at 18. Say out loud how far away your birthday is and what you will do that week.</p>
+<ul class="steps"><li>Open the ride-along page</li><li>Dictate your plan</li><li>Save it</li></ul>
+<a class="go" href="https://santarosasheriff.org/ride-along-program/" target="_blank" rel="noopener">Ride-along program</a>
+<div class="done" data-k="s058"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s059" data-n="59">
+<h3>Ask Dad to sign</h3>
+<p class="say">Bring Dad the printed form and ask him to sign his part.</p>
+<ul class="steps"><li>Hand Dad the form</li><li>Ask him to sign</li><li>Put it somewhere safe</li></ul>
+
+<div class="done" data-k="s059"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s060" data-n="60">
+<h3>Walk and answer</h3>
+<p class="say">Walk 25 minutes. Then answer one question out loud. Do you still want this after talking to a real deputy?</p>
+<ul class="steps"><li>Walk 25 minutes</li><li>Answer yes or no aloud</li><li>Dictate why</li></ul>
+
+<div class="done" data-k="s060"><div class="box"></div><div class="txt">Done</div></div>
+</div></div></details><details class="mon" id="bD">
+<summary><span class="eyebrow">Part 4 &middot; 20 missions</span><span class="mt">Reports and legs</span><span class="ms">Six part reports out loud. Walks up to thirty minutes.</span></summary>
+<div class="mbody"><div class="card" id="s061" data-n="61">
+<h3>Six parts</h3>
+<p class="say">Learn the six parts of a report. Who, What, When, Where, Then, End. Say them out loud twice.</p>
+<ul class="steps"><li>Read the six words</li><li>Say them out loud</li><li>Say them once more</li></ul>
+
+<div class="done" data-k="s061"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s062" data-n="62">
+<h3>Your morning</h3>
+<p class="say">Say a six part report about your morning. Out loud, to yourself, one minute.</p>
+<ul class="steps"><li>Pick one small thing</li><li>Speak all six parts</li></ul>
+
+<div class="done" data-k="s062"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s063" data-n="63">
+<h3>Walk and say</h3>
+<p class="say">Walk twenty five minutes today and say the six parts out loud while you go.</p>
+<ul class="steps"><li>Walk twenty five minutes</li><li>Say six parts aloud</li></ul>
+
+<div class="done" data-k="s063"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s064" data-n="64">
+<h3>Record it</h3>
+<p class="say">Record a voice memo of one six part report. Keep it under a minute.</p>
+<ul class="steps"><li>Open Voice Memos</li><li>Say your six parts</li><li>Save it</li></ul>
+
+<div class="done" data-k="s064"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s065" data-n="65">
+<h3>Play it back</h3>
+<p class="say">Play that memo back and find the one part you skipped or rushed.</p>
+<ul class="steps"><li>Listen once</li><li>Name the weak part</li></ul>
+
+<div class="done" data-k="s065"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s066" data-n="66">
+<h3>Describe a person</h3>
+<p class="say">Describe one person you saw today. Height, hair, clothes, shoes. Out loud.</p>
+<ul class="steps"><li>Picture one person</li><li>Say four details aloud</li></ul>
+
+<div class="done" data-k="s066"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s067" data-n="67">
+<h3>Describe a car</h3>
+<p class="say">Look at one car outside and say color, make, and something you noticed.</p>
+<ul class="steps"><li>Pick one car</li><li>Say three details aloud</li></ul>
+
+<div class="done" data-k="s067"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s068" data-n="68">
+<h3>Push to thirty</h3>
+<p class="say">Walk thirty minutes. That is the goal from here on out.</p>
+<ul class="steps"><li>Walk thirty minutes</li><li>Notice how it felt</li></ul>
+
+<div class="done" data-k="s068"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s069" data-n="69">
+<h3>Room report</h3>
+<p class="say">Stand in one room, look around, and give a six part report on what is there.</p>
+<ul class="steps"><li>Pick one room</li><li>Speak all six parts</li></ul>
+
+<div class="done" data-k="s069"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s070" data-n="70">
+<h3>Just the facts</h3>
+<p class="say">Say a short report about your day with no guessing and no opinions. Facts only.</p>
+<ul class="steps"><li>Speak sixty seconds</li><li>Cut every opinion</li></ul>
+
+<div class="done" data-k="s070"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s071" data-n="71">
+<h3>Family walk</h3>
+<p class="say">Ask someone at home to walk twenty minutes with you. Just talk.</p>
+<ul class="steps"><li>Ask one person</li><li>Walk twenty minutes</li></ul>
+
+<div class="done" data-k="s071"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s072" data-n="72">
+<h3>One thank you</h3>
+<p class="say">Say out loud one thing you are thankful for right now.</p>
+<ul class="steps"><li>Think for a second</li><li>Say it out loud</li></ul>
+
+<div class="done" data-k="s072"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s073" data-n="73">
+<h3>Tell someone</h3>
+<p class="say">Tell one family member the coolest thing you learned about K-9 work.</p>
+<ul class="steps"><li>Pick one person</li><li>Tell them one thing</li></ul>
+
+<div class="done" data-k="s073"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s074" data-n="74">
+<h3>Take a break</h3>
+<p class="say">Rest today. If you get a minute outside, take a short easy walk.</p>
+<ul class="steps"><li>Rest</li><li>Walk if you want</li></ul>
+
+<div class="done" data-k="s074"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s075" data-n="75">
+<h3>Leftovers walk</h3>
+<p class="say">Walk thirty easy minutes. No report, no thinking. Just move.</p>
+<ul class="steps"><li>Walk thirty minutes</li><li>Enjoy it</li></ul>
+
+<div class="done" data-k="s075"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s076" data-n="76">
+<h3>Back at it</h3>
+<p class="say">Give one six part report about the last few days, out loud.</p>
+<ul class="steps"><li>Speak all six parts</li><li>Keep it under minute</li></ul>
+
+<div class="done" data-k="s076"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s077" data-n="77">
+<h3>Two minute scene</h3>
+<p class="say">Watch two minutes of a traffic stop video and report what you saw out loud.</p>
+<ul class="steps"><li>Watch two minutes</li><li>Say six parts aloud</li></ul>
+<a class="go" href="https://www.youtube.com/results?search_query=body+camera+traffic+stop+deputy" target="_blank" rel="noopener">Body camera videos</a>
+<div class="done" data-k="s077"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s078" data-n="78">
+<h3>Time and place</h3>
+<p class="say">Practice the hard parts. Say exact times and exact places for one thing that happened today.</p>
+<ul class="steps"><li>Name the exact time</li><li>Name the exact place</li></ul>
+
+<div class="done" data-k="s078"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s079" data-n="79">
+<h3>Thirty and talk</h3>
+<p class="say">Walk thirty minutes and record one report at the end while you catch your breath.</p>
+<ul class="steps"><li>Walk thirty minutes</li><li>Record one report</li></ul>
+
+<div class="done" data-k="s079"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s080" data-n="80">
+<h3>Best one yet</h3>
+<p class="say">Record your cleanest six part report so far. One take is fine.</p>
+<ul class="steps"><li>Record one report</li><li>Save it in Voice Memos</li></ul>
+
+<div class="done" data-k="s080"><div class="box"></div><div class="txt">Done</div></div>
+</div></div></details><details class="mon" id="bE">
+<summary><span class="eyebrow">Part 5 &middot; 10 missions</span><span class="mt">Decide</span><span class="ms">Was this it? Yes and no are both good answers.</span></summary>
+<div class="mbody"><div class="card" id="s081" data-n="81">
+<h3>Look back</h3>
+<p class="say">Open your My Missions note and listen to it with Speak Screen.</p>
+<ul class="steps"><li>Open My Missions</li><li>Listen all the way</li></ul>
+
+<div class="done" data-k="s081"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s082" data-n="82">
+<h3>What excited you</h3>
+<p class="say">Say out loud the one part of this work that made you lean forward.</p>
+<ul class="steps"><li>Think of one moment</li><li>Say it out loud</li></ul>
+
+<div class="done" data-k="s082"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s083" data-n="83">
+<h3>What worried you</h3>
+<p class="say">Now the honest one. Say out loud the part that worried you. Being worried is normal.</p>
+<ul class="steps"><li>Name one worry</li><li>Say it out loud</li></ul>
+
+<div class="done" data-k="s083"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s084" data-n="84">
+<h3>Three in the morning</h3>
+<p class="say">Picture a call at three in the morning in the rain. Say yes or no out loud.</p>
+<ul class="steps"><li>Picture it clearly</li><li>Answer out loud</li></ul>
+
+<div class="done" data-k="s084"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s085" data-n="85">
+<h3>Tell Dad</h3>
+<p class="say">Ask Dad for five minutes and tell him what you have figured out so far.</p>
+<ul class="steps"><li>Ask for five minutes</li><li>Tell him plainly</li></ul>
+
+<div class="done" data-k="s085"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s086" data-n="86">
+<h3>Look at school</h3>
+<p class="say">Open the Northwest Florida State College academy page and listen to the first part.</p>
+<ul class="steps"><li>Open the page</li><li>Use Speak Screen</li></ul>
+<a class="go" href="https://www.nwfsc.edu/academics/degrees-offered/law-enforcement-officer-basic/" target="_blank" rel="noopener">Northwest Florida State College academy</a>
+<div class="done" data-k="s086"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s087" data-n="87">
+<h3>Other doors</h3>
+<p class="say">Look at the Pensacola State College criminal justice degree. Just so you know it exists.</p>
+<ul class="steps"><li>Open the page</li><li>Listen two minutes</li></ul>
+<a class="go" href="https://pensacolastate.edu/academic-programs/law-as/" target="_blank" rel="noopener">Pensacola State College criminal justice</a>
+<div class="done" data-k="s087"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s088" data-n="88">
+<h3>The big report</h3>
+<p class="say">Record one six part report about everything you did here. Take your time.</p>
+<ul class="steps"><li>Record one report</li><li>Play it back once</li></ul>
+
+<div class="done" data-k="s088"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s089" data-n="89">
+<h3>Your decision</h3>
+<p class="say">Say out loud whether you want to keep going toward this. Yes and no are both good answers.</p>
+<ul class="steps"><li>Say your answer aloud</li><li>Say why in one sentence</li></ul>
+
+<div class="done" data-k="s089"><div class="box"></div><div class="txt">Done</div></div>
+</div><div class="card" id="s090" data-n="90">
+<h3>Finish line</h3>
+<p class="say">You finished the whole thing. Walk thirty minutes today and be proud of yourself.</p>
+<ul class="steps"><li>Walk thirty minutes</li><li>Say I finished this</li></ul>
+
+<div class="done" data-k="s090"><div class="box"></div><div class="txt">Done</div></div>
+</div></div></details>
+
+<div class="footer">There is no behind. There is only the next one.<br>
+<b class="k">Five minutes. That is all it ever is.</b><br><br>
+— Made for you, with Dad 💙<br><br>
+<span style="font-size:13px;">Facts checked August 2026. Things change, so call to confirm.<br>
+Santa Rosa County Sheriff's Office: 850-983-1100</span></div>
+</div>
+<script>
+var DATA=[{"id":"s001","n":1,"title":"Make your note","sms":"Open the Notes app and make one note called My Missions. Use the microphone to say the name instead of typing it.","bullets":["Open the Notes app","Tap the microphone","Say My Missions"]},{"id":"s002","n":2,"title":"Ten minute walk","sms":"Walk for ten minutes. Any direction, no running, phone timer on.","bullets":["Set a ten minute timer","Walk outside","Come home"]},{"id":"s003","n":3,"title":"Meet the dogs","sms":"Open the Santa Rosa County Sheriff K-9 page and just look at the dogs. Say one dog name out loud.","bullets":["Open the K-9 page","Look at the dogs","Say one name aloud"]},{"id":"s004","n":4,"title":"Watch a K-9","sms":"Watch one short video of a police K-9 working. Stop after one video.","bullets":["Open the video search","Pick a short one","Watch it once"]},{"id":"s005","n":5,"title":"Walk and think","sms":"Walk ten minutes. While you walk, think about that dog video. Nothing to write down.","bullets":["Set a ten minute timer","Walk outside","Think about the dog"]},{"id":"s006","n":6,"title":"Eleven minute walk","sms":"Walk for eleven minutes. One minute more than last time.","bullets":["Set an eleven minute timer","Walk outside","Come home"]},{"id":"s007","n":7,"title":"A real shift","sms":"Watch one short ride along video of a deputy on patrol. Just one.","bullets":["Open the video search","Pick a short one","Watch it once"]},{"id":"s008","n":8,"title":"Say two sentences","sms":"Open My Missions and dictate two sentences about the ride along video. What looked good and what looked boring.","bullets":["Open My Missions","Tap the microphone","Say two sentences"]},{"id":"s009","n":9,"title":"Eleven minute walk","sms":"Walk eleven minutes again. Same as last time, no faster.","bullets":["Set an eleven minute timer","Walk outside","Come home"]},{"id":"s010","n":10,"title":"Teen Driver Challenge","sms":"Look at the Teen Driver Challenge page. It is free and you are the right age, so ask Dad for five minutes to talk about it.","bullets":["Open the page","See the age rule","Ask Dad for five minutes"]},{"id":"s011","n":11,"title":"How dogs train","sms":"Watch one short video of K-9 training. Notice how many times they repeat the same thing.","bullets":["Open the video search","Pick a short one","Watch the repeats"]},{"id":"s012","n":12,"title":"Twelve minute walk","sms":"Walk twelve minutes. Still a walk, never a run.","bullets":["Set a twelve minute timer","Walk outside","Come home"]},{"id":"s013","n":13,"title":"The hard part","sms":"Open My Missions and dictate two sentences. Say what part of this job looks hardest to you so far.","bullets":["Open My Missions","Tap the microphone","Say two sentences"]},{"id":"s014","n":14,"title":"Where training happens","sms":"Open the Northwest Florida State College academy page and find how long the academy lasts. Say the number out loud.","bullets":["Open the page","Find the length","Say it out loud"]},{"id":"s015","n":15,"title":"Thirteen minute walk","sms":"Walk thirteen minutes today. You have added three minutes since you started.","bullets":["Set a thirteen minute timer","Walk outside","Come home"]},{"id":"s016","n":16,"title":"The paperwork part","sms":"Watch one short video about police report writing. This is a real part of the job every shift.","bullets":["Open the video search","Pick a short one","Watch it once"]},{"id":"s017","n":17,"title":"Fourteen minute walk","sms":"Walk fourteen minutes. Almost at fifteen.","bullets":["Set a fourteen minute timer","Walk outside","Come home"]},{"id":"s018","n":18,"title":"Another road in","sms":"Open the Pensacola State College criminal justice page and look at the name of the degree. That is all.","bullets":["Open the page","Read the degree name","Close it"]},{"id":"s019","n":19,"title":"Fifteen minute walk","sms":"Walk fifteen minutes. This is your number now.","bullets":["Set a fifteen minute timer","Walk outside","Come home"]},{"id":"s020","n":20,"title":"What surprised you","sms":"Open My Missions and dictate two sentences about the biggest surprise so far. Say it, do not type it.","bullets":["Open My Missions","Tap the microphone","Say two sentences"]},{"id":"s021","n":21,"title":"Turn on dictation","sms":"Go to Settings, then General, then Keyboard, and turn on Enable Dictation. One switch and you are done.","bullets":["Open Settings","Tap General then Keyboard","Turn on Enable Dictation"]},{"id":"s022","n":22,"title":"Say one sentence","sms":"Open your My Missions note, tap the microphone, and say one sentence about your day out loud.","bullets":["Open My Missions note","Tap the microphone key","Say one sentence"]},{"id":"s023","n":23,"title":"Turn on Speak Screen","sms":"Settings, then Accessibility, then Spoken Content, then turn on Speak Screen.","bullets":["Open Settings then Accessibility","Tap Spoken Content","Turn on Speak Screen"]},{"id":"s024","n":24,"title":"Two finger swipe","sms":"Open the Santa Rosa County Sheriff's Office K-9 page and swipe down with two fingers to hear it read.","bullets":["Open the K-9 page","Swipe down two fingers","Listen for one minute"]},{"id":"s025","n":25,"title":"Walk and notice","sms":"Walk fifteen minutes and pick one thing you could describe to a dispatcher later.","bullets":["Walk fifteen minutes","Pick one thing","Remember three details"]},{"id":"s026","n":26,"title":"Describe a car","sms":"Look at one parked car and dictate a description into your note. Color, make, damage, plate if you can see it.","bullets":["Pick one parked car","Dictate color and make","Add any damage"]},{"id":"s027","n":27,"title":"Speak the punctuation","sms":"Dictate two sentences and say period and comma out loud where they belong.","bullets":["Open My Missions note","Dictate two sentences","Say period and comma"]},{"id":"s028","n":28,"title":"Listen to Page","sms":"In Safari, tap the AA button in the address bar and choose Listen to Page on any article.","bullets":["Open any article in Safari","Tap the AA button","Choose Listen to Page"]},{"id":"s029","n":29,"title":"Race yourself","sms":"Write one sentence by hand, then dictate the same sentence. Notice which was faster.","bullets":["Write one sentence by hand","Dictate the same sentence","Say which won"]},{"id":"s030","n":30,"title":"Walk and dictate","sms":"Walk twenty minutes and dictate three things you saw before you go back inside.","bullets":["Walk twenty minutes","Stop outside the door","Dictate three things"]},{"id":"s031","n":31,"title":"Describe a person","sms":"Describe someone in a K-9 video out loud. Height, build, clothes, top to bottom.","bullets":["Play one K-9 video","Pause on one person","Dictate top to bottom"]},{"id":"s032","n":32,"title":"Fix one word","sms":"Dictate a sentence, find the one word it got wrong, and fix that word only.","bullets":["Dictate one sentence","Find the wrong word","Fix only that"]},{"id":"s033","n":33,"title":"Say a timeline","sms":"Dictate what you did this morning in order. First, then, after that. Order is the whole skill.","bullets":["Open My Missions note","Dictate three steps in order","Use first then after"]},{"id":"s034","n":34,"title":"Hear it back","sms":"Use Speak Screen on something you dictated earlier and listen for anything that does not make sense.","bullets":["Open your note","Swipe down two fingers","Listen for one mistake"]},{"id":"s035","n":35,"title":"Walk one loop","sms":"Walk fifteen minutes with no phone in your hand. Just look around.","bullets":["Walk fifteen minutes","Leave phone in pocket","Look at everything"]},{"id":"s036","n":36,"title":"Ask about handwriting","sms":"Ask Dad for five minutes and ask him when he last wrote something important by hand.","bullets":["Ask Dad for five minutes","Ask his last handwritten thing","Listen to the answer"]},{"id":"s037","n":37,"title":"Dictate a report","sms":"Dictate a short report about something that happened today. Who, what, where, when.","bullets":["Open My Missions note","Dictate who and what","Add where and when"]},{"id":"s038","n":38,"title":"Read a real page","sms":"Open the Teen Driver Challenge page and use Listen to Page instead of reading it.","bullets":["Open the page in Safari","Tap AA then Listen","Say one thing you heard"]},{"id":"s039","n":39,"title":"Time the race","sms":"Dictate five sentences and time it. That number is your proof.","bullets":["Start a timer","Dictate five sentences","Say the time out loud"]},{"id":"s040","n":40,"title":"Name your tools","sms":"Dictate one line into your note about which tool you will keep using and why.","bullets":["Open My Missions note","Name your best tool","Say why in one line"]},{"id":"s041","n":41,"title":"Write three lines","sms":"Build three short lines for a phone call. Your name, your age, and the one thing you want to ask.","bullets":["Open My Missions note","Dictate your three lines","Save it"]},{"id":"s042","n":42,"title":"Say it out loud","sms":"Read your three lines out loud in your room. Nobody is listening. It just needs to leave your mouth once.","bullets":["Open your note","Use Speak Screen first","Say it once yourself"]},{"id":"s043","n":43,"title":"Walk and think","sms":"Walk 20 minutes. While you walk, think of one more question you actually want answered by a deputy.","bullets":["Walk 20 minutes","Pick one real question","Voice note it after"]},{"id":"s044","n":44,"title":"Add the big question","sms":"Add one line to your script asking about the Teen Driver Challenge. That class is free and you are the right age for it.","bullets":["Open the class page","Dictate one new line","Save it"]},{"id":"s045","n":45,"title":"Walk it off","sms":"Walk 25 minutes today. No phone script, no thinking about it. Just move.","bullets":["Walk 25 minutes","Go your usual way","Come back"]},{"id":"s046","n":46,"title":"Say it again","sms":"Say the whole script out loud again, start to finish. Second time is always easier than the first.","bullets":["Open your note","Say all your lines","Fix one clunky word"]},{"id":"s047","n":47,"title":"Add two questions","sms":"Add two more lines. Ask if they have a teen Explorer program, and ask what age a ride-along starts.","bullets":["Open your note","Dictate both questions","Save it"]},{"id":"s048","n":48,"title":"Walk before the call","sms":"Walk 20 minutes. The call is coming soon and your legs are a good place to put nerves.","bullets":["Walk 20 minutes","Leave the phone alone","Head home"]},{"id":"s049","n":49,"title":"Practice with Dad","sms":"Ask Dad for five minutes and read your script to him like he is the front desk.","bullets":["Ask Dad for five minutes","Read your script aloud","Ask what sounded unclear"]},{"id":"s050","n":50,"title":"Make the call","sms":"This is the one. Call the Santa Rosa County Sheriff's Office at 850-983-1100 and read your lines. You have practiced this.","bullets":["Sit somewhere quiet","Open your script","Call 850-983-1100"]},{"id":"s051","n":51,"title":"Say what happened","sms":"Dictate everything you remember from that call while it is still fresh. Messy is fine.","bullets":["Open My Missions note","Dictate what they said","Save it"]},{"id":"s052","n":52,"title":"Walk and replay","sms":"Walk 25 minutes. Let the call replay in your head and notice how you feel about it now.","bullets":["Walk 25 minutes","Replay the call","Notice how it felt"]},{"id":"s053","n":53,"title":"Find the form","sms":"Find the Teen Driver Challenge sign up form and ask Dad to print one copy.","bullets":["Open the class page","Find the form","Ask Dad to print"]},{"id":"s054","n":54,"title":"Ask about a notary","sms":"The form needs a notary. Ask Dad where you two can get something notarized near Navarre.","bullets":["Tell Dad about the notary","Ask where to go","Voice note his answer"]},{"id":"s055","n":55,"title":"Note the deadline","sms":"The form is due two weeks before the class. Say that date out loud into your note so you do not miss it.","bullets":["Open My Missions note","Dictate the due date","Save it"]},{"id":"s056","n":56,"title":"Walk 20","sms":"Walk 20 minutes today. That is the whole mission.","bullets":["Walk 20 minutes","No phone needed","Come back"]},{"id":"s057","n":57,"title":"Explorer follow up","sms":"If the Explorer program answer was fuzzy, call back and ask one clear time. Who runs it and what age.","bullets":["Say the question aloud once","Call 850-983-1100","Dictate their answer"]},{"id":"s058","n":58,"title":"Ride along at 18","sms":"Ride-alongs start at 18. Say out loud how far away your birthday is and what you will do that week.","bullets":["Open the ride-along page","Dictate your plan","Save it"]},{"id":"s059","n":59,"title":"Ask Dad to sign","sms":"Bring Dad the printed form and ask him to sign his part.","bullets":["Hand Dad the form","Ask him to sign","Put it somewhere safe"]},{"id":"s060","n":60,"title":"Walk and answer","sms":"Walk 25 minutes. Then answer one question out loud. Do you still want this after talking to a real deputy?","bullets":["Walk 25 minutes","Answer yes or no aloud","Dictate why"]},{"id":"s061","n":61,"title":"Six parts","sms":"Learn the six parts of a report. Who, What, When, Where, Then, End. Say them out loud twice.","bullets":["Read the six words","Say them out loud","Say them once more"]},{"id":"s062","n":62,"title":"Your morning","sms":"Say a six part report about your morning. Out loud, to yourself, one minute.","bullets":["Pick one small thing","Speak all six parts"]},{"id":"s063","n":63,"title":"Walk and say","sms":"Walk twenty five minutes today and say the six parts out loud while you go.","bullets":["Walk twenty five minutes","Say six parts aloud"]},{"id":"s064","n":64,"title":"Record it","sms":"Record a voice memo of one six part report. Keep it under a minute.","bullets":["Open Voice Memos","Say your six parts","Save it"]},{"id":"s065","n":65,"title":"Play it back","sms":"Play that memo back and find the one part you skipped or rushed.","bullets":["Listen once","Name the weak part"]},{"id":"s066","n":66,"title":"Describe a person","sms":"Describe one person you saw today. Height, hair, clothes, shoes. Out loud.","bullets":["Picture one person","Say four details aloud"]},{"id":"s067","n":67,"title":"Describe a car","sms":"Look at one car outside and say color, make, and something you noticed.","bullets":["Pick one car","Say three details aloud"]},{"id":"s068","n":68,"title":"Push to thirty","sms":"Walk thirty minutes. That is the goal from here on out.","bullets":["Walk thirty minutes","Notice how it felt"]},{"id":"s069","n":69,"title":"Room report","sms":"Stand in one room, look around, and give a six part report on what is there.","bullets":["Pick one room","Speak all six parts"]},{"id":"s070","n":70,"title":"Just the facts","sms":"Say a short report about your day with no guessing and no opinions. Facts only.","bullets":["Speak sixty seconds","Cut every opinion"]},{"id":"s071","n":71,"title":"Family walk","sms":"Ask someone at home to walk twenty minutes with you. Just talk.","bullets":["Ask one person","Walk twenty minutes"]},{"id":"s072","n":72,"title":"One thank you","sms":"Say out loud one thing you are thankful for right now.","bullets":["Think for a second","Say it out loud"]},{"id":"s073","n":73,"title":"Tell someone","sms":"Tell one family member the coolest thing you learned about K-9 work.","bullets":["Pick one person","Tell them one thing"]},{"id":"s074","n":74,"title":"Take a break","sms":"Rest today. If you get a minute outside, take a short easy walk.","bullets":["Rest","Walk if you want"]},{"id":"s075","n":75,"title":"Leftovers walk","sms":"Walk thirty easy minutes. No report, no thinking. Just move.","bullets":["Walk thirty minutes","Enjoy it"]},{"id":"s076","n":76,"title":"Back at it","sms":"Give one six part report about the last few days, out loud.","bullets":["Speak all six parts","Keep it under minute"]},{"id":"s077","n":77,"title":"Two minute scene","sms":"Watch two minutes of a traffic stop video and report what you saw out loud.","bullets":["Watch two minutes","Say six parts aloud"]},{"id":"s078","n":78,"title":"Time and place","sms":"Practice the hard parts. Say exact times and exact places for one thing that happened today.","bullets":["Name the exact time","Name the exact place"]},{"id":"s079","n":79,"title":"Thirty and talk","sms":"Walk thirty minutes and record one report at the end while you catch your breath.","bullets":["Walk thirty minutes","Record one report"]},{"id":"s080","n":80,"title":"Best one yet","sms":"Record your cleanest six part report so far. One take is fine.","bullets":["Record one report","Save it in Voice Memos"]},{"id":"s081","n":81,"title":"Look back","sms":"Open your My Missions note and listen to it with Speak Screen.","bullets":["Open My Missions","Listen all the way"]},{"id":"s082","n":82,"title":"What excited you","sms":"Say out loud the one part of this work that made you lean forward.","bullets":["Think of one moment","Say it out loud"]},{"id":"s083","n":83,"title":"What worried you","sms":"Now the honest one. Say out loud the part that worried you. Being worried is normal.","bullets":["Name one worry","Say it out loud"]},{"id":"s084","n":84,"title":"Three in the morning","sms":"Picture a call at three in the morning in the rain. Say yes or no out loud.","bullets":["Picture it clearly","Answer out loud"]},{"id":"s085","n":85,"title":"Tell Dad","sms":"Ask Dad for five minutes and tell him what you have figured out so far.","bullets":["Ask for five minutes","Tell him plainly"]},{"id":"s086","n":86,"title":"Look at school","sms":"Open the Northwest Florida State College academy page and listen to the first part.","bullets":["Open the page","Use Speak Screen"]},{"id":"s087","n":87,"title":"Other doors","sms":"Look at the Pensacola State College criminal justice degree. Just so you know it exists.","bullets":["Open the page","Listen two minutes"]},{"id":"s088","n":88,"title":"The big report","sms":"Record one six part report about everything you did here. Take your time.","bullets":["Record one report","Play it back once"]},{"id":"s089","n":89,"title":"Your decision","sms":"Say out loud whether you want to keep going toward this. Yes and no are both good answers.","bullets":["Say your answer aloud","Say why in one sentence"]},{"id":"s090","n":90,"title":"Finish line","sms":"You finished the whole thing. Walk thirty minutes today and be proud of yourself.","bullets":["Walk thirty minutes","Say I finished this"]}];
+function K(i){return 'jessi-'+i}
+function ld(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function sv(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function refresh(){
+  var n=0; DATA.forEach(function(x){if(ld(K(x.id))==='1')n++});
+  var pct=Math.round(n/DATA.length*100);
+  document.getElementById('pp').textContent=pct+'%';
+  document.getElementById('pc').textContent=n+' of '+DATA.length+' missions';
+  document.getElementById('pb').style.width=pct+'%';
+  document.getElementById('pn').textContent = n===0 ? 'Nothing done yet. That is exactly where everyone starts.'
+    : n===DATA.length ? 'One hundred percent. You did every single one.'
+    : pct>=75 ? 'Most of the way there.' : pct>=50 ? 'Over halfway.' : pct>=25 ? 'A quarter of the way in.' : 'No due dates. Just the next one.';
+  var nx=DATA.find(function(x){return ld(K(x.id))!=='1'});
+  var box=document.getElementById('next');
+  if(nx){
+    document.getElementById('tt').textContent=nx.title;
+    document.getElementById('ts').textContent=nx.sms;
+    document.getElementById('tb').innerHTML=nx.bullets.map(function(b){return '<li>'+b+'</li>'}).join('');
+    document.getElementById('tj').setAttribute('href','#'+nx.id);
+    document.getElementById('tj').style.display='inline-block';
+  }else{
+    document.getElementById('tt').textContent='You finished all ninety';
+    document.getElementById('ts').textContent='Every mission is done. Go tell Dad.';
+    document.getElementById('tb').innerHTML='';
+    document.getElementById('tj').style.display='none';
+  }
+}
+document.querySelectorAll('.done').forEach(function(d){
+  var k=K(d.dataset.k);
+  if(ld(k)==='1') d.classList.add('checked');
+  d.addEventListener('click',function(){
+    d.classList.toggle('checked');
+    sv(k, d.classList.contains('checked')?'1':'0');
+    refresh();
+  });
+});
+refresh();
+function focusHash(){
+  var h=location.hash.replace('#','');
+  if(!h) return;
+  var el=document.getElementById(h); if(!el) return;
+  var d=el.closest('details'); if(d) d.open=true;
+  document.querySelectorAll('.card.hit').forEach(function(c){c.classList.remove('hit')});
+  el.classList.add('hit');
+  setTimeout(function(){el.scrollIntoView({block:'start'})},60);
+}
+window.addEventListener('hashchange',focusHash);
+focusHash();
+</script></body></html>
