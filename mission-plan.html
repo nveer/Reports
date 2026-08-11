@@ -12,6 +12,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"S
 .hero .badge{display:inline-block;background:rgba(255,255,255,.15);border-radius:999px;padding:6px 15px;font-size:15px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
 .hero h1{margin:0 0 10px;font-size:34px;line-height:1.2;font-weight:800}
 .hero p{margin:0;font-size:19px;color:#EAF1F7}
+.brief{margin:0;padding:0;list-style:none}
+.brief li{color:#EAF1F7;font-size:19px;padding:9px 0 9px 30px;position:relative;line-height:1.45;border-top:1px solid rgba(255,255,255,.14)}
+.brief li:first-child{border-top:none}
+.brief li::before{content:"";position:absolute;left:4px;top:19px;width:9px;height:9px;border-radius:50%;background:var(--amber)}
+.brief b{color:#fff}
 .readaloud{background:var(--amberSoft);border:2px solid #EFCF9C;border-radius:16px;padding:16px 18px;margin-bottom:18px;font-size:18px}
 .readaloud b{color:#9A5B12}
 #next{background:#fff;border:3px solid var(--amber);border-radius:18px;padding:20px 22px;margin-bottom:16px}
@@ -56,9 +61,14 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"S
 b.k{color:var(--blueDeep)}
 </style></head><body><div class="wrap">
 
-<div class="hero"><span class="badge">Your Mission Plan</span>
-<h1>Is this you?</h1>
-<p>Ninety small missions. Each one takes about five minutes. There are no dates and no due dates. Do the next one when you are ready. When you get to the end, you will know whether being a deputy is really what you want.</p></div>
+<div class="hero"><span class="badge">Your Assignment</span>
+<h1>Your mission, should you choose to accept it</h1>
+<ul class="brief">
+<li><b>90 missions.</b> One at a time.</li>
+<li><b>5 minutes each.</b> Never more.</li>
+<li><b>No dates. No deadlines.</b> You cannot fall behind.</li>
+<li><b>Finish, and you will know</b> if this badge is yours.</li>
+</ul></div>
 
 <div class="readaloud"><b>Want it read out loud?</b><br>
 In Safari, tap the <b>AA</b> button in the address bar, then tap <b>Listen to Page</b>. Or swipe down with two fingers for Speak Screen. 🎧</div>
