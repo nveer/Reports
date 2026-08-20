@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#14472E">
+<meta name="apple-mobile-web-app-title" content="Missions · Parents">
+<link rel="apple-touch-icon" href="mission-icon.png">
+<link rel="icon" href="mission-icon.png">
+<title>Jessi's Missions · Parents</title>
+<style>
+:root{--bg:#FAF8F3;--card:#FFF;--ink:#25302A;--soft:#586158;--blue:#1B5E3A;--blueDeep:#14472E;--amber:#B08810;--amberSoft:#F6EDD3;--line:#E4E0D4;--gold:#C9A227}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;font-size:18px;line-height:1.55;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px;margin:0 auto;padding:22px 18px 72px}
+.livery{height:9px;background:linear-gradient(90deg,var(--blueDeep) 0 45%,var(--gold) 45% 55%,var(--blueDeep) 55% 100%)}
+.hero{position:relative;overflow:hidden;background:var(--blueDeep);color:#fff;border-radius:20px;padding:24px 22px;margin-bottom:14px}
+.hero::before{content:"";position:absolute;right:-96px;top:-60px;width:150px;height:640px;transform:rotate(20deg);background:linear-gradient(90deg,rgba(201,162,39,.30) 0 5%,rgba(255,255,255,.05) 5% 95%,rgba(201,162,39,.30) 95% 100%);pointer-events:none}
+.hero>*{position:relative}
+.hero .badge{display:inline-block;border:1px solid rgba(240,215,122,.45);color:#F0D77A;background:rgba(240,215,122,.12);border-radius:999px;padding:5px 13px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.hero h1{margin:0 0 8px;font-size:28px;line-height:1.2;font-weight:800}
+.hero p{margin:0;font-size:17px;color:#EAF1F7}
+.badge-svg{width:72px;height:72px;display:block;margin:0 0 12px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
+.note{background:var(--amberSoft);border:2px solid #EFCF9C;border-radius:14px;padding:12px 16px;margin-bottom:14px;font-size:16px}
+.note b{color:#9A5B12}
+.prog{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.pct{display:flex;align-items:baseline;gap:12px}
+.prog b#pp{color:var(--blue);font-size:40px;font-weight:800;line-height:1}
+.pct span{font-size:16px;color:var(--soft)}
+.bar{height:10px;background:#EDE7DC;border-radius:99px;margin-top:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);width:0;transition:width .25s}
+.rank{display:flex;align-items:center;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.chev{display:flex;gap:3px;flex:none}
+.chev i{display:block;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:13px solid #E3DDD1}
+.chev i.on{border-bottom-color:var(--gold)}
+.rankname{font-weight:800;color:var(--blueDeep);font-size:18px;line-height:1.2}
+.ranknext{font-size:15px;color:var(--soft)}
+.sync{margin-top:8px;font-size:13px;color:#9aa2ad}
+.sync.warn{color:#9A5B12}
+.pair{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px}
+.spot{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.spot.next{border:3px solid var(--gold)}
+.lbl{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:800;margin-bottom:4px}
+.spot h2{margin:0;font-size:21px;font-weight:800;color:var(--blueDeep);line-height:1.25}
+.spot .num{font-size:14px;color:var(--soft);margin-top:4px}
+.parts{background:#fff;border:1px solid var(--line);border-radius:16px;padding:6px 8px 8px;margin-bottom:16px}
+.parts h2{margin:10px 12px 4px;font-size:18px;color:var(--blue)}
+.row{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:end;padding:10px 12px;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:none}
+.row .name{font-weight:800;color:var(--blueDeep);font-size:17px;line-height:1.2}
+.row .sub{font-size:14px;color:var(--soft);margin-top:2px}
+.row .count{font-weight:800;color:var(--blue);font-size:16px;white-space:nowrap}
+.mini{grid-column:1 / -1;height:7px;background:#EDE7DC;border-radius:99px;overflow:hidden}
+.mini i{display:block;height:100%;background:var(--blue);width:0}
+.refresh{display:inline-block;background:var(--blue);color:#fff;border:0;font-weight:700;padding:11px 16px;border-radius:12px;font-size:16px;font-family:inherit}
+.refresh:disabled{opacity:.6}
+.footer{text-align:center;color:var(--soft);font-size:14px;margin-top:28px;line-height:1.6}
+b.k{color:var(--blueDeep)}
+</style></head><body><div class="livery"></div>
+<div class="wrap">
+
+<div class="hero"><svg class="badge-svg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="gld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0D77A"/><stop offset="0.45" stop-color="#C9A227"/><stop offset="1" stop-color="#93731A"/></linearGradient></defs><circle cx="50.00" cy="8.00" r="5.2" fill="url(#gld)" stroke="#7A5E10" stroke-width="1.2"/><circle cx="91.85" cy="38.40" r="5.2" fill="url(#gld)" stroke="#7A5E10" stroke-width="1.2"/><circle cx="75.86" cy="87.60" r="5.2" fill="url(#gld)" stroke="#7A5E10" stroke-width="1.2"/><circle cx="24.14" cy="87.60" r="5.2" fill="url(#gld)" stroke="#7A5E10" stroke-width="1.2"/><circle cx="8.15" cy="38.40" r="5.2" fill="url(#gld)" stroke="#7A5E10" stroke-width="1.2"/><polygon points="50.00,8.00 61.17,36.63 91.85,38.40 68.07,57.87 75.86,87.60 50.00,71.00 24.14,87.60 31.93,57.87 8.15,38.40 38.83,36.63" fill="url(#gld)" stroke="#7A5E10" stroke-width="1.4" stroke-linejoin="round"/><circle cx="50" cy="52" r="15" fill="#14472E" stroke="#F0D77A" stroke-width="1.8"/><text x="50" y="50" text-anchor="middle" font-size="13" font-weight="800" fill="#F0D77A" font-family="-apple-system,Helvetica,Arial,sans-serif">90</text><text x="50" y="60" text-anchor="middle" font-size="6.5" font-weight="700" fill="#EAF1F7" font-family="-apple-system,Helvetica,Arial,sans-serif">MISSIONS</text></svg><span class="badge">For Nathan and Lisa</span>
+<h1>How Jessi is doing</h1>
+<p>Read-only. You can see her rank and what is next. You cannot check anything off here.</p>
+</div>
+
+<div class="note"><b>Her page stays hers.</b> This only reads the same saved progress she syncs from My Missions.</div>
+
+<div class="prog"><div class="pct"><b id="pp">—</b><span id="pc">Loading missions</span></div>
+<div class="bar"><i id="pb"></i></div>
+<div class="rank"><div class="chev" id="chev"></div><div><div class="rankname" id="rankname">Recruit</div><div class="ranknext" id="ranknext">Checking the live list…</div></div></div>
+<div id="sync" class="sync">Checking her progress…</div></div>
+
+<div class="pair">
+  <div class="spot"><div class="lbl">Last finished</div><h2 id="lastTitle">Loading</h2><div class="num" id="lastNum"></div></div>
+  <div class="spot next"><div class="lbl">Up next</div><h2 id="nextTitle">Loading</h2><div class="num" id="nextNum"></div></div>
+</div>
+
+<div class="parts">
+<h2>The five parts</h2>
+<div id="parts"></div>
+</div>
+
+<button type="button" class="refresh" id="refresh">Refresh</button>
+
+<div class="footer">No checkboxes. No dates. Just a look at the next one.<br>
+<b class="k">Made for Mom and Dad.</b></div>
+</div>
+<script>
+var DATA=[{"id":"s001","n":1,"title":"Make your note"},{"id":"s002","n":2,"title":"Ten minute walk"},{"id":"s003","n":3,"title":"Meet the dogs"},{"id":"s004","n":4,"title":"Watch a K-9"},{"id":"s005","n":5,"title":"Walk and think"},{"id":"s006","n":6,"title":"Eleven minute walk"},{"id":"s007","n":7,"title":"A real shift"},{"id":"s008","n":8,"title":"Say two sentences"},{"id":"s009","n":9,"title":"Eleven minute walk"},{"id":"s010","n":10,"title":"Teen Driver Challenge"},{"id":"s011","n":11,"title":"How dogs train"},{"id":"s012","n":12,"title":"Twelve minute walk"},{"id":"s013","n":13,"title":"The hard part"},{"id":"s014","n":14,"title":"Where training happens"},{"id":"s015","n":15,"title":"Thirteen minute walk"},{"id":"s016","n":16,"title":"The paperwork part"},{"id":"s017","n":17,"title":"Fourteen minute walk"},{"id":"s018","n":18,"title":"Another road in"},{"id":"s019","n":19,"title":"Fifteen minute walk"},{"id":"s020","n":20,"title":"What surprised you"},{"id":"s021","n":21,"title":"Turn on dictation"},{"id":"s022","n":22,"title":"Say one sentence"},{"id":"s023","n":23,"title":"Turn on Speak Screen"},{"id":"s024","n":24,"title":"Two finger swipe"},{"id":"s025","n":25,"title":"Walk and notice"},{"id":"s026","n":26,"title":"Describe a car"},{"id":"s027","n":27,"title":"Speak the punctuation"},{"id":"s028","n":28,"title":"Listen to Page"},{"id":"s029","n":29,"title":"Race yourself"},{"id":"s030","n":30,"title":"Walk and dictate"},{"id":"s031","n":31,"title":"Describe a person"},{"id":"s032","n":32,"title":"Fix one word"},{"id":"s033","n":33,"title":"Say a timeline"},{"id":"s034","n":34,"title":"Hear it back"},{"id":"s035","n":35,"title":"Walk one loop"},{"id":"s036","n":36,"title":"Ask about handwriting"},{"id":"s037","n":37,"title":"Dictate a report"},{"id":"s038","n":38,"title":"Read a real page"},{"id":"s039","n":39,"title":"Time the race"},{"id":"s040","n":40,"title":"Name your tools"},{"id":"s041","n":41,"title":"Write three lines"},{"id":"s042","n":42,"title":"Say it out loud"},{"id":"s043","n":43,"title":"Walk and think"},{"id":"s044","n":44,"title":"Add the big question"},{"id":"s045","n":45,"title":"Walk it off"},{"id":"s046","n":46,"title":"Say it again"},{"id":"s047","n":47,"title":"Add two questions"},{"id":"s048","n":48,"title":"Walk before the call"},{"id":"s049","n":49,"title":"Practice with Dad"},{"id":"s050","n":50,"title":"Make the call"},{"id":"s051","n":51,"title":"Say what happened"},{"id":"s052","n":52,"title":"Walk and replay"},{"id":"s053","n":53,"title":"Find the form"},{"id":"s054","n":54,"title":"Ask about a notary"},{"id":"s055","n":55,"title":"Note the deadline"},{"id":"s056","n":56,"title":"Walk 20"},{"id":"s057","n":57,"title":"Explorer follow up"},{"id":"s058","n":58,"title":"Ride along at 18"},{"id":"s059","n":59,"title":"Ask Dad to sign"},{"id":"s060","n":60,"title":"Walk and answer"},{"id":"s061","n":61,"title":"Six parts"},{"id":"s062","n":62,"title":"Your morning"},{"id":"s063","n":63,"title":"Walk and say"},{"id":"s064","n":64,"title":"Record it"},{"id":"s065","n":65,"title":"Play it back"},{"id":"s066","n":66,"title":"Describe a person"},{"id":"s067","n":67,"title":"Describe a car"},{"id":"s068","n":68,"title":"Push to thirty"},{"id":"s069","n":69,"title":"Room report"},{"id":"s070","n":70,"title":"Just the facts"},{"id":"s071","n":71,"title":"Family walk"},{"id":"s072","n":72,"title":"One thank you"},{"id":"s073","n":73,"title":"Tell someone"},{"id":"s074","n":74,"title":"Take a break"},{"id":"s075","n":75,"title":"Leftovers walk"},{"id":"s076","n":76,"title":"Back at it"},{"id":"s077","n":77,"title":"Two minute scene"},{"id":"s078","n":78,"title":"Time and place"},{"id":"s079","n":79,"title":"Thirty and talk"},{"id":"s080","n":80,"title":"Best one yet"},{"id":"s081","n":81,"title":"Look back"},{"id":"s082","n":82,"title":"What excited you"},{"id":"s083","n":83,"title":"What worried you"},{"id":"s084","n":84,"title":"Three in the morning"},{"id":"s085","n":85,"title":"Tell Dad"},{"id":"s086","n":86,"title":"Look at school"},{"id":"s087","n":87,"title":"Other doors"},{"id":"s088","n":88,"title":"The big report"},{"id":"s089","n":89,"title":"Your decision"},{"id":"s090","n":90,"title":"Finish line"}];
+var CFG = {"api":"https://script.google.com/macros/s/AKfycbziT_oaaD-yd1j5hs8PVnfRMmRVUQWBEpS9CLVE1JEta-XNthV2ydMPh1Xrk1zA0WLfPA/exec","key":"J9a7XkI3fSdRYx4IV3MV8U3r"};
+var API = CFG.api, KEY = CFG.key;
+var PARTS = [
+  { name:'See the job', from:1, to:20 },
+  { name:'Your tools', from:21, to:40 },
+  { name:'Real people', from:41, to:60 },
+  { name:'Reports and legs', from:61, to:80 },
+  { name:'Decide', from:81, to:90 }
+];
+var RANKS = [
+  { at:0,  name:'Recruit'        },
+  { at:18, name:'Cadet'          },
+  { at:36, name:'Senior Cadet'   },
+  { at:54, name:'Squad Leader'   },
+  { at:72, name:'Cadet Sergeant' },
+  { at:90, name:'Academy Ready'  }
+];
+
+function setSync(msg, warn){
+  var el = document.getElementById('sync');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.className = warn ? 'sync warn' : 'sync';
+}
+
+var jsonpN = 0;
+function jsonp(params, ok, fail){
+  if (!API || API.indexOf('http') !== 0){ fail && fail('not configured'); return; }
+  var name = 'jcb' + (++jsonpN) + '_' + (new Date().getTime());
+  var s = document.createElement('script');
+  var timer = setTimeout(function(){ done(); fail && fail('timeout'); }, 15000);
+  var finished = false;
+  function done(){
+    if (finished) return;
+    finished = true;
+    clearTimeout(timer);
+    try { delete window[name]; } catch(e){ window[name] = undefined; }
+    if (s.parentNode) s.parentNode.removeChild(s);
+  }
+  window[name] = function(data){ done(); ok && ok(data); };
+  s.onerror = function(){ done(); fail && fail('network'); };
+  var q = 'callback=' + name + '&key=' + encodeURIComponent(KEY);
+  for (var k in params) q += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  s.src = API + '?' + q;
+  document.head.appendChild(s);
+}
+
+function snapshot(doneList){
+  var done = {};
+  var list = doneList || [];
+  for (var i=0;i<list.length;i++) done[list[i]] = true;
+  var n = 0, last = null, next = null;
+  var parts = PARTS.map(function(p){ return { name:p.name, from:p.from, to:p.to, total:(p.to - p.from + 1), done:0 }; });
+  for (var j=0;j<DATA.length;j++){
+    var m = DATA[j];
+    var isDone = !!done[m.id];
+    if (isDone){ n++; last = m; }
+    else if (!next) next = m;
+    for (var p=0;p<parts.length;p++){
+      if (m.n >= parts[p].from && m.n <= parts[p].to && isDone) parts[p].done++;
+    }
+  }
+  var lvl = 0;
+  for (var r=0;r<RANKS.length;r++) if (n >= RANKS[r].at) lvl = r;
+  var nxt = RANKS[lvl+1];
+  return {
+    n: n,
+    pct: Math.round(n / DATA.length * 100),
+    last: last,
+    next: next,
+    rank: RANKS[lvl].name,
+    rankLevel: lvl,
+    rankNext: nxt ? (nxt.at - n) + ' more to make ' + nxt.name : 'Top rank. Nothing left to earn.',
+    parts: parts
+  };
+}
+
+function paint(view){
+  document.getElementById('pp').textContent = view.pct + '%';
+  document.getElementById('pc').textContent = view.n + ' of ' + DATA.length + ' missions';
+  document.getElementById('pb').style.width = view.pct + '%';
+  var chev = '';
+  for (var j=1;j<=5;j++) chev += '<i class="' + (j<=view.rankLevel ? 'on' : '') + '"></i>';
+  document.getElementById('chev').innerHTML = chev;
+  document.getElementById('rankname').textContent = view.rank;
+  document.getElementById('ranknext').textContent = view.rankNext;
+
+  if (view.last){
+    document.getElementById('lastTitle').textContent = view.last.title;
+    document.getElementById('lastNum').textContent = 'Mission ' + view.last.n;
+  } else {
+    document.getElementById('lastTitle').textContent = 'Nothing finished yet';
+    document.getElementById('lastNum').textContent = 'She is still at the start.';
+  }
+
+  if (view.next){
+    document.getElementById('nextTitle').textContent = view.next.title;
+    document.getElementById('nextNum').textContent = 'Mission ' + view.next.n;
+  } else {
+    document.getElementById('nextTitle').textContent = 'All ninety are done';
+    document.getElementById('nextNum').textContent = 'Academy Ready.';
+  }
+
+  var html = '';
+  for (var i=0;i<view.parts.length;i++){
+    var p = view.parts[i];
+    var w = Math.round(p.done / p.total * 100);
+    html += '<div class="row"><div><div class="name">' + p.name + '</div><div class="sub">Missions ' + p.from + '–' + p.to + '</div></div><div class="count">' + p.done + ' of ' + p.total + '</div><div class="mini"><i style="width:' + w + '%"></i></div></div>';
+  }
+  document.getElementById('parts').innerHTML = html;
+}
+
+function loadState(){
+  var btn = document.getElementById('refresh');
+  if (btn) btn.disabled = true;
+  setSync('Checking her progress…');
+  jsonp({ action:'state' }, function(res){
+    if (btn) btn.disabled = false;
+    if (res && res.ok && Array.isArray(res.done)){
+      paint(snapshot(res.done));
+      setSync('Live from her saved progress.');
+    } else {
+      setSync('Could not read progress. Try refresh.', true);
+    }
+  }, function(){
+    if (btn) btn.disabled = false;
+    setSync('No connection. Try refresh in a minute.', true);
+  });
+}
+
+document.getElementById('refresh').addEventListener('click', loadState);
+paint(snapshot([]));
+loadState();
+</script></body></html>
